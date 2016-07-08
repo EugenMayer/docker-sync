@@ -188,7 +188,7 @@ Without those to project, this project would be empty space and worth nothing. A
 
 ## Other projects with similar purpose (i know of)
 #### NFS
-Performance: In general, at least 3 times slower the **RSYNC**, mostly eene more
+Performance: In general, at least 3 times slower the **RSYNC**, ofter even more
 
  - [Dinghy](https://github.com/codekitchen/dinghy) (docker-machine only)
  - [dlite](https://github.com/nlf/dlite) (docker-machine only)
@@ -197,6 +197,7 @@ Performance: In general, at least 3 times slower the **RSYNC**, mostly eene more
 Performance: Exactly the performance you would have without shares. Perfect!
  - [docker-dev-osx](https://github.com/brikis98/docker-osx-dev) (rsync, vbox only)
 
+Hint: If you are happy with docker-machine and virtual box, this is a pretty solid alternative. It has been there for ages and is most probably pretty advanced. For me, it was no choice, since neither i want to stick to VBox nor it has support for docker-for-mac
 #### Unison
 Performance: Not sure, i suggest similar to RSYNC. You have to implement watch-ing yourself though
  - [Hodor](https://github.com/gansbrest/hodor) (should be as fast as rsync?)
