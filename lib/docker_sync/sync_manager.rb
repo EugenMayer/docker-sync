@@ -10,22 +10,12 @@ module Docker_Rsync
     @configurations
     @config_path
     def initialize(options)
-      if options[:config_path].nil?
-        @config_path = find_config
-      else
-        @config_path = options[:config_path]
-      end
-
       @sync_processes = []
       @config_syncs = []
       @config_options = []
       @config_syncs = []
-
+      @config_path = options[:config_path]
       load_configuration
-    end
-
-    def find_config
-
     end
 
     def load_configuration
@@ -40,9 +30,14 @@ module Docker_Rsync
       upgrade_syncs_config
     end
 
+    def get_sync_points
+      return @config_syncs
+    end
+
     def upgrade_syncs_config
       @config_syncs.each do |name, config|
         @config_syncs[name]['config_path'] = @config_path
+        @config_syncs[name]['src'] = File.expand_path(@config_syncs[name]['src'])
         unless config.key?('verbose')
           @config_syncs[name]['verbose'] = @config_options['verbose'] || false
         end
@@ -78,6 +73,14 @@ module Docker_Rsync
         end
         @sync_processes.push(create_sync(sync_name, @config_syncs[sync_name]))
       end
+    end
+
+
+    def clean(sync_name = nil)
+      init_sync_processes(sync_name)
+      @sync_processes.each { |sync_process|
+        sync_process.clean
+      }
     end
 
     def sync(sync_name = nil)

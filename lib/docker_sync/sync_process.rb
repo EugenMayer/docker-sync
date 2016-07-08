@@ -16,6 +16,7 @@ module Docker_Sync
       }
       @sync_name = sync_name
       @options = defaults.merge(options)
+
     end
 
     def get_host_ip
@@ -31,7 +32,7 @@ module Docker_Sync
     def stop
       say_status 'ok', "Stopping sync container #{@sync_name}"
       begin
-        `dockers stop #{@sync_name}`
+        `docker stop #{@sync_name}`
       rescue Exception => e
         say_status 'error', "Stopping failed of #{@sync_name}:", :red
         puts e.message
@@ -46,7 +47,7 @@ module Docker_Sync
         exists = `docker ps --filter "status=exited" --filter "name=filesync_dw" | grep filesync_dw`
         if exists == ''
           say_status 'ok', "creating #{@sync_name} container", :white
-          cmd = "docker run -p '#{@options['sync_host_port']}:873' -v #{@sync_name}:#{@options['dest']} --name #{@sync_name} -d registry.kw.kontextwork.com/rsync"
+          cmd = "docker run -p '#{@options['sync_host_port']}:873' -v #{@sync_name}:#{@options['dest']} -e VOLUME=#{@options['dest']} --name #{@sync_name} -d eugenmayer/rsync"
         else
           say_status 'success', "starting #{@sync_name} container", :green
           cmd = "docker start #{@sync_name}"
@@ -60,6 +61,20 @@ module Docker_Sync
       # this sleep is needed since the container could be not started
       sleep 1
       sync
+    end
+
+    def stop_container
+      `docker stop #{@sync_name}`
+    end
+
+    def reset_container
+      stop_container
+      `docker rm #{@sync_name}`
+      `docker volume rm #{@sync_name}`
+    end
+
+    def clean
+      reset_container
     end
 
     def sync
@@ -85,9 +100,9 @@ module Docker_Sync
       unless @options['sync_excludes'].nil?
         args = @options['sync_excludes'].map { |pattern| "--exclude='#{pattern}'" } + args
       end
-      args.push('-avp')
+      args.push('-ap')
       args.push(@options['sync_args']) if @options.key?('sync_args')
-      args.push(@options['src'])
+      args.push("#{@options['src']}/") # add a trailing slash
       args.push("rsync://#{@options['sync_host_ip']}:#{@options['sync_host_port']}/volume")
     end
 

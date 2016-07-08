@@ -25,15 +25,29 @@ gem install docker-sync
 
 ## usage
 ### 1. configuration (once)
-Please see test/config.yml and look for the annotations of the configuration values
- - You can define as many syncs as you need. Be sure to vary the port, that's basically it
+Please see [test/docker-sync.yml](https://github.com/EugenMayer/docker_sync/blob/master/test/docker-sync.yml) and check the annotations to understand, how how to configure docker-sync
+
+a) Place your docker-sync.yml in your project root. The configuration will be searched from the point your run docker-sync from, traversing up the path tree
+
+b) You can define as many syncs as you need. Be sure to vary the port, that's basically it
 
 ### 2. Start sync/watch process (every time)
 ```
 docker-sync sync:start
 ```
+For further help and commands use
 
-### How to mount the synced volumes in my containers? (once)
+```
+docker-sync help
+docker-sync help sync
+docker-sync help sync:start
+docker-sync help sync:sync
+docker-sync help sync:clean
+```
+
+And so on
+
+### 3. How to mount the synced volumes in my containers? (once)
 The sync-name, like fullexample in the example, is the container-name you should mount.
 So in you docker-compose.yml you would add
 
@@ -64,6 +78,17 @@ run after you started your sync
 ```
 docker-compose up
 ```
+
+### 5. Cleanup
+
+After you are done and probably either want to free up space or switch to a different project you might want to release the sync containers and volumes by
+
+```
+docker-sync sync:clean
+```
+
+This will of course not delete anthing on you host, it just removes the container for rsync and its volumes. It does not touch you application stack
+
 ## Behind the scenes
 - On the host, a thor based ruby task is started, this starts
   - Every sync will start a own docker-container with a rsync-daemon watching for connections.
@@ -71,6 +96,67 @@ docker-compose up
   - a fswatch cli-task is setup, to run rsync on each file-change in the source-folder you defined
 
 Done. No magic. But its roadrunner fast! And it has no pre-conditions on your actual stack
+
+## Tests (sync and perfomance)
+Pull this repo and then
+```
+cd docker_sync/test
+thor sync:start
+```
+Let this process running
+
+Open a new shell
+
+```
+cd docker_sync/test
+dc up
+```
+
+This starts to containers which cat the file we sync ( data1/somefile.txt and data2/somefile.txt )
+
+Open a third shell and run
+
+```
+cd docker_sync/test
+echo "NEWVALUE" >> data1/somefile.txt
+echo "NOTTHEOTHER" >> data2/somefile.txt
+```
+
+Check the docker-compose logs and you see that the files are updated.
+
+Performance
+
+```
+docker exec -i -t fullexample_app time dd if=/dev/zero of=/var/www/test.dat bs=1024 count=100000
+```
+
+## Performance
+Use the test-setup aboe and try
+
+This writes on a folder which is shares/synced
+```
+docker exec -i -t fullexample_app time dd if=/dev/zero of=/var/www/test.dat bs=1024 count=100000
+100000+0 records in
+100000+0 records out
+real	0m 0.11s
+user	0m 0.00s
+sys	0m 0.11s
+```
+
+This writes on a folder which is NOT shared
+```
+docker exec -i -t fullexample_app time dd if=/dev/zero of=/test.dat bs=1024 count=100000      1 ↵
+100000+0 records in
+100000+0 records out
+real	0m 0.15s
+user	0m 0.02s
+sys	0m 0.13s
+```
+
+**So the result**: No difference. That's what we want
+## TODO
+ - probably use alpine linux for the sync container, to minimize its size
+ - i bet you find something! :)
 
 ## Other usages with docker_sync
 
