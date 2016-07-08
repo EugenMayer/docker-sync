@@ -5,8 +5,9 @@ Doing this the classic/native way leads to huge performance issues - that's why 
 
 Docker-sync is:
  - able to run on all of those docker-machines and also on **docker for mac**
- - it uses **RSYNC** to sync - so the container performance is not influenced at all, see [performance](https://github.com/EugenMayer/docker_sync#performance)
+ - it uses **rsync or unison** (you can chose) to sync - so the container performance is not influenced at all, see [performance](https://github.com/EugenMayer/docker_sync#performance)
  - an efficient way is used to watch for file changes (fswatch -o) - does not eat up you CPU even for 12k+ files
+ - supports either one-way sync ( rsync ) or two way sync ( unison )
 
 So besides performance being the first priority, the second is, not forcing you into using a **specific** docker-toolbox solution.
 Use docker-for-mac, dockertoolbox, virtualbox fusion or Paralelles, xhyve or whatever!
@@ -105,7 +106,7 @@ This will of course not delete anything on your host source code folders or simi
 - On the host, a thor based ruby task is started, this starts
   - Every sync will start an own docker-container with a rsync-daemon watching for connections.
   - The data gets pre-synced on sync-start
-  - a fswatch cli-task gets setup, to run rsync on each file-change in the source-folder you defined
+  - a fswatch cli-task gets setup, to run rsync or unison on each file-change in the source-folder you defined
 
 Done. No magic. But its roadrunner fast! And it has no pre-conditions on your actual stack
 
@@ -176,7 +177,7 @@ sys	0m 0.13s
 
 We use docker-sync as a library in our own docker-stack startup script. It starts the docker-compose stack using
 a ruby gem [docker-compose](https://github.com/EugenMayer/docker-compose) all this wrapped into a thor task. So
- - start docker-rsync
+ - start docker-sync
  - start a docker-compose stack based on some arguments like --dev and load the specific docker-compose files for that using [docker-compose](https://github.com/xeger/docker-compose)
 
 ## Thanks to
@@ -184,6 +185,7 @@ Without the following projects, this project would be empty space and worth noth
 
  - [fswatch](https://emcrisostomo.github.io/fswatch)
  - [rsync](https://de.wikipedia.org/wiki/Rsync)
+ - [unison](https://www.cis.upenn.edu/~bcpierce/unison/)
  - [thor](https://github.com/erikhuda/thor)
 
 ## Contributions
@@ -202,11 +204,10 @@ Performance: Exactly the performance you would have without shares. Perfect!
 
 Hint: If you are happy with docker-machine and virtual box, this is a pretty solid alternative. It has been there for ages and is most probably pretty advanced. For me, it was no choice, since neither i want to stick to VBox nor it has support for docker-for-mac
 #### Unison
-Performance: Not sure, i suggest similar to RSYNC. You have to implement watch-ing yourself though
+Performance: Not sure, i suggest similar to RSYNC, but two way sync
  - [Hodor](https://github.com/gansbrest/hodor) (should be as fast as rsync?)
 
-Hint: Tried unison, but i do not like the idea behind 2-way sync for development. If you need this, it should be a conceptual issue with your docker image architecture.
-Beside that, it does not support docker for mac.
+Hint: You can chose to use unison with docker-sync by adding sync_strategy: 'unison' to an sync-point
 ####Native
 
 Performance: Well, i had everything, from 2-100 times slower to NFS and even more to rsync. **Useless**

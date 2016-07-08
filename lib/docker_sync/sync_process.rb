@@ -1,5 +1,8 @@
 require 'thor/shell'
+# noinspection RubyResolve
 require 'docker_sync/sync_strategy/rsync'
+require 'docker_sync/sync_strategy/unison'
+# noinspection RubyResolve
 require 'docker_sync/watch_strategy/fswatch'
 
 module Docker_Sync
@@ -11,6 +14,7 @@ module Docker_Sync
     @sync_strategy
     @watch_strategy
 
+    # noinspection RubyStringKeysInHashInspection
     def initialize(sync_name, options)
       defaults = {
           'verbose' => false,
@@ -30,7 +34,9 @@ module Docker_Sync
           when 'rsync'
             @sync_strategy = Docker_Sync::SyncStrategy::Rsync.new(@sync_name, @options)
           when 'unison'
-            #@sync_strategy = Docker_Sync::SyncStrategy::Unison.new(@sync_name, @options)
+            @sync_strategy = Docker_Sync::SyncStrategy::Unison.new(@sync_name, @options)
+          else
+            @sync_strategy = Docker_Sync::SyncStrategy::Rsync.new(@sync_name, @options)
         end
       else
         @sync_strategy = Docker_Sync::SyncStrategy::Rsync.new(@sync_name, @options)
@@ -41,6 +47,8 @@ module Docker_Sync
       if @options.key?('watch_strategy')
         case @options['watch_strategy']
           when 'fswatch'
+            @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
+          else
             @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
         end
       else

@@ -7,20 +7,23 @@ syncs:
     src: '~/Development/repos/docker_sync/test/data1'
     # which destination on the sync-container. Since you will use volumes_from to mount this, this should match your code-deployment location in the real container
     dest: '/var/www'
-    # a list of excludes for rsync - see rsync docs for details
-    sync_excludes: ['Gemfile.lock', 'Gemfile', 'config.rb', '.sass-cache/', 'sass/', 'sass-cache/', 'composer.json' , 'bower.json', 'package.json', 'Gruntfile*', 'bower_components/', 'node_modules/', '.gitignore', '.git/', '*.coffee', '*.scss', '*.sass']
     # when a port of a container is exposed, on which IP does it get exposed. Localhost for docker for mac, something else for docker-machine
     sync_host_ip: 'localhost'
     # should be a unique port this sync instance uses on the host to offer the rsync service on
     sync_host_port: 10871
+    # optionl, a list of excludes for rsync - see rsync docs for details
+    sync_excludes: ['Gemfile.lock', 'Gemfile', 'config.rb', '.sass-cache/', 'sass/', 'sass-cache/', 'composer.json' , 'bower.json', 'package.json', 'Gruntfile*', 'bower_components/', 'node_modules/', '.gitignore', '.git/', '*.coffee', '*.scss', '*.sass']
     # optional: use this to switch to rsync verbose mode
     sync_args: '-v'
-    # a list of regular expressions to exclude from the fswatch - see fswatch docs for details
+    # optional, a list of regular expressions to exclude from the fswatch - see fswatch docs for details
     watch_excludes: ['.*/.git', '.*/node_modules', '.*/bower_components', '.*/sass-cache', '.*/.sass-cache', '.*/.sass-cache', '.coffee', '.scss', '.sass', '.gitignore']
     # optional: use this to switch to fswatch verbose mode
     watch_args: '-v'
+    # default, optional
+    sync_strategy: 'rsycn'
   simpleexample:
     src: '~/Development/repos/docker_sync/test/data2'
     dest: '/app/code'
     sync_host_ip: 'localhost'
     sync_host_port: 10872
+    sync_strategy: 'unison' # this time we pick unison
