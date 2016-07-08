@@ -6,7 +6,7 @@ Doing this the classic/native way leads to huge performance issues - that's why 
 Docker-sync is:
  - able to run on all of those docker-machines and also on **docker for mac**
  - it uses **RSYNC** to sync - so the container performance is not influenced at all, see [performance](https://github.com/EugenMayer/docker_sync#performance)
- - a efficient way is used to watch for file changes (fswatch -o) - does not eat up you CPU even for 12k+ files
+ - an efficient way is used to watch for file changes (fswatch -o) - does not eat up you CPU even for 12k+ files
 
 So beside performance being the first priority, the second is, not forcing you into using a **specific** docker-toolbox solution.
 Use docker-for-mac, dockertoolbox, virtualbox fusion or Paralelles, xhyve or whatever!
@@ -52,7 +52,7 @@ And so on
 
 ### 3. How to mount the synced volumes in my containers? (once)
 The sync-name, like fullexample in the example, is the container-name you should mount.
-So in you docker-compose.yml you would add
+So in your docker-compose.yml you would add
 
 ```
 version: "2"
@@ -103,9 +103,9 @@ This will of course not delete anthing on your host source code folders or simil
 
 ## Behind the scenes
 - On the host, a thor based ruby task is started, this starts
-  - Every sync will start a own docker-container with a rsync-daemon watching for connections.
+  - Every sync will start an own docker-container with a rsync-daemon watching for connections.
   - The data gets pre-synced on sync-start
-  - a fswatch cli-task is setup, to run rsync on each file-change in the source-folder you defined
+  - a fswatch cli-task gets setup, to run rsync on each file-change in the source-folder you defined
 
 Done. No magic. But its roadrunner fast! And it has no pre-conditions on your actual stack
 
@@ -180,7 +180,7 @@ a ruby gem [docker-compose](https://github.com/EugenMayer/docker-compose) all th
  - start a docker-compose stack based on some arguments like --dev and load the specific docker-compose files for that using [docker-compose](https://github.com/xeger/docker-compose)
 
 ## Thanks to
-Without those to project, this project would be empty space and worth nothing. All the credits to them
+Without the following projects, this project would be empty space and worth nothing. All the credits to them
 
  - [fswatch](https://emcrisostomo.github.io/fswatch)
  - [rsync](https://de.wikipedia.org/wiki/Rsync)
