@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="52f6a274-8102-4a8f-9ab4-84fce2adc9d2" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/config.rb" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/bin/docker_sync" afterPath="$PROJECT_DIR$/bin/docker-sync" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docker_sync.gemspec" afterPath="$PROJECT_DIR$/docker_sync.gemspec" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tasks/sync.thor" afterPath="$PROJECT_DIR$/tasks/sync.thor" />
     </list>
     <ignored path="docker_sync.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,16 +29,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="config.yml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/config.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="25" column="25" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="sync.thor" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tasks/sync.thor">
           <provider selected="true" editor-type-id="text-editor">
@@ -63,16 +49,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Gemfile.lock" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Gemfile.lock">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="docker_sync.iml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docker_sync.iml">
           <provider selected="true" editor-type-id="text-editor">
@@ -83,11 +59,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="docker_sync.gemspec" pinned="false" current-in-tab="true">
+      <file leaf-file-name="docker_sync.gemspec" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docker_sync.gemspec">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
+            <state relative-caret-position="221">
+              <caret line="13" column="36" selection-start-line="13" selection-start-column="36" selection-end-line="13" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Gemfile" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Gemfile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Thorfile" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Thorfile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="26" selection-start-line="0" selection-start-column="26" selection-end-line="0" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -1036,7 +1032,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1467976180330</updated>
-      <workItem from="1467976183036" duration="10495000" />
+      <workItem from="1467976183036" duration="10648000" />
     </task>
     <task id="LOCAL-00001" summary="Initial version, &#10;&#10;It is all working, ^TM :)">
       <created>1467987621464</created>
@@ -1045,11 +1041,18 @@
       <option name="project" value="LOCAL" />
       <updated>1467987621464</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="fix path calculation, some readme adjustments, rename binary">
+      <created>1467988288621</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1467988288621</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10495000" />
+    <option name="totallyTimeSpent" value="10648000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="20" y="23" width="1723" height="986" extended-state="0" />
@@ -1088,7 +1091,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial version, &#10;&#10;It is all working, ^TM :)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial version, &#10;&#10;It is all working, ^TM :)" />
+    <MESSAGE value="fix path calculation, some readme adjustments, rename binary" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix path calculation, some readme adjustments, rename binary" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1101,22 +1105,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Thorfile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="26" selection-start-line="0" selection-start-column="26" selection-end-line="0" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Gemfile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/data1/somefile.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1242,8 +1230,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/docker_sync.gemspec">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
+        <state relative-caret-position="221">
+          <caret line="13" column="36" selection-start-line="13" selection-start-column="36" selection-end-line="13" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Gemfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Thorfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="26" selection-start-line="0" selection-start-column="26" selection-end-line="0" selection-end-column="26" />
           <folding />
         </state>
       </provider>

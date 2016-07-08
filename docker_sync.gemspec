@@ -10,6 +10,6 @@ Gem::Specification.new do |s|
   s.files       = Dir['lib/**/*.rb','tasks/**/*.thor','Thorfile','bin/*']
   s.license     = 'GPL'
   s.homepage    = 'https://github.com/EugenMayer/docker_registry_cli'
+  s.add_runtime_dependency 'thor', '~> 0'
   s.add_runtime_dependency 'colorize', '~> 0'
-  s.add_runtime_dependency 'httparty', '~> 0'
 end
