@@ -9,13 +9,13 @@ services:
     command: ['watch', '-n1', 'cat /var/www/somefile.txt']
   otherapp:
     image: alpine
-    container_name: 'simlpeexample_app'
+    container_name: 'simpleexample_app'
     command: ['watch', '-n1', 'cat /app/code/somefile.txt']
-    # that the important thing
+    # thats the important thing
     volumes_from:
       - container:simpleexample:rw # will be mounted on /app/code
 
-# that the important thing
+# thats the important thing
 volumes:
   fullexample:
     external: true

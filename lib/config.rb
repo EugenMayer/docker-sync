@@ -1,5 +1,5 @@
 require 'pp'
-require 'Pathname'
+#require 'Pathname'
 # this has basically completely reused from Thor::runner.rb - thank you!
 
 module DockerSyncConfig

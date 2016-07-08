@@ -1,19 +1,19 @@
 ## WAT
 
 A huge topic under OSX is, how to mount/share code into docker containers, used for development.
-Doing this the classic/native way leads to huge performance issues - that's why docker-sync has been made (next to the [other alternatives](https://github.com/EugenMayer/docker_sync#other-projects-with-similar-purpose-i-know-of)
+Doing this the classic/native way leads to huge performance issues - that's why docker-sync has been made (next to the [other alternatives](https://github.com/EugenMayer/docker_sync#other-projects-with-similar-purpose-i-know-of))
 
 Docker-sync is:
  - able to run on all of those docker-machines and also on **docker for mac**
  - it uses **RSYNC** to sync - so the container performance is not influenced at all, see [performance](https://github.com/EugenMayer/docker_sync#performance)
  - an efficient way is used to watch for file changes (fswatch -o) - does not eat up you CPU even for 12k+ files
 
-So beside performance being the first priority, the second is, not forcing you into using a **specific** docker-toolbox solution.
+So besides performance being the first priority, the second is, not forcing you into using a **specific** docker-toolbox solution.
 Use docker-for-mac, dockertoolbox, virtualbox fusion or Paralelles, xhyve or whatever!
 
 ## Motivation
 
-I tried a lot of the below named projects, and they did not suite out of this reasons:
+I tried a lot of the below named projects, and they did not suite because:
  - they require either a specific docker machine ( forcing vbox e.g. ) or require one at all
  - they use native shares or NFS, which are both way to slow to use them for code-sharing / development
 
@@ -66,13 +66,13 @@ services:
     command: ['watch', '-n1', 'cat /var/www/somefile.txt']
   otherapp:
     image: alpine
-    container_name: 'simlpeexample_app'
+    container_name: 'simpleexample_app'
     command: ['watch', '-n1', 'cat /app/code/somefile.txt']
-    # that the important thing
+    # thats the important thing
     volumes_from:
       - container:simpleexample:rw # will be mounted on /app/code
 
-# that the important thing
+# thats the important thing
 volumes:
   fullexample:
     external: true
@@ -84,7 +84,7 @@ That's it, so just define that the volumes are created externally and then refer
 
 ### 4. Start your stack
 
-run after you started your sync
+Run after you started your sync
 ```
 docker-compose up
 ```
@@ -99,7 +99,7 @@ After you are done and probably either want to free up space or switch to a diff
 docker-sync clean
 ```
 
-This will of course not delete anthing on your host source code folders or similar, it just removes the container for rsync and its volumes. It does not touch you application stack
+This will of course not delete anything on your host source code folders or similar, it just removes the container for rsync and its volumes. It does not touch you application stack
 
 ## Behind the scenes
 - On the host, a thor based ruby task is started, this starts
@@ -145,7 +145,7 @@ docker exec -i -t fullexample_app time dd if=/dev/zero of=/var/www/test.dat bs=1
 ## Performance
 Use the test-setup above and try
 
-This writes on a folder which is shares/synced
+This writes on a folder which is share/synced
 ```
 docker exec -i -t fullexample_app time dd if=/dev/zero of=/var/www/test.dat bs=1024 count=100000
 100000+0 records in
@@ -168,9 +168,9 @@ sys	0m 0.13s
 **So the result**: No difference between shared and not shared. That's what we want. And thats faster then anything else.
 
 ## TODO
- - probably use alpine linux for the sync container, to minimize its size
+ - Probably use alpine linux for the sync container, to minimize its size
  - Do we have windows support? :)
- - i bet you find something! :)
+ - I bet you find something! :)
 
 ## Other usages with docker_sync
 
@@ -206,7 +206,7 @@ Performance: Not sure, i suggest similar to RSYNC. You have to implement watch-i
  - [Hodor](https://github.com/gansbrest/hodor) (should be as fast as rsync?)
 
 Hint: Tried unison, but i do not like the idea behind 2-way sync for development. If you need this, it should be a conceptual issue with your docker image architecture.
-Beside that, it does not support docker for mac
+Beside that, it does not support docker for mac.
 ####Native
 
 Performance: Well, i had everything, from 2-100 times slower to NFS and even more to rsync. **Useless**
