@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/README.md" line="3" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="52f6a274-8102-4a8f-9ab4-84fce2adc9d2" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
@@ -94,8 +97,8 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="362">
-                <caret line="199" column="262" selection-start-line="199" selection-start-column="262" selection-end-line="199" selection-end-column="262" />
+              <first_editor relative-caret-position="136">
+                <caret line="8" column="111" selection-start-line="8" selection-start-column="111" selection-end-line="8" selection-end-column="111" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -893,7 +896,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1467976180330</updated>
-      <workItem from="1467976183036" duration="19911000" />
+      <workItem from="1467976183036" duration="20062000" />
     </task>
     <task id="LOCAL-00001" summary="Initial version, &#10;&#10;It is all working, ^TM :)">
       <created>1467987621464</created>
@@ -937,11 +940,18 @@
       <option name="project" value="LOCAL" />
       <updated>1467998292158</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="more readme adjustments">
+      <created>1467998962532</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1467998962532</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19911000" />
+    <option name="totallyTimeSpent" value="20062000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="20" y="23" width="1723" height="986" extended-state="0" />
@@ -986,7 +996,8 @@
     <MESSAGE value="Finished implementation, tests and docks.&#10;Included performance tests" />
     <MESSAGE value="some updates on the readme and the example compose file" />
     <MESSAGE value="added project links to alternatives" />
-    <option name="LAST_COMMIT_MESSAGE" value="added project links to alternatives" />
+    <MESSAGE value="more readme adjustments" />
+    <option name="LAST_COMMIT_MESSAGE" value="more readme adjustments" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1182,8 +1193,8 @@
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="362">
-            <caret line="199" column="262" selection-start-line="199" selection-start-column="262" selection-end-line="199" selection-end-column="262" />
+          <first_editor relative-caret-position="136">
+            <caret line="8" column="111" selection-start-line="8" selection-start-column="111" selection-end-line="8" selection-end-column="111" />
             <folding />
           </first_editor>
           <second_editor />
