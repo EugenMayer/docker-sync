@@ -1,6 +1,11 @@
 #!/usr/bin/env ruby
-# -*- mode: ruby -*-
 
-require "thor/runner"
-$thor_runner = true
-Thor::Runner.start
+require "thor"
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+thor = File.expand_path('../../tasks', __FILE__)
+Dir.glob(File.join(thor, '/**/*.thor')).each { |taskfile|
+  load taskfile
+}
+
+Sync.start

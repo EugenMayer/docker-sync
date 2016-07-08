@@ -1,6 +1,7 @@
 require 'thor/shell'
 require 'docker_sync/sync_process'
 require 'execution'
+require 'yaml'
 
 module Docker_Rsync
   class SyncManager

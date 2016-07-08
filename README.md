@@ -22,6 +22,9 @@ I tried a lot of the below named projects, and they did not suite out of this re
 ```
 gem install docker-sync
 ```
+## Boilerplate / Quickstart
+
+See the boilerplate for a simple, working example : https://github.com/EugenMayer/docker-sync-boilerplate
 
 ## Usage
 ### 1. configuration (once)
@@ -33,16 +36,16 @@ b) You can define as many syncs as you need. Be sure to vary the port, that's ba
 
 ### 2. Start sync/watch process (every time)
 ```
-docker-sync sync:start
+docker-sync start
 ```
 For further help and commands use
 
 ```
 docker-sync help
 docker-sync help sync
-docker-sync help sync:start
-docker-sync help sync:sync
-docker-sync help sync:clean
+docker-sync help start
+docker-sync help sync
+docker-sync help clean
 ```
 
 And so on
@@ -93,7 +96,7 @@ docker-compose up
 After you are done and probably either want to free up space or switch to a different project you might want to release the sync containers and volumes by
 
 ```
-docker-sync sync:clean
+docker-sync clean
 ```
 
 This will of course not delete anthing on your host source code folders or similar, it just removes the container for rsync and its volumes. It does not touch you application stack
