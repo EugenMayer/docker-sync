@@ -1,0 +1,14 @@
+GEM
+  specs:
+    colorize (0.7.7)
+    thor (0.19.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  colorize
+  thor
+
+BUNDLED WITH
+   1.11.2

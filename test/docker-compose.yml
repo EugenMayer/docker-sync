@@ -1,0 +1,15 @@
+version: "2"
+services:
+  someapp:
+    image: alpine
+    volumes_from:
+      - container:fullexample:rw # will be mounted on /var/www
+  otherapp:
+    image: alpine
+    volumes_from:
+      - container:simpleexample:rw # will be mounted on /app/code
+volumes:
+  fullexample:
+    external: true
+  simpleexample:
+    external: true
