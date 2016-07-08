@@ -30,7 +30,7 @@ Please see test/config.yml and look for the annotations of the configuration val
 
 ### 2. Start sync/watch process (every time)
 ```
-thor sync:start
+docker-sync sync:start
 ```
 
 ### How to mount the synced volumes in my containers? (once)
@@ -90,25 +90,27 @@ Without those to project, this project would be empty space and worth nothing. A
 **Hell yes**. Pull-requests, Feedback, Bug-Issues are very welcome.
 
 ## Other projects with similar purpose (i know of)
-###NFS
+#### NFS
 Performance: In general, at least 3 times slower the **RSYNC**, mostly eene more
 
  - Dinghy (docker-machine only)
  - dlite (docker-machine only)
 
-###Rsync
+#### Rsync
 Performance: Exactly the performance you would have without shares. Perfect!
  - docker-dev-osx (rsync, vbox only)
 
-### Unison
+#### Unison
 Performance: Not sure, i suggest similar to RSYNC. You have to implement watch-ing yourself though
  - only custom made?
 
 Hint: Tried unison, but i do not like the idea behind 2-way sync for development. If you need this, it should be a conceptual issue with your docker image architecture
-###Native
+####Native
 
 Performance: Well, i had everything, from 2-100 times slower to NFS and even more to rsync. **Useless**
  - dockertoolbox: virtualBox / fusion (native, horribly slow)
  - docker for mac (osxfs, 2/3 slower then NFS)
 
-
+## License
+You can eat, sell or delete this code - just without any warranty of any kind.
+Leaving the authors credits would be a friendly way of saying thank you :)
