@@ -3,16 +3,19 @@ services:
   someapp:
     image: alpine
     container_name: 'fullexample_app'
+    # that the important thing
     volumes_from:
       - container:fullexample:rw # will be mounted on /var/www
     command: ['watch', '-n1', 'cat /var/www/somefile.txt']
   otherapp:
     image: alpine
     container_name: 'simlpeexample_app'
+    command: ['watch', '-n1', 'cat /app/code/somefile.txt']
+    # that the important thing
     volumes_from:
       - container:simpleexample:rw # will be mounted on /app/code
-    command: ['watch', '-n1', 'cat /app/code/somefile.txt']
 
+# that the important thing
 volumes:
   fullexample:
     external: true

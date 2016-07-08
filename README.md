@@ -52,17 +52,24 @@ The sync-name, like fullexample in the example, is the container-name you should
 So in you docker-compose.yml you would add
 
 ```
-version:2
+version: "2"
 services:
   someapp:
     image: alpine
+    container_name: 'fullexample_app'
+    # that the important thing
     volumes_from:
       - container:fullexample:rw # will be mounted on /var/www
+    command: ['watch', '-n1', 'cat /var/www/somefile.txt']
   otherapp:
     image: alpine
+    container_name: 'simlpeexample_app'
+    command: ['watch', '-n1', 'cat /app/code/somefile.txt']
+    # that the important thing
     volumes_from:
       - container:simpleexample:rw # will be mounted on /app/code
 
+# that the important thing
 volumes:
   fullexample:
     external: true
@@ -79,6 +86,8 @@ run after you started your sync
 docker-compose up
 ```
 
+**You can no boldly change your code and it will all end up int the containers**
+
 ### 5. Cleanup
 
 After you are done and probably either want to free up space or switch to a different project you might want to release the sync containers and volumes by
@@ -87,7 +96,7 @@ After you are done and probably either want to free up space or switch to a diff
 docker-sync sync:clean
 ```
 
-This will of course not delete anthing on you host, it just removes the container for rsync and its volumes. It does not touch you application stack
+This will of course not delete anthing on your host source code folders or similar, it just removes the container for rsync and its volumes. It does not touch you application stack
 
 ## Behind the scenes
 - On the host, a thor based ruby task is started, this starts
@@ -131,7 +140,7 @@ docker exec -i -t fullexample_app time dd if=/dev/zero of=/var/www/test.dat bs=1
 ```
 
 ## Performance
-Use the test-setup aboe and try
+Use the test-setup above and try
 
 This writes on a folder which is shares/synced
 ```
@@ -153,14 +162,15 @@ user	0m 0.02s
 sys	0m 0.13s
 ```
 
-**So the result**: No difference. That's what we want
+**So the result**: No difference between shared and not shared. That's what we want. And thats faster then anything else.
+
 ## TODO
  - probably use alpine linux for the sync container, to minimize its size
  - i bet you find something! :)
 
 ## Other usages with docker_sync
 
-We use docker-sync as a library in our own docker-stack startup scrip. It starts the docker-compose stack using
+We use docker-sync as a library in our own docker-stack startup script. It starts the docker-compose stack using
 a ruby gem [docker-compose](https://github.com/EugenMayer/docker-compose) all this wrapped into a thor task. So
  - start docker-rsync
  - start a docker-compose stack based on some arguments like --dev and load the specific docker-compose files for that using [docker-compose](https://github.com/xeger/docker-compose)
