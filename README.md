@@ -23,7 +23,7 @@ I tried a lot of the below named projects, and they did not suite out of this re
 gem install docker-sync
 ```
 
-## usage
+## Usage
 ### 1. configuration (once)
 Please see [test/docker-sync.yml](https://github.com/EugenMayer/docker_sync/blob/master/test/docker-sync.yml) and check the annotations to understand, how how to configure docker-sync
 
@@ -166,6 +166,7 @@ sys	0m 0.13s
 
 ## TODO
  - probably use alpine linux for the sync container, to minimize its size
+ - Do we have windows support? :)
  - i bet you find something! :)
 
 ## Other usages with docker_sync
@@ -189,18 +190,19 @@ Without those to project, this project would be empty space and worth nothing. A
 #### NFS
 Performance: In general, at least 3 times slower the **RSYNC**, mostly eene more
 
- - Dinghy (docker-machine only)
- - dlite (docker-machine only)
+ - [Dinghy](https://github.com/codekitchen/dinghy) (docker-machine only)
+ - [dlite](https://github.com/nlf/dlite) (docker-machine only)
 
 #### Rsync
 Performance: Exactly the performance you would have without shares. Perfect!
- - docker-dev-osx (rsync, vbox only)
+ - [docker-dev-osx](https://github.com/brikis98/docker-osx-dev) (rsync, vbox only)
 
 #### Unison
 Performance: Not sure, i suggest similar to RSYNC. You have to implement watch-ing yourself though
- - only custom made?
+ - [Hodor](https://github.com/gansbrest/hodor) (should be as fast as rsync?)
 
-Hint: Tried unison, but i do not like the idea behind 2-way sync for development. If you need this, it should be a conceptual issue with your docker image architecture
+Hint: Tried unison, but i do not like the idea behind 2-way sync for development. If you need this, it should be a conceptual issue with your docker image architecture.
+Beside that, it does not support docker for mac
 ####Native
 
 Performance: Well, i had everything, from 2-100 times slower to NFS and even more to rsync. **Useless**
