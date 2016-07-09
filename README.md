@@ -26,6 +26,9 @@ Use docker-for-mac, dockertoolbox, virtualbox fusion or Paralelles, xhyve or wha
 **0.0.6** Critical issue in sync
 - Fixing critical issue where sync has been called using the old sync:sync syntax - not syncing at all
 
+**0.0.5** Unison support
+- Added unison support
+
 ## Motivation
 
 I tried a lot of the below named projects, and they did not suite because:
@@ -115,7 +118,7 @@ Run after you started your sync
 docker-compose up
 ```
 
-**You can no boldly change your code and it will all end up int the containers**
+**You can now boldly change your code and it will all end up int the app-containers**
 
 ### 5. Cleanup
 
@@ -125,17 +128,17 @@ After you are done and probably either want to free up space or switch to a diff
 docker-sync clean
 ```
 
-This will of course not delete anything on your host source code folders or similar, it just removes the container for rsync and its volumes. It does not touch you application stack
+This will of course not delete anything on your host source code folders or similar, it just removes the container for rsync and its volumes. It does not touch you application stack.
 
 ## Behind the scenes
 - On the host, a thor based ruby task is started, this starts
-  - Every sync will start an own docker-container with a rsync-daemon watching for connections.
+  - Every sync will start an own docker-container with a rsync/unison-daemon watching for connections.
   - The data gets pre-synced on sync-start
-  - a fswatch cli-task gets setup, to run rsync or unison on each file-change in the source-folder you defined
+  - a fswatch cli-task gets setup, to run rsync/unison on each file-change in the source-folder you defined
 
 Done. No magic. But its roadrunner fast! And it has no pre-conditions on your actual stack
 
-## Tests (sync and perfomance)
+## Tests (sync and performance)
 Pull this repo and then
 ```
 cd docker_sync/test
