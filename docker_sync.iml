@@ -5,7 +5,7 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="jdk" jdkName="rbenv: 2.2.4" jdkType="RUBY_SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.12.1, rbenv: 2.2.4) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.11.2, rbenv: 2.2.4) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="thor (v0.19.1, rbenv: 2.2.4) [gem]" level="application" />
   </component>
 </module>

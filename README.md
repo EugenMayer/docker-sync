@@ -22,6 +22,8 @@ Use docker-for-mac, dockertoolbox, virtualbox fusion or Paralelles, xhyve or wha
 - Do no longer enforce verbose flag
 - remove colorize
 - be less verbose in normal mode
+- Fixed source code mapping when using test
+- renamed test to example
 
 **0.0.6** Critical issue in sync
 - Fixing critical issue where sync has been called using the old sync:sync syntax - not syncing at all

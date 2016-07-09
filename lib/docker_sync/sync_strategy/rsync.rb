@@ -54,8 +54,10 @@ module Docker_Sync
         end
         args.push('-ap')
         args.push(@options['sync_args']) if @options.key?('sync_args')
-        args.push("--usermap='*:#{@options['sync_user']}'") if @options.key?('sync_user')
-        args.push("--groupmap='*:#{@options['sync_group']}'") if @options.key?('sync_group')
+        # we do not need to user usermap/groupmap since we started our container the way that it also maps user/group like we defined
+        # in the config - see start_container
+        #args.push("--usermap='*:#{@options['sync_user']}'") if @options.key?('sync_user')
+        #args.push("--groupmap='*:#{@options['sync_group']}'") if @options.key?('sync_group')
         args.push("#{@options['src']}/") # add a trailing slash
         args.push("rsync://#{@options['sync_host_ip']}:#{@options['sync_host_port']}/volume")
       end
@@ -71,7 +73,28 @@ module Docker_Sync
           exists = `docker ps --filter "status=exited" --filter "name=#{@sync_name}" | grep #{@sync_name}`
           if exists == '' # container has yet not been created
             say_status 'ok', "creating #{@sync_name} container", :white if @options['verbose']
-            cmd = "docker run -p '#{@options['sync_host_port']}:873' -v #{@sync_name}:#{@options['dest']} -e VOLUME=#{@options['dest']} --name #{@sync_name} -d eugenmayer/rsync"
+
+            user_mapping = ''
+            if @options.key?('sync_user')
+              user_mapping = "-e OWNER=#{@options['sync_user']}"
+              if @options.key?('sync_userid')
+                user_mapping = "#{user_mapping} -e OWNERID=#{@options['sync_userid']}"
+              end
+            elsif @options.key?('sync_userid')
+              raise("#{@sync_name}: You have set a sync_userid but no sync_user - you need to set both")
+            end
+
+            group_mapping = ''
+            if @options.key?('sync_group')
+              group_mapping = "-e GROUP=#{@options['sync_group']}"
+              if @options.key?('sync_groupid')
+                group_mapping = "#{group_mapping} -e GROUPID=#{@options['sync_groupid']}"
+              end
+            elsif @options.key?('sync_groupid')
+              raise("#{@sync_name}: You have set a sync_groupid but no sync_group - you need to set both")
+            end
+
+            cmd = "docker run -p '#{@options['sync_host_port']}:873' -v #{@sync_name}:#{@options['dest']} #{user_mapping} #{group_mapping} -e VOLUME=#{@options['dest']} --name #{@sync_name} -d eugenmayer/rsync"
           else # container already created, just start / reuse it
             say_status 'ok', "starting #{@sync_name} container", :white if @options['verbose']
             cmd = "docker start #{@sync_name}"
