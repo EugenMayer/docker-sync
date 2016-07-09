@@ -1,5 +1,6 @@
 # for a simpler example, see the boilerplate at https://github.com/EugenMayer/docker-sync-boilerplate
 options:
+  # optional, activate this if you need to debug something, default is false
   verbose: true
 syncs:
   fullexample:
