@@ -4,14 +4,10 @@
     <bookmark url="file://$PROJECT_DIR$/README.md" line="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="52f6a274-8102-4a8f-9ab4-84fce2adc9d2" name="Default" comment="implemented">
+    <list default="true" id="52f6a274-8102-4a8f-9ab4-84fce2adc9d2" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docker_sync.iml" afterPath="$PROJECT_DIR$/docker_sync.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/example/data1/somefile.txt" afterPath="$PROJECT_DIR$/example/data1/somefile.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/example/docker-sync.yml" afterPath="$PROJECT_DIR$/example/docker-sync.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/docker_sync/sync_strategy/rsync.rb" afterPath="$PROJECT_DIR$/lib/docker_sync/sync_strategy/rsync.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/docker_sync/sync_strategy/unison.rb" afterPath="$PROJECT_DIR$/lib/docker_sync/sync_strategy/unison.rb" />
     </list>
     <ignored path="docker_sync.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -88,12 +84,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="361">
-                <caret line="25" column="25" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
+              <first_editor relative-caret-position="459">
+                <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -111,11 +107,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="docker-sync.yml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="docker-sync.yml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/example/docker-sync.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="33" column="26" selection-start-line="33" selection-start-column="26" selection-end-line="33" selection-end-column="26" />
+            <state relative-caret-position="374">
+              <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -177,9 +173,9 @@
         <option value="$PROJECT_DIR$/lib/preconditions.rb" />
         <option value="$PROJECT_DIR$/lib/docker_sync/watch_strategy/fswatch.rb" />
         <option value="$PROJECT_DIR$/lib/docker_sync/sync_strategy/unison.rb" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/lib/docker_sync/sync_strategy/rsync.rb" />
         <option value="$PROJECT_DIR$/example/docker-sync.yml" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -1042,7 +1038,7 @@
       <workItem from="1467976183036" duration="20149000" />
       <workItem from="1468007294331" duration="7522000" />
       <workItem from="1468049225167" duration="5786000" />
-      <workItem from="1468062389918" duration="2782000" />
+      <workItem from="1468062389918" duration="4940000" />
     </task>
     <task id="LOCAL-00001" summary="Initial version, &#10;&#10;It is all working, ^TM :)">
       <created>1467987621464</created>
@@ -1121,11 +1117,32 @@
       <option name="project" value="LOCAL" />
       <updated>1468013693717</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="finished user/group impersonation on sync with rsync to fix file-permission issues on the destination system">
+      <created>1468065335383</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1468065335383</updated>
+    </task>
+    <task id="LOCAL-00013" summary="document verbose">
+      <created>1468065399797</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1468065399797</updated>
+    </task>
+    <task id="LOCAL-00014" summary="fix dock, remove usermap/groumap evidence">
+      <created>1468065640863</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1468065640863</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36239000" />
+    <option name="totallyTimeSpent" value="38397000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="986" extended-state="6" />
@@ -1137,13 +1154,13 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.48322147" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.0" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34340045" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16187434" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16187434" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1184,7 +1201,10 @@
     <MESSAGE value="typos fixed, thanks to KarolB :)" />
     <MESSAGE value="made rsync and fswatch strategys so we can easily implement others, like unison for rsync" />
     <MESSAGE value="adding preconditions, preparing 0.0.7 release" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding preconditions, preparing 0.0.7 release" />
+    <MESSAGE value="finished user/group impersonation on sync with rsync to fix file-permission issues on the destination system" />
+    <MESSAGE value="document verbose" />
+    <MESSAGE value="fix dock, remove usermap/groumap evidence" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix dock, remove usermap/groumap evidence" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1314,6 +1334,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="3" selection-start-line="0" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1431,6 +1452,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="3" selection-start-line="0" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1535,17 +1557,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="361">
-            <caret line="25" column="25" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
-            <folding />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/docker_sync/sync_strategy/rsync.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
@@ -1556,9 +1567,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/example/docker-sync.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="33" column="26" selection-start-line="33" selection-start-column="26" selection-end-line="33" selection-end-column="26" />
+        <state relative-caret-position="374">
+          <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="459">
+            <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>

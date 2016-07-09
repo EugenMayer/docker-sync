@@ -20,7 +20,7 @@ syncs:
     # optional, a list of regular expressions to exclude from the fswatch - see fswatch docs for details
 
     # optional, default
-    sync_strategy: 'rsycn'
+    sync_strategy: 'rsync'
 
     # optional, use this to map the files to a specific user on sync. Helps fixing permissions. You can use names and uids
     sync_user: 'test'
