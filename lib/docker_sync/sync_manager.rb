@@ -42,7 +42,10 @@ module Docker_Rsync
         @config_syncs[name]['config_path'] = @config_path
         @config_syncs[name]['src'] = File.expand_path(@config_syncs[name]['src'])
         unless config.key?('verbose')
-          @config_syncs[name]['verbose'] = @config_options['verbose'] || false
+          @config_syncs[name]['verbose'] = false
+          if @config_options.key?('verbose')
+            @config_syncs[name]['verbose'] = @config_options['verbose']
+          end
         end
       end
     end

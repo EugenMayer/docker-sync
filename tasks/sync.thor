@@ -1,13 +1,23 @@
 require 'docker_sync/sync_manager'
 require 'config'
+require 'preconditions'
 
 class Sync < Thor
   include DockerSyncConfig
+  include Preconditions
+
   class_option :config, :aliases => '-c',:default => nil, :type => :string, :desc => 'Path of the docker_sync config'
   class_option :sync_name, :aliases => '-n',:type => :string, :desc => 'If given, only this sync configuration will be references/started/synced'
 
   desc 'start', 'Start all sync configurations in this project'
   def start
+    begin
+      check_all_preconditions
+    rescue Exception => e
+      say_status 'error', e.message, :red
+      exit 1
+    end
+
     if options[:config]
       config_path = options[:config]
     else
@@ -24,6 +34,13 @@ class Sync < Thor
 
   desc 'sync_only', 'sync - do not start a watcher'
   def sync
+    begin
+      check_all_preconditions
+    rescue Exception => e
+      say_status 'error', e.message, :red
+      exit 1
+    end
+
     if options[:config]
       config_path = options[:config]
     else
@@ -40,6 +57,13 @@ class Sync < Thor
 
   desc 'clean', 'Stop and clean up all sync endpoints'
   def clean
+    begin
+      check_all_preconditions
+    rescue Exception => e
+      say_status 'error', e.message, :red
+      exit 1
+    end
+
     if options[:config]
       config_path = options[:config]
     else
@@ -58,6 +82,13 @@ class Sync < Thor
   desc 'list', 'List all sync-points of the project configuration path'
   method_option :verbose, :default => false, :type => :boolean, :desc => 'Verbose output'
   def list
+    begin
+      check_all_preconditions
+    rescue Exception => e
+      say_status 'error', e.message, :red
+      exit 1
+    end
+
     if options[:config]
       config_path = options[:config]
     else

@@ -1,9 +1,14 @@
 require 'thor/shell'
+require 'preconditions'
+require 'open3'
 
 module Docker_Sync
   module SyncStrategy
     class Unison
       include Thor::Shell
+      include Preconditions
+
+
       @options
       @sync_name
       @watch_thread
@@ -13,6 +18,14 @@ module Docker_Sync
       def initialize(sync_name, options)
         @sync_name = sync_name
         @options = options
+
+        begin
+          unison_available
+        rescue Exception => e
+          say_status 'error', "#{@sync_name} has been configured to sync with unison, but no unison available", :red
+          say_status 'error', e.message, :red
+          exit 1
+        end
       end
 
       def run
@@ -26,12 +39,12 @@ module Docker_Sync
 
         say_status 'command', cmd, :white if @options['verbose']
 
-        out = `#{cmd}`
+        Open3.popen3(cmd)
         if $?.exitstatus > 0
           say_status 'error', "Error starting sync, exit code #{$?.exitstatus}", :red
           say_status 'message', out
         else
-          say_status 'success', "Synced #{@options['src']}", :green
+          say_status 'ok', "Synced #{@options['src']}", :white
           if @options['verbose']
             say_status 'output', out
           end
@@ -42,8 +55,8 @@ module Docker_Sync
         args = []
 
         unless @options['sync_excludes'].nil?
-          # TODO: does unison support excludes as a command paramter? seems to be a config-value only
-          say_status 'warning','Excludes are yet not implemented for unison!', :orange
+          # TODO: does unison support excludes as a command parameter? seems to be a config-value only
+          say_status 'warning','Excludes are yet not implemented for unison!', :yellow
           #  args = @options['sync_excludes'].map { |pattern| "--exclude='#{pattern}'" } + args
         end
         args.push(@options['src'])
@@ -54,27 +67,28 @@ module Docker_Sync
       end
 
       def start_container
-        say_status 'ok', 'Starting rsync', :white
+        say_status 'ok', 'Starting unison', :white
         running = `docker ps --filter 'status=running' --filter 'name=#{@sync_name}' | grep #{@sync_name}`
         if running == ''
-          say_status 'ok', "#{@sync_name} container not running", :white
-          exists = `docker ps --filter "status=exited" --filter "name=filesync_dw" | grep filesync_dw`
+          say_status 'ok', "#{@sync_name} container not running", :white if @options['verbose']
+          exists = `docker ps --filter "status=exited" --filter "name=#{@sync_name}" | grep #{@sync_name}`
           if exists == ''
-            say_status 'ok', "creating #{@sync_name} container", :white
+            say_status 'ok', "creating #{@sync_name} container", :white if @options['verbose']
             cmd = "docker run -p '#{@options['sync_host_port']}:#{UNISON_CONTAINER_PORT}' -v #{@sync_name}:#{@options['dest']} -e UNISON_VERSION=#{UNISON_VERSION} -e UNISON_WORKING_DIR=#{@options['dest']} --name #{@sync_name} -d #{UNISON_IMAGE}"
           else
-            say_status 'success', "starting #{@sync_name} container", :green
+            say_status 'ok', "starting #{@sync_name} container", :ok if @options['verbose']
             cmd = "docker start #{@sync_name}"
           end
-          say_status 'command', cmd, :white
+          say_status 'command', cmd, :white if @options['verbose']
           `#{cmd}` || raise('Start failed')
         else
           say_status 'ok', "#{@sync_name} container still running", :blue
         end
-        say_status 'success', "starting initial #{@sync_name} of src", :green
+        say_status 'ok', "starting initial #{@sync_name} of src", :white if @options['verbose']
         # this sleep is needed since the container could be not started
         sleep 1
         sync
+        say_status 'success', 'Unison server started', :green
       end
 
       def stop_container

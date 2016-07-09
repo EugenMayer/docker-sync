@@ -1,2 +1,1 @@
 gem 'thor'
-gem 'colorize'

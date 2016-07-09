@@ -1,9 +1,12 @@
 require 'thor/shell'
+require 'preconditions'
 
 module Docker_Sync
   module SyncStrategy
     class Rsync
       include Thor::Shell
+      include Preconditions
+
       @options
       @sync_name
       @watch_thread
@@ -11,6 +14,14 @@ module Docker_Sync
       def initialize(sync_name, options)
         @sync_name = sync_name
         @options = options
+
+        begin
+          rsync_available
+        rescue Exception => e
+          say_status 'error', "#{@sync_name} has been configured to sync with rsync, but no rsync binary available", :red
+          say_status 'error', e.message, :red
+          exit 1
+        end
       end
 
       def run
@@ -29,7 +40,7 @@ module Docker_Sync
           say_status 'error', "Error starting sync, exit code #{$?.exitstatus}", :red
           say_status 'message', out
         else
-          say_status 'success', "Synced #{@options['src']}", :green
+          say_status 'ok', "Synced #{@options['src']}", :white
           if @options['verbose']
             say_status 'output', out
           end
@@ -43,33 +54,38 @@ module Docker_Sync
         end
         args.push('-ap')
         args.push(@options['sync_args']) if @options.key?('sync_args')
+        args.push("--usermap='*:#{@options['sync_user']}'") if @options.key?('sync_user')
+        args.push("--groupmap='*:#{@options['sync_group']}'") if @options.key?('sync_group')
         args.push("#{@options['src']}/") # add a trailing slash
         args.push("rsync://#{@options['sync_host_ip']}:#{@options['sync_host_port']}/volume")
       end
 
-
+      # starts a rsync docker container listening on the specific port
+      # this container exposes a named volume and is on one side used as the rsync-endpoint for the
+      # local rsync command, on the other side the volume is mounted into the app-container to share the code / content
       def start_container
         say_status 'ok', 'Starting rsync', :white
         running = `docker ps --filter 'status=running' --filter 'name=#{@sync_name}' | grep #{@sync_name}`
-        if running == ''
-          say_status 'ok', "#{@sync_name} container not running", :white
-          exists = `docker ps --filter "status=exited" --filter "name=filesync_dw" | grep filesync_dw`
-          if exists == ''
-            say_status 'ok', "creating #{@sync_name} container", :white
+        if running == '' # container is yet not running
+          say_status 'ok', "#{@sync_name} container not running", :white if @options['verbose']
+          exists = `docker ps --filter "status=exited" --filter "name=#{@sync_name}" | grep #{@sync_name}`
+          if exists == '' # container has yet not been created
+            say_status 'ok', "creating #{@sync_name} container", :white if @options['verbose']
             cmd = "docker run -p '#{@options['sync_host_port']}:873' -v #{@sync_name}:#{@options['dest']} -e VOLUME=#{@options['dest']} --name #{@sync_name} -d eugenmayer/rsync"
-          else
-            say_status 'success', "starting #{@sync_name} container", :green
+          else # container already created, just start / reuse it
+            say_status 'ok', "starting #{@sync_name} container", :white if @options['verbose']
             cmd = "docker start #{@sync_name}"
           end
-          say_status 'command', cmd, :white
+          say_status 'command', cmd, :white if @options['verbose']
           `#{cmd}` || raise('Start failed')
         else
-          say_status 'ok', "#{@sync_name} container still running", :blue
+          say_status 'ok', "#{@sync_name} container still running", :blue if @options['verbose']
         end
-        say_status 'success', "starting initial #{@sync_name} of src", :green
+        say_status 'ok', "starting initial #{@sync_name} of src", :white if @options['verbose']
         # this sleep is needed since the container could be not started
         sleep 1
         sync
+        say_status 'success', 'Rsync server started', :green
       end
 
       def stop_container

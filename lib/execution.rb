@@ -1,5 +1,5 @@
 require 'open3'
-require 'colorize'
+require 'thor/shell'
 
 module Execution
 
@@ -7,8 +7,9 @@ module Execution
 
   def threadexec(command, prefix = nil, color = nil)
 
-    unless prefix.nil?
-      prefix = "#{prefix}    | "
+    if prefix.nil?
+      # TODO: probably pick the command name without args
+      prefix = 'unknown'
     end
 
     if color.nil?
@@ -19,11 +20,11 @@ module Execution
       Open3.popen3(command) do |stdin, stdout, stderr, wait_thr|
 
         while lineOut = stdout.gets
-          puts prefix.nil? ? lineOut : prefix.colorize(color) + lineOut
+          say_status prefix, lineOut, color
         end
 
         while lineErr = stderr.gets
-          puts prefix.nil? ? lineErr : prefix.colorize(color) + lineErr
+          say_status prefix, lineErr, :red
         end
 
       end

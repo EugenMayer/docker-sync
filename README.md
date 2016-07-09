@@ -8,9 +8,23 @@ Docker-sync is:
  - it uses **rsync or unison** (you can chose) to sync - so the container performance is not influenced at all, see [performance](https://github.com/EugenMayer/docker_sync#performance)
  - an efficient way is used to watch for file changes (fswatch -o) - does not eat up you CPU even for 12k+ files
  - supports either one-way sync ( rsync ) or two way sync ( unison )
+ - supports user-remapping on sync to avoid permission problems
 
 So besides performance being the first priority, the second is, not forcing you into using a **specific** docker-toolbox solution.
 Use docker-for-mac, dockertoolbox, virtualbox fusion or Paralelles, xhyve or whatever!
+
+## Changelog
+**0.0.7** Convinience / Bugfixes
+- Fixed container-re-usage issue
+- **add the possibility to map user/group on sync**
+- Add preconditions to properly detect if fswatch, unison, docker, and others are in proper state
+- Better log output
+- Do no longer enforce verbose flag
+- remove colorize
+- be less verbose in normal mode
+
+**0.0.6** Critical issue in sync
+- Fixing critical issue where sync has been called using the old sync:sync syntax - not syncing at all
 
 ## Motivation
 
@@ -22,14 +36,25 @@ I tried a lot of the below named projects, and they did not suite because:
 
 ```
 gem install docker-sync
+brew install fswatch
 ```
+
+[Homebrew aka brew](http://brew.sh/) is a tool you need under OSX to install / easy compile other tools.
+
+Optionally, if you want to use unison or want a better rsync (then the build in OSX one)
+
+```
+brew install unison
+brew install rsync
+```
+
 ## Boilerplate / Quickstart
 
 See the boilerplate for a simple, working example : https://github.com/EugenMayer/docker-sync-boilerplate
 
 ## Usage
 ### 1. configuration (once)
-Please see [test/docker-sync.yml](https://github.com/EugenMayer/docker_sync/blob/master/test/docker-sync.yml) and check the annotations to understand, how how to configure docker-sync
+Please see [example/docker-sync.yml](https://github.com/EugenMayer/docker_sync/blob/master/example/docker-sync.yml) and check the annotations to understand, how how to configure docker-sync
 
 a) Place your docker-sync.yml in your project root. The configuration will be searched from the point your run docker-sync from, traversing up the path tree
 
@@ -170,6 +195,7 @@ sys	0m 0.13s
 
 ## TODO
  - Probably use alpine linux for the sync container, to minimize its size
+ - Create Wiki pages and slim down the readme - can someone help on this?
  - Do we have windows support? :)
  - I bet you find something! :)
 
@@ -187,13 +213,14 @@ Without the following projects, this project would be empty space and worth noth
  - [rsync](https://de.wikipedia.org/wiki/Rsync)
  - [unison](https://www.cis.upenn.edu/~bcpierce/unison/)
  - [thor](https://github.com/erikhuda/thor)
+ - [Homebrew](http://brew.sh/)
 
 ## Contributions
 **Hell yes**. Pull-requests, Feedback, Bug-Issues are very welcome.
 
 ## Other projects with similar purpose (i know of)
 #### NFS
-Performance: In general, at least 3 times slower the **RSYNC**, ofter even more
+Performance: In general, at least 3 times slower then **RSYNC**, ofter even more
 
  - [Dinghy](https://github.com/codekitchen/dinghy) (docker-machine only)
  - [dlite](https://github.com/nlf/dlite) (docker-machine only)
@@ -204,13 +231,13 @@ Performance: Exactly the performance you would have without shares. Perfect!
 
 Hint: If you are happy with docker-machine and virtual box, this is a pretty solid alternative. It has been there for ages and is most probably pretty advanced. For me, it was no choice, since neither i want to stick to VBox nor it has support for docker-for-mac
 #### Unison
-Performance: Not sure, i suggest similar to RSYNC, but two way sync
+Performance: The same as rsync, so normal container speed, no performance impac. Two way sync
  - [Hodor](https://github.com/gansbrest/hodor) (should be as fast as rsync?)
 
 Hint: You can chose to use unison with docker-sync by adding sync_strategy: 'unison' to an sync-point
 ####Native
 
-Performance: Well, i had everything, from 2-100 times slower to NFS and even more to rsync. **Useless**
+Performance: I had everything, from 2-100 times slower then NFS and even more compared to rsync. **Useless**
  - dockertoolbox: virtualBox / fusion (native, horribly slow)
  - docker for mac (osxfs, 2/3 slower then NFS)
 

@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'docker-sync'
-  s.version     = '0.0.5'
-  s.date        = '2016-07-08'
+  s.version     = '0.0.7'
+  s.date        = '2016-07-09'
   s.summary     = 'Docker Sync - Fast and efficient way to sync code to docker-containers'
   s.description = 'Sync your code live to docker-containers without losing any performance on OSX'
   s.authors     = ['Eugen Mayer']
@@ -11,5 +11,4 @@ Gem::Specification.new do |s|
   s.license     = 'GPL'
   s.homepage    = 'https://github.com/EugenMayer/docker_sync'
   s.add_runtime_dependency 'thor', '~> 0'
-  s.add_runtime_dependency 'colorize', '~> 0'
 end

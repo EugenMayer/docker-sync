@@ -1,3 +1,4 @@
+# for a simpler example, see the boilerplate at https://github.com/EugenMayer/docker-sync-boilerplate
 options:
   #verbose: true
 syncs:
@@ -19,8 +20,16 @@ syncs:
     watch_excludes: ['.*/.git', '.*/node_modules', '.*/bower_components', '.*/sass-cache', '.*/.sass-cache', '.*/.sass-cache', '.coffee', '.scss', '.sass', '.gitignore']
     # optional: use this to switch to fswatch verbose mode
     watch_args: '-v'
-    # default, optional
+    # optional, default
     sync_strategy: 'rsycn'
+    # optional, use this to map the files to a specific user on sync. Helps fixing permissions. You can use names and uids
+    # this option does only work with rsync, and only rsync 3.1.0+ - no support for unison right now
+    # will be added as --usermap='*:#{@options['sync_user']}'
+    sync_user: 'root'
+    # optional, use this to map the files to a specific group on sync. Helps fixing permissions, You can use names and guids
+    # this option does only work with rsync, and only rsync 3.1.0+ - no support for unison right now
+    # will be added as --groupmap='*:#{@options['sync_group']}'
+    sync_group: 'root'
   simpleexample:
     src: '~/Development/repos/docker_sync/test/data2'
     dest: '/app/code'
