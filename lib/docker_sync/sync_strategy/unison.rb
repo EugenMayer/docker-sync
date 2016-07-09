@@ -39,14 +39,14 @@ module Docker_Sync
 
         say_status 'command', cmd, :white if @options['verbose']
 
-        Open3.popen3(cmd)
-        if $?.exitstatus > 0
+        stdout, stderr, exit_status = Open3.capture3(cmd)
+        if not exit_status.success?
           say_status 'error', "Error starting sync, exit code #{$?.exitstatus}", :red
-          say_status 'message', out
+          say_status 'message', stdout
         else
           say_status 'ok', "Synced #{@options['src']}", :white
           if @options['verbose']
-            say_status 'output', out
+            say_status 'output', stdout
           end
         end
       end
