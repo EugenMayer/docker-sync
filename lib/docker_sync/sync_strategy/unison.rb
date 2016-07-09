@@ -80,7 +80,7 @@ module Docker_Sync
             say_status 'ok', "creating #{@sync_name} container", :white if @options['verbose']
             cmd = "docker run -p '#{@options['sync_host_port']}:#{UNISON_CONTAINER_PORT}' -v #{@sync_name}:#{@options['dest']} -e UNISON_VERSION=#{UNISON_VERSION} -e UNISON_WORKING_DIR=#{@options['dest']} --name #{@sync_name} -d #{UNISON_IMAGE}"
           else
-            say_status 'ok', "starting #{@sync_name} container", :ok if @options['verbose']
+            say_status 'ok', "starting #{@sync_name} container", :white if @options['verbose']
             cmd = "docker start #{@sync_name}"
           end
           say_status 'command', cmd, :white if @options['verbose']
