@@ -39,14 +39,14 @@ module Docker_Sync
 
         say_status 'command', cmd, :white if @options['verbose']
 
-        Open3.popen3(cmd)
-        if $?.exitstatus > 0
+        stdout, stderr, exit_status = Open3.capture3(cmd)
+        if not exit_status.success?
           say_status 'error', "Error starting sync, exit code #{$?.exitstatus}", :red
-          say_status 'message', out
+          say_status 'message', stdout
         else
           say_status 'ok', "Synced #{@options['src']}", :white
           if @options['verbose']
-            say_status 'output', out
+            say_status 'output', stdout
           end
         end
       end
@@ -80,7 +80,7 @@ module Docker_Sync
             say_status 'ok', "creating #{@sync_name} container", :white if @options['verbose']
             cmd = "docker run -p '#{@options['sync_host_port']}:#{UNISON_CONTAINER_PORT}' -v #{@sync_name}:#{@options['dest']} -e UNISON_VERSION=#{UNISON_VERSION} -e UNISON_WORKING_DIR=#{@options['dest']} --name #{@sync_name} -d #{UNISON_IMAGE}"
           else
-            say_status 'ok', "starting #{@sync_name} container", :ok if @options['verbose']
+            say_status 'ok', "starting #{@sync_name} container", :white if @options['verbose']
             cmd = "docker start #{@sync_name}"
           end
           say_status 'command', cmd, :white if @options['verbose']
