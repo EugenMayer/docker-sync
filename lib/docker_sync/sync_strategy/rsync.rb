@@ -68,12 +68,13 @@ module Docker_Sync
       # local rsync command, on the other side the volume is mounted into the app-container to share the code / content
       def start_container
         say_status 'ok', 'Starting rsync', :white
-        running = `docker ps --filter 'status=running' --filter 'name=#{@sync_name}' | grep #{@sync_name}`
+        container_name = "#{@sync_name}-sync"
+        running = `docker ps --filter 'status=running' --filter 'name=#{container_name}' | grep #{container_name}`
         if running == '' # container is yet not running
-          say_status 'ok', "#{@sync_name} container not running", :white if @options['verbose']
-          exists = `docker ps --filter "status=exited" --filter "name=#{@sync_name}" | grep #{@sync_name}`
+          say_status 'ok', "#{container_name} container not running", :white if @options['verbose']
+          exists = `docker ps --filter "status=exited" --filter "name=#{container_name}" | grep #{container_name}`
           if exists == '' # container has yet not been created
-            say_status 'ok', "creating #{@sync_name} container", :white if @options['verbose']
+            say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
 
             user_mapping = ''
             if @options.key?('sync_user')
@@ -95,17 +96,17 @@ module Docker_Sync
               raise("#{@sync_name}: You have set a sync_groupid but no sync_group - you need to set both")
             end
 
-            cmd = "docker run -p '#{@options['sync_host_port']}:873' -v #{@sync_name}:#{@options['dest']} #{user_mapping} #{group_mapping} -e VOLUME=#{@options['dest']} --name #{@sync_name} -d eugenmayer/rsync"
+            cmd = "docker run -p '#{@options['sync_host_port']}:873' -v #{@sync_name}:#{@options['dest']} #{user_mapping} #{group_mapping} -e VOLUME=#{@options['dest']} --name #{container_name} -d eugenmayer/rsync"
           else # container already created, just start / reuse it
-            say_status 'ok', "starting #{@sync_name} container", :white if @options['verbose']
-            cmd = "docker start #{@sync_name}"
+            say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
+            cmd = "docker start #{container_name}"
           end
           say_status 'command', cmd, :white if @options['verbose']
           `#{cmd}` || raise('Start failed')
         else
-          say_status 'ok', "#{@sync_name} container still running", :blue if @options['verbose']
+          say_status 'ok', "#{container_name} container still running", :blue if @options['verbose']
         end
-        say_status 'ok', "starting initial #{@sync_name} of src", :white if @options['verbose']
+        say_status 'ok', "#{@sync_name}: starting initial sync of #{@options['src']}", :white if @options['verbose']
         # this sleep is needed since the container could be not started
         sleep 1
         sync
