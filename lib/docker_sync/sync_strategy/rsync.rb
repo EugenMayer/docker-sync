@@ -60,6 +60,7 @@ module Docker_Sync
         #args.push("--groupmap='*:#{@options['sync_group']}'") if @options.key?('sync_group')
         args.push("#{@options['src']}/") # add a trailing slash
         args.push("rsync://#{@options['sync_host_ip']}:#{@options['sync_host_port']}/volume")
+        return args
       end
 
       # starts a rsync docker container listening on the specific port

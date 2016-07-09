@@ -67,6 +67,7 @@ module Docker_Sync
         if @options.key?('sync_user') || @options.key?('sync_group') || @options.key?('sync_groupid') || @options.key?('sync_userid')
           raise('Unison does not support sync_user, sync_group, sync_groupid or sync_userid - please use rsync if you need that')
         end
+        return args
       end
 
       def start_container
