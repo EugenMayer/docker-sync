@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'docker-sync'
-  s.version     = '0.0.7'
+  s.version     = '0.0.8'
   s.date        = '2016-07-09'
   s.summary     = 'Docker Sync - Fast and efficient way to sync code to docker-containers'
   s.description = 'Sync your code live to docker-containers without losing any performance on OSX'

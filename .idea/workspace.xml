@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="52f6a274-8102-4a8f-9ab4-84fce2adc9d2" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/example/docker-sync.yml" afterPath="$PROJECT_DIR$/example/docker-sync.yml" />
     </list>
     <ignored path="docker_sync.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1038,7 +1036,7 @@
       <workItem from="1467976183036" duration="20149000" />
       <workItem from="1468007294331" duration="7522000" />
       <workItem from="1468049225167" duration="5786000" />
-      <workItem from="1468062389918" duration="4940000" />
+      <workItem from="1468062389918" duration="5549000" />
     </task>
     <task id="LOCAL-00001" summary="Initial version, &#10;&#10;It is all working, ^TM :)">
       <created>1467987621464</created>
@@ -1138,11 +1136,18 @@
       <option name="project" value="LOCAL" />
       <updated>1468065640863</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="split readme into wiki-pages">
+      <created>1468069428820</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1468069428820</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="38397000" />
+    <option name="totallyTimeSpent" value="39006000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="986" extended-state="6" />
@@ -1204,7 +1209,8 @@
     <MESSAGE value="finished user/group impersonation on sync with rsync to fix file-permission issues on the destination system" />
     <MESSAGE value="document verbose" />
     <MESSAGE value="fix dock, remove usermap/groumap evidence" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix dock, remove usermap/groumap evidence" />
+    <MESSAGE value="split readme into wiki-pages" />
+    <option name="LAST_COMMIT_MESSAGE" value="split readme into wiki-pages" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

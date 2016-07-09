@@ -14,6 +14,8 @@ So besides performance being the first priority, the second is, not forcing you 
 Use docker-for-mac, dockertoolbox, virtualbox fusion or Paralelles, xhyve or whatever!
 
 ## Changelog
+**0.0.8** Fix unison startup
+- Fixed isseu during unison startup #4
 
 **0.0.7** Convinience / Bugfixes
 - Fixed container-re-usage issue
