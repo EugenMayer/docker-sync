@@ -10,12 +10,17 @@ Docker-sync is:
  - supports either one-way sync ( rsync ) or two way sync ( unison )
  - supports user-remapping on sync to avoid permission problems
 
-So besides performance being the first priority, the second is, not forcing you into using a **specific** docker-toolbox solution.
-Use docker-for-mac, dockertoolbox, virtualbox fusion or Paralelles, xhyve or whatever!
+Besides performance being the first priority for docker-sync, the second is, not forcing you into using a **specific** docker-toolbox solution.
+Use docker-for-mac, docker toolbox, VirtualBox, VMware Fusion or Paralells, xhyve or whatever!
 
 ## Changelog
+**0.0.9** Adresses further unison issues, minor features
+- Missing stdout pipe and wrong color, thank you @mickaelperrin
+- More verbose outputs on unison runs with verbose,, thank you @mickaelperrin
+- Adding update-checker to ensure, that you run the newest docker-sync
+
 **0.0.8** Fix unison startup
-- Fixed isseu during unison startup #4
+- Fixed issue during unison startup #4
 
 **0.0.7** Convinience / Bugfixes
 - Fixed container-re-usage issue
@@ -37,7 +42,13 @@ I tried a lot of the below named projects, and they did not suite because:
  - they use native shares or NFS, which are both way to slow to use them for code-sharing / development
 
 ## Installation
-See [installation](https://github.com/EugenMayer/docker_sync/wiki/Installation) in the wiki
+
+```
+gem install docker-sync
+brew install fswatch
+```
+
+For more see [installation](https://github.com/EugenMayer/docker_sync/wiki/Installation) in the wiki
 
 ## Boilerplate / Quickstart
 

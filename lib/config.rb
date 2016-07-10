@@ -1,8 +1,31 @@
 require 'pp'
 require 'pathname'
+require 'yaml'
 # this has basically completely reused from Thor::runner.rb - thank you!
 
 module DockerSyncConfig
+  def global_config_location
+    return File.expand_path('~/.docker-sync-global.yml')
+  end
+
+  def global_config
+    global_config_path = global_config_location
+    date = DateTime.new(2001, 1, 1) #paste
+    defaults = {'update_check'=>true, 'update_last_check' => date.iso8601(9), 'update_enforce' => true}
+    if File.exist?(global_config_path)
+      config =  YAML.load_file(global_config_path)
+      config = defaults.merge(config)
+      return config
+    else
+      return defaults
+    end
+  end
+
+  def global_config_save(config)
+    global_config_path = global_config_location
+    File.open(global_config_path, 'w') {|f| f.write config.to_yaml }
+  end
+
   def find_config
     files = find_config_file
     if files.length > 0

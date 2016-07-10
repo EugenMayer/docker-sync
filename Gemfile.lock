@@ -1,11 +1,13 @@
 GEM
   specs:
+    gem_update_checker (0.2.0)
     thor (0.19.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  gem_update_checker
   thor
 
 BUNDLED WITH
