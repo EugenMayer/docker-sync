@@ -55,7 +55,6 @@ module Docker_Sync
         args = []
 
         unless @options['sync_excludes'].nil?
-          say_status 'warning','Excludes are yet not implemented for unison!', :yellow
           args = @options['sync_excludes'].map { |pattern| "-ignore='Path #{pattern}'" } + args
         end
         args.push(@options['src'])
