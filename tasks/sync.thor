@@ -1,6 +1,7 @@
 require 'docker_sync/sync_manager'
 require 'config'
 require 'preconditions'
+require 'update_check'
 
 class Sync < Thor
   include DockerSyncConfig
@@ -11,6 +12,10 @@ class Sync < Thor
 
   desc 'start', 'Start all sync configurations in this project'
   def start
+    # do run update check in the start command only
+    updates = UpdateChecker.new
+    updates.run
+
     begin
       check_all_preconditions
     rescue Exception => e
@@ -82,6 +87,7 @@ class Sync < Thor
   desc 'list', 'List all sync-points of the project configuration path'
   method_option :verbose, :default => false, :type => :boolean, :desc => 'Verbose output'
   def list
+    pp Gem.configuration
     begin
       check_all_preconditions
     rescue Exception => e
