@@ -1,14 +1,14 @@
 ## WAT
 
 A huge topic under OSX is, how to mount/share code into docker containers, used for development.
-Doing this the classic/native way leads to huge performance issues - that's why docker-sync has been made (next to the [other alternatives](https://github.com/EugenMayer/docker_sync#other-projects-with-similar-purpose-i-know-of))
+Doing this the classic/native way leads to huge performance issues - that's why docker-sync has been made (next to the [[alternatives|Alternatives to docker sync]]))
 
 Docker-sync is:
  - able to run on all of those docker-machines and also on **docker for mac**
- - it uses **rsync or unison** (you can chose) to sync - so the container performance is not influenced at all, see [performance](https://github.com/EugenMayer/docker_sync#performance)
+ - it uses **rsync or unison** (you can chose) to sync - so the container performance is not influenced at all, see [[performance|4. Performance]]
  - an efficient way is used to watch for file changes (fswatch -o) - does not eat up you CPU even for 12k+ files
  - supports either one-way sync ( rsync ) or two way sync ( unison )
- - supports user-remapping on sync to avoid permission problems
+ - **supports user-remapping on sync to avoid permission problems**
 
 Besides performance being the first priority for docker-sync, the second is, not forcing you into using a **specific** docker-toolbox solution.
 Use docker-for-mac, docker toolbox, VirtualBox, VMware Fusion or Paralells, xhyve or whatever!
@@ -19,21 +19,7 @@ Use docker-for-mac, docker toolbox, VirtualBox, VMware Fusion or Paralells, xhyv
 - More verbose outputs on unison runs with verbose,, thank you @mickaelperrin
 - Adding update-checker to ensure, that you run the newest docker-sync
 
-**0.0.8** Fix unison startup
-- Fixed issue during unison startup #4
-
-**0.0.7** Convinience / Bugfixes
-- Fixed container-re-usage issue
-- **add the possibility to map user/group on sync**
-- Add preconditions to properly detect if fswatch, unison, docker, and others are in proper state
-- Better log output
-- Do no longer enforce verbose flag
-- remove colorize
-- be less verbose in normal mode
-- Fixed source code mapping when using test
-- renamed test to example
-
-See [full changelog](https://github.com/EugenMayer/docker_sync/wiki/Changelog)
+See [[full changelog|5. Changelog]]
 
 ## Motivation
 
@@ -48,7 +34,7 @@ gem install docker-sync
 brew install fswatch
 ```
 
-For more see [installation](https://github.com/EugenMayer/docker_sync/wiki/Installation) in the wiki
+For more see [[installation|1. Installation]] in the wiki
 
 ## Boilerplate / Quickstart
 
@@ -56,7 +42,7 @@ See the boilerplate for a simple, working example : https://github.com/EugenMaye
 
 ## Usage
 
-a) Create a docker-sync.yml configuration in your project root, see [configuration](https://github.com/EugenMayer/docker_sync/wiki/Configuration)
+a) Create a docker-sync.yml configuration in your project root, see [[configuration|2. Configuration]]
 
 b) start the syncronisation with
 ```
@@ -66,7 +52,7 @@ Let docker-sync run in the background
 
 ( see ```docker-sync help``` help for more commands )
 
-c) Adjust your docker-compose.yml file [like here](https://github.com/EugenMayer/docker_sync/wiki/Configuration#docker-composeyml)
+c) Adjust your docker-compose.yml file [[like here|2. Configuration]]
 
 d) In a new shell run after you started docker-sync
 ```
@@ -75,14 +61,14 @@ docker-compose up
 
 **You can now boldly change your code and it will all end up int the app-containers**
 
-e) For cleanup see [leanup](https://github.com/EugenMayer/docker_sync/wiki/docker-sync-commands#clear)
+e) For cleanup see [[cleanup|2.1 Docker sync Commands]]
 
 ## Tests (sync and performance)
-See [tests and sample setup](https://github.com/EugenMayer/docker_sync/wiki/Tests) in the Wiki
+See [[test|3. Tests]] in the Wiki
 or checkout the [docker-sync-boilerplate](https://github.com/EugenMayer/docker-sync-boilerplate)
 
 ## Performance
-See [performance](https://github.com/EugenMayer/docker_sync/wiki/Performance) in the Wiki
+See [[performance|4. Performance]] in the Wiki
 
 **So the result**: No difference between shared and not shared. That's what we want. And thats faster then anything else.
 
@@ -94,7 +80,7 @@ See [performance](https://github.com/EugenMayer/docker_sync/wiki/Performance) in
 
 ## Other usages with docker_sync
 
-- [as Library](https://github.com/EugenMayer/docker_sync/wiki/Docker-sync-as-library)
+- [[Docker sync as library]]
 
 ## Thanks to
 Without the following projects, this project would be empty space and worth nothing. All the credits to them
@@ -110,7 +96,7 @@ Without the following projects, this project would be empty space and worth noth
 
 ## Alternatives
 
-See [alternatives](https://github.com/EugenMayer/docker_sync/wiki/Alternatives-to-docker-sync)
+See [[alternatives|Alternatives to docker sync]]
 
 ## License
 You can eat, sell or delete this code - just without any warranty of any kind.
