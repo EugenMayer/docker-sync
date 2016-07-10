@@ -5,7 +5,7 @@ services:
     container_name: 'fullexample_app'
     # that the important thing
     volumes_from:
-      - container:fullexample:rw # will be mounted on /var/www
+      - container:fullexample-sync:rw # will be mounted on /var/www
     command: ['watch', '-n1', 'cat /var/www/somefile.txt']
   otherapp:
     image: alpine
@@ -13,11 +13,11 @@ services:
     command: ['watch', '-n1', 'cat /app/code/somefile.txt']
     # thats the important thing
     volumes_from:
-      - container:simpleexample:rw # will be mounted on /app/code
+      - container:simpleexample-sync:rw # will be mounted on /app/code
 
 # thats the important thing
 volumes:
-  fullexample:
+  fullexample-sync:
     external: true
-  simpleexample:
+  simpleexample-sync:
     external: true

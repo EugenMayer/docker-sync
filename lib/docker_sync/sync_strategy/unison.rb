@@ -39,14 +39,14 @@ module Docker_Sync
 
         say_status 'command', cmd, :white if @options['verbose']
 
-        Open3.popen3(cmd)
-        if $?.exitstatus > 0
+        stdout, stderr, exit_status = Open3.capture3(cmd)
+        if not exit_status.success?
           say_status 'error', "Error starting sync, exit code #{$?.exitstatus}", :red
-          say_status 'message', out
+          say_status 'message', stderr
         else
           say_status 'ok', "Synced #{@options['src']}", :white
           if @options['verbose']
-            say_status 'output', out
+            say_status 'output', stdout
           end
         end
       end
@@ -55,50 +55,64 @@ module Docker_Sync
         args = []
 
         unless @options['sync_excludes'].nil?
-          # TODO: does unison support excludes as a command parameter? seems to be a config-value only
-          say_status 'warning','Excludes are yet not implemented for unison!', :yellow
-          #  args = @options['sync_excludes'].map { |pattern| "--exclude='#{pattern}'" } + args
+          args = @options['sync_excludes'].map { |pattern| "-ignore='Path #{pattern}'" } + args
         end
         args.push(@options['src'])
         args.push('-auto')
         args.push('-batch')
         args.push(@options['sync_args']) if @options.key?('sync_args')
         args.push("socket://#{@options['sync_host_ip']}:#{@options['sync_host_port']}/")
+        args.push('-debug verbose') if @options['verbose']
+        if @options.key?('sync_user') || @options.key?('sync_group') || @options.key?('sync_groupid') || @options.key?('sync_userid')
+          raise('Unison does not support sync_user, sync_group, sync_groupid or sync_userid - please use rsync if you need that')
+        end
+        return args
       end
 
       def start_container
         say_status 'ok', 'Starting unison', :white
-        running = `docker ps --filter 'status=running' --filter 'name=#{@sync_name}' | grep #{@sync_name}`
+        container_name = get_container_name
+        volume_name = get_volume_name
+
+        running = `docker ps --filter 'status=running' --filter 'name=#{container_name}' | grep #{container_name}`
         if running == ''
-          say_status 'ok', "#{@sync_name} container not running", :white if @options['verbose']
-          exists = `docker ps --filter "status=exited" --filter "name=#{@sync_name}" | grep #{@sync_name}`
+          say_status 'ok', "#{container_name} container not running", :white if @options['verbose']
+          exists = `docker ps --filter "status=exited" --filter "name=#{container_name}" | grep #{container_name}`
           if exists == ''
-            say_status 'ok', "creating #{@sync_name} container", :white if @options['verbose']
-            cmd = "docker run -p '#{@options['sync_host_port']}:#{UNISON_CONTAINER_PORT}' -v #{@sync_name}:#{@options['dest']} -e UNISON_VERSION=#{UNISON_VERSION} -e UNISON_WORKING_DIR=#{@options['dest']} --name #{@sync_name} -d #{UNISON_IMAGE}"
+            say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
+            cmd = "docker run -p '#{@options['sync_host_port']}:#{UNISON_CONTAINER_PORT}' -v #{volume_name}:#{@options['dest']} -e UNISON_VERSION=#{UNISON_VERSION} -e UNISON_WORKING_DIR=#{@options['dest']} --name #{container_name} -d #{UNISON_IMAGE}"
           else
-            say_status 'ok', "starting #{@sync_name} container", :ok if @options['verbose']
-            cmd = "docker start #{@sync_name}"
+            say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
+            cmd = "docker start #{container_name}"
           end
           say_status 'command', cmd, :white if @options['verbose']
           `#{cmd}` || raise('Start failed')
         else
-          say_status 'ok', "#{@sync_name} container still running", :blue
+          say_status 'ok', "#{container_name} container still running", :blue
         end
-        say_status 'ok', "starting initial #{@sync_name} of src", :white if @options['verbose']
+        say_status 'ok', "starting initial #{container_name} of src", :white if @options['verbose']
         # this sleep is needed since the container could be not started
         sleep 1
         sync
         say_status 'success', 'Unison server started', :green
       end
 
+      def get_container_name
+        return "#{@sync_name}"
+      end
+
+      def get_volume_name
+        return @sync_name
+      end
+
       def stop_container
-        `docker stop #{@sync_name}`
+        `docker stop #{get_container_name}`
       end
 
       def reset_container
         stop_container
-        `docker rm #{@sync_name}`
-        `docker volume rm #{@sync_name}`
+        `docker rm #{get_container_name}`
+        `docker volume rm #{get_volume_name}`
       end
 
       def clean
@@ -106,11 +120,11 @@ module Docker_Sync
       end
 
       def stop
-        say_status 'ok', "Stopping sync container #{@sync_name}"
+        say_status 'ok', "Stopping sync container #{get_container_name}"
         begin
           stop_container
         rescue Exception => e
-          say_status 'error', "Stopping failed of #{@sync_name}:", :red
+          say_status 'error', "Stopping failed of #{get_container_name}:", :red
           puts e.message
         end
       end
