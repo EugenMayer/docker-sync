@@ -15,4 +15,4 @@ Use docker-for-mac, docker toolbox, VirtualBox, VMware Fusion or Paralells, xhyv
 
 ## Anything else
 
-[Documenation and antyhing else can be found in the wiki on gitub](https://github.com/EugenMayer/docker_sync/wiki)
+[Documenation and antyhing else can be found in the wiki on github](https://github.com/EugenMayer/docker_sync/wiki)
