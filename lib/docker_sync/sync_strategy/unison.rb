@@ -100,7 +100,7 @@ module Docker_Sync
       end
 
       def get_container_name
-        return "#{@sync_name}-sync"
+        return "#{@sync_name}"
       end
 
       def get_volume_name

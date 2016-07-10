@@ -3,6 +3,7 @@ options:
   # optional, activate this if you need to debug something, default is false
   verbose: true
 syncs:
+  # IMPORTANT: this name must be unique and should NOT match your real applciation container name!
   fullexample:
     # which folder to watch / sync from - you can use tiled, it will get expanded. Be aware the then trailing slash makes a difference
     # if you add them, only the inner parts of the folder gets synced, otherwise the parent folder will be synced as top-level folder
@@ -36,7 +37,7 @@ syncs:
     watch_excludes: ['.*/.git', '.*/node_modules', '.*/bower_components', '.*/sass-cache', '.*/.sass-cache', '.*/.sass-cache', '.coffee', '.scss', '.sass', '.gitignore']
     # optional: use this to switch to fswatch verbose mode
     watch_args: '-v'
-  simpleexample:
+  simpleexample: # IMPORTANT: this name must be unique and should NOT match your real applciation container name!
     src: './data2'
     dest: '/app/code'
     sync_host_ip: 'localhost'
