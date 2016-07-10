@@ -27,6 +27,8 @@ I tried a lot of the below named projects, and they did not suite because:
  - they require either a specific docker machine ( forcing vbox e.g. ) or require one at all
  - they use native shares or NFS, which are both way to slow to use them for code-sharing / development
 
+## Documentation
+Please just see the [wiki](https://github.com/EugenMayer/docker_sync/wiki)
 ## Installation
 
 ```
