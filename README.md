@@ -14,8 +14,10 @@ Besides performance being the first priority for docker-sync, the second is, not
 Use docker-for-mac, docker toolbox, VirtualBox, VMware Fusion or Paralells, xhyve or whatever!
 
 ## Changelog
-**0.0.9** Adresses further unison issues
+**0.0.9** Adresses further unison issues, minor features
 - Missing stdout pipe and wrong color, thank you @mickaelperrin
+- More verbose outputs on unison runs with verbose,, thank you @mickaelperrin
+- Adding update-checker to ensure, that you run the newest docker-sync
 
 **0.0.8** Fix unison startup
 - Fixed issue during unison startup #4
