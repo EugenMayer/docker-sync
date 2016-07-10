@@ -62,6 +62,9 @@ module Docker_Sync
         args.push(@options['src'])
         args.push('-auto')
         args.push('-batch')
+        args.push('-owner')
+        args.push('-group')
+        args.push('-numericids')
         args.push(@options['sync_args']) if @options.key?('sync_args')
         args.push("socket://#{@options['sync_host_ip']}:#{@options['sync_host_port']}/")
         args.push('-debug verbose') if @options['verbose']
