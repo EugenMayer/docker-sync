@@ -55,9 +55,8 @@ module Docker_Sync
         args = []
 
         unless @options['sync_excludes'].nil?
-          # TODO: does unison support excludes as a command parameter? seems to be a config-value only
           say_status 'warning','Excludes are yet not implemented for unison!', :yellow
-          #  args = @options['sync_excludes'].map { |pattern| "--exclude='#{pattern}'" } + args
+          args = @options['sync_excludes'].map { |pattern| "-ignore='Path #{pattern}'" } + args
         end
         args.push(@options['src'])
         args.push('-auto')
