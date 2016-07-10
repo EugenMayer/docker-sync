@@ -15,6 +15,7 @@ Use docker-for-mac, docker toolbox, VirtualBox, VMware Fusion or Paralells, xhyv
 
 ## Changelog
 **0.0.9** Adresses further unison issues, minor features
+- sync-container names are now called $sync_name-sync when started, to avoid confusion/inconvinience with the app containers
 - Missing stdout pipe and wrong color, thank you @mickaelperrin
 - More verbose outputs on unison runs with verbose,, thank you @mickaelperrin
 - Adding update-checker to ensure, that you run the newest docker-sync
