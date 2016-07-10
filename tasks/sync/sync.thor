@@ -35,9 +35,10 @@ class Sync < Thor
     end
     @sync_manager = Docker_Rsync::SyncManager.new(:config_path => config_path)
     @sync_manager.run(options[:sync_name])
+    @sync_manager.join_threads
   end
 
-  desc 'sync_only', 'sync - do not start a watcher'
+  desc 'sync', 'sync - do not start a watcher'
   def sync
     begin
       check_all_preconditions
@@ -87,7 +88,6 @@ class Sync < Thor
   desc 'list', 'List all sync-points of the project configuration path'
   method_option :verbose, :default => false, :type => :boolean, :desc => 'Verbose output'
   def list
-    pp Gem.configuration
     begin
       check_all_preconditions
     rescue Exception => e

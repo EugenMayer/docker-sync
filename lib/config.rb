@@ -34,6 +34,7 @@ module DockerSyncConfig
       raise('No docker-sync.yml configuration found in your path ( traversing up ) Did you define it for your project?')
     end
   end
+
   # this has been ruthlessly stolen from Thor/runner.rb - please do not hunt me for that :)
   def find_config_file(skip_lookup = false)
     # Finds docker-sync.yml by traversing from your current directory down to the root
