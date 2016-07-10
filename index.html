@@ -16,7 +16,7 @@
     <header>
       <div class="container">
         <h1>Docker sync</h1>
-        <h2>Performant way to sync code to docker containers (docker for mac/docker machine)</h2>
+        <h2>Run your application at full speed while syncing your code for development, finally empowering you to utilize docker for development under OSX</h2>
 
         <section id="downloads">
           <a href="https://github.com/EugenMayer/docker_sync/zipball/master" class="btn">Download as .zip</a>
@@ -28,31 +28,24 @@
 
     <div class="container">
       <section id="main_content">
-        <h2>
-<a id="wat" class="anchor" href="#wat" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>WAT</h2>
-
-<p>A huge topic under OSX is, how to mount/share code into docker containers, used for development.
-Doing this the classic/native way leads to huge performance issues - that's why docker-sync has been made (next to the <a href="https://github.com/EugenMayer/docker_sync/wiki/Alternatives-to-docker-sync">alternatives</a>)</p>
+        <p>Developing with docker under OSX is a huge pain, since sharing code into docker containers make the code-execution about 50 times slower (depends on the solution). Testing and working with a lot of <a href="https://github.com/EugenMayer/docker_sync/wiki/Alternatives-to-docker-sync">alternatives</a> made me pick the best of those, and combine this in one single tool.</p>
 
 <p>Docker-sync is:</p>
 
 <ul>
 <li>able to run on all of those docker-machines and also on <strong>docker for mac</strong>
 </li>
-<li>it uses <strong>rsync or unison</strong> (you can chose) to sync - so the container performance is not influenced at all, see <a href="https://github.com/EugenMayer/docker_sync/wiki/4.-Performance">performance</a>
+<li>it uses either <strong>rsync</strong> or <strong>unison</strong> to sync. The container performance is not influenced at all, see <a href="https://github.com/EugenMayer/docker_sync/wiki/4.-Performance">performance</a>
 </li>
-<li>an efficient way is used to watch for file changes (fswatch -o) - does not eat up you CPU even for 12k+ files</li>
+<li>efficient in its way to watch for file changes - even for 12k+ files it will not eat up you CPU</li>
 <li>supports either one-way sync ( rsync ) or two way sync ( unison )</li>
-<li><strong>supports user-remapping on sync to avoid permission problems</strong></li>
+<li><strong>supports user-remapping on sync to avoid permission problems on the container</strong></li>
 </ul>
 
-<p>Besides performance being the first priority for docker-sync, the second is, not forcing you into using a <strong>specific</strong> docker-toolbox solution.
-Use docker-for-mac, docker toolbox, VirtualBox, VMware Fusion or Paralells, xhyve or whatever!</p>
+<p>Besides performance being the first priority for docker-sync, the second is, not forcing you into using a <strong>specific</strong> docker solution. Use docker-for-mac, docker toolbox, VirtualBox, VMware Fusion or Parallels, xhyve or whatever!</p>
 
 <h2>
 <a id="anything-else" class="anchor" href="#anything-else" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Anything else</h2>
-
-<p><a href="https://github.com/EugenMayer/docker_sync/wiki">Documenation and antyhing else can be found in the wiki on github</a></p>
       </section>
     </div>
 
