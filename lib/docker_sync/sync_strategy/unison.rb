@@ -64,6 +64,7 @@ module Docker_Sync
         args.push('-batch')
         args.push(@options['sync_args']) if @options.key?('sync_args')
         args.push("socket://#{@options['sync_host_ip']}:#{@options['sync_host_port']}/")
+        args.push('-debug verbose') if @options['verbose']
         if @options.key?('sync_user') || @options.key?('sync_group') || @options.key?('sync_groupid') || @options.key?('sync_userid')
           raise('Unison does not support sync_user, sync_group, sync_groupid or sync_userid - please use rsync if you need that')
         end
