@@ -12,12 +12,13 @@ class UpdateChecker
 
   def run
     unless @config['update_check']
-      say_status 'hint','Skipping up-to-date check since it has been disabled in yout ~/.docker-sync-global.yml configuration',:yellow
+      say_status 'hint','Skipping up-to-date check since it has been disabled in your ~/.docker-sync-global.yml configuration',:yellow
       return
     end
     unless should_run
       return
     end
+    check_rsync_image unless is_first_run # do not check the image if its the first run - since this it will be downloaded anyway
     check_and_warn(@config['update_enforce'])
   end
 
@@ -30,6 +31,18 @@ class UpdateChecker
     end
 
     return false
+  end
+
+  def check_rsync_image
+    say_status 'ok','Checking if a newer rsync image is available'
+
+    if system("docker pull eugenmayer/rsync | grep 'Downloaded newer image for'")
+      say_status 'warning', 'Downloaded newer image for rsync', :red
+      say_status 'warning', 'Please use "docker-sync clean" before you start docker-sync again', :red
+
+      exit 0
+    end
+    say_status 'success','Image is (now) up to date'
   end
 
   def get_current_version

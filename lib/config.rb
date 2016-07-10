@@ -8,6 +8,11 @@ module DockerSyncConfig
     return File.expand_path('~/.docker-sync-global.yml')
   end
 
+  def is_first_run
+    global_config_path = global_config_location
+    return !File.exist?(global_config_path)
+  end
+
   def global_config
     global_config_path = global_config_location
     date = DateTime.new(2001, 1, 1) #paste
