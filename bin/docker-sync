@@ -2,7 +2,7 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'thor'
-require 'update_check'
+require 'docker-sync/update_check'
 
 thor = File.expand_path('../../tasks/sync', __FILE__)
 Dir.glob(File.join(thor, '/**/*.thor')).each { |taskfile|

@@ -1,7 +1,7 @@
-require 'docker_sync/sync_manager'
-require 'config'
-require 'preconditions'
-require 'update_check'
+require 'docker-sync/sync_manager'
+require 'docker-sync/config'
+require 'docker-sync/preconditions'
+require 'docker-sync/update_check'
 
 class Sync < Thor
   include DockerSyncConfig

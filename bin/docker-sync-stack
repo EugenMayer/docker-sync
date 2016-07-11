@@ -2,7 +2,7 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'thor'
-require 'update_check'
+require 'docker-sync/update_check'
 
 # ensure docker-compose is installed, if not, do so
 begin

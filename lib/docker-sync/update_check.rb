@@ -1,6 +1,6 @@
 require 'gem_update_checker'
 require 'thor/actions'
-require 'config'
+require 'docker-sync/config'
 
 class UpdateChecker
   include Thor::Shell
@@ -46,7 +46,7 @@ class UpdateChecker
   end
 
   def get_current_version
-    path = File.expand_path('../../', __FILE__)
+    path = File.expand_path('../../../', __FILE__)
     return File.read("#{path}/VERSION")
   end
 

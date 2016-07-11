@@ -1,9 +1,9 @@
 require 'thor/shell'
 # noinspection RubyResolve
-require 'docker_sync/sync_strategy/rsync'
-require 'docker_sync/sync_strategy/unison'
+require 'docker-sync/sync_strategy/rsync'
+require 'docker-sync/sync_strategy/unison'
 # noinspection RubyResolve
-require 'docker_sync/watch_strategy/fswatch'
+require 'docker-sync/watch_strategy/fswatch'
 
 module Docker_Sync
   class SyncProcess

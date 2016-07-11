@@ -1,8 +1,8 @@
 require 'thor/shell'
 # noinspection RubyResolve
-require 'docker_sync/sync_process'
+require 'docker-sync/sync_process'
 # noinspection RubyResolve
-require 'execution'
+require 'docker-sync/execution'
 require 'yaml'
 
 module Docker_Rsync

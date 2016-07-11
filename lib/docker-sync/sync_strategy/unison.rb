@@ -1,5 +1,5 @@
 require 'thor/shell'
-require 'preconditions'
+require 'docker-sync/preconditions'
 require 'open3'
 
 module Docker_Sync
