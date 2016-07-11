@@ -5,7 +5,6 @@ module Docker_Sync
   module SyncStrategy
     class Rsync
       include Thor::Shell
-      include Preconditions
 
       @options
       @sync_name
@@ -16,7 +15,7 @@ module Docker_Sync
         @options = options
 
         begin
-          rsync_available
+          Preconditions::rsync_available
         rescue Exception => e
           say_status 'error', "#{@sync_name} has been configured to sync with rsync, but no rsync binary available", :red
           say_status 'error', e.message, :red

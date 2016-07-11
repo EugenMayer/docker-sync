@@ -5,9 +5,6 @@ require 'docker-sync/update_check'
 require 'compose'
 
 class Stack < Thor
-  include DockerSyncConfig
-  include Preconditions
-
   class_option :config, :aliases => '-c', :default => nil, :type => :string, :desc => 'Path of the docker_sync config'
   class_option :sync_name, :aliases => '-n', :type => :string, :desc => 'If given, only this sync configuration will be references/started/synced'
 
@@ -19,7 +16,7 @@ class Stack < Thor
     updates.run
 
     begin
-      check_all_preconditions
+      Preconditions::check_all_preconditions
     rescue Exception => e
       say_status 'error', e.message, :red
       exit 1
@@ -29,7 +26,7 @@ class Stack < Thor
       config_path = options[:config]
     else
       begin
-        config_path = find_config
+        config_path = project_config_path
       rescue Exception => e
         say_status 'error', e.message, :red
         return
@@ -65,7 +62,7 @@ class Stack < Thor
 
   def clean
     begin
-      check_all_preconditions
+      Preconditions::check_all_preconditions
     rescue Exception => e
       say_status 'error', e.message, :red
       exit 1
@@ -75,7 +72,7 @@ class Stack < Thor
       config_path = options[:config]
     else
       begin
-        config_path = find_config
+        config_path = project_config_path
       rescue Exception => e
         say_status 'error', e.message, :red
         return

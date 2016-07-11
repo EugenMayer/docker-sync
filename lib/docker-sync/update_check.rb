@@ -4,10 +4,9 @@ require 'docker-sync/config'
 
 class UpdateChecker
   include Thor::Shell
-  include DockerSyncConfig
   @config
   def initialize
-    @config = global_config
+    @config = DockerSyncConfig::global_config
   end
 
   def run
@@ -61,7 +60,7 @@ class UpdateChecker
     # update the timestamp
     now = DateTime.now
     @config['update_last_check'] = now.iso8601(9)
-    global_config_save(@config)
+    DockerSyncConfig::global_config_save(@config)
 
     check = docker_sync_update_check
     if check.update_available

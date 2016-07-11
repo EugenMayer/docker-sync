@@ -6,8 +6,6 @@ module Docker_Sync
   module SyncStrategy
     class Unison
       include Thor::Shell
-      include Preconditions
-
 
       @options
       @sync_name
@@ -20,7 +18,7 @@ module Docker_Sync
         @options = options
 
         begin
-          unison_available
+          Preconditions::unison_available
         rescue Exception => e
           say_status 'error', "#{@sync_name} has been configured to sync with unison, but no unison available", :red
           say_status 'error', e.message, :red
