@@ -60,10 +60,13 @@ module Docker_Sync
         args.push(@options['src'])
         args.push('-auto')
         args.push('-batch')
+        args.push('-owner') if @options['sync_userid'] == 'from_host'
+        args.push('-group') if @options['sync_groupid'] == 'from_host'
+        args.push('-numericids') if @options['sync_userid'] == 'from_host' || @options['sync_groupid'] == 'from_host'
         args.push(@options['sync_args']) if @options.key?('sync_args')
         args.push("socket://#{@options['sync_host_ip']}:#{@options['sync_host_port']}/")
         args.push('-debug verbose') if @options['verbose']
-        if @options.key?('sync_user') || @options.key?('sync_group') || @options.key?('sync_groupid') || @options.key?('sync_userid')
+        if @options.key?('sync_user') || @options.key?('sync_group') || @options.key?('sync_groupid') && @options['sync_groupid'] != 'from_host' || @options.key?('sync_userid') && @options['sync_userid'] != 'from_host'
           raise('Unison does not support sync_user, sync_group, sync_groupid or sync_userid - please use rsync if you need that')
         end
         return args
@@ -81,6 +84,7 @@ module Docker_Sync
           if exists == ''
             say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
             cmd = "docker run -p '#{@options['sync_host_port']}:#{UNISON_CONTAINER_PORT}' -v #{volume_name}:#{@options['dest']} -e UNISON_VERSION=#{UNISON_VERSION} -e UNISON_WORKING_DIR=#{@options['dest']} --name #{container_name} -d #{UNISON_IMAGE}"
+            cmd = cmd + " && docker exec #{container_name} chown #{Process.uid} #{@options['dest']}" if @options['sync_userid'] == 'from_host'
           else
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
             cmd = "docker start #{container_name}"
