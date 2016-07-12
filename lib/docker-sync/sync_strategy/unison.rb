@@ -1,26 +1,27 @@
 require 'thor/shell'
-require 'preconditions'
+require 'docker-sync/preconditions'
 require 'open3'
 
 module Docker_Sync
   module SyncStrategy
     class Unison
       include Thor::Shell
-      include Preconditions
-
 
       @options
       @sync_name
       @watch_thread
-      UNISON_IMAGE = 'leighmcculloch/unison'
-      UNISON_VERSION = '2.48.3'
       UNISON_CONTAINER_PORT = '5000'
       def initialize(sync_name, options)
         @sync_name = sync_name
         @options = options
-
+        # if a custom image is set, apply it
+        if @options.key?('image')
+          @docker_image = @options['image']
+        else
+          @docker_image = 'eugenmayer/unison'
+        end
         begin
-          unison_available
+          Preconditions::unison_available
         rescue Exception => e
           say_status 'error', "#{@sync_name} has been configured to sync with unison, but no unison available", :red
           say_status 'error', e.message, :red
@@ -55,7 +56,6 @@ module Docker_Sync
         args = []
 
         unless @options['sync_excludes'].nil?
-          say_status 'warning','Excludes are yet not implemented for unison!', :yellow
           args = @options['sync_excludes'].map { |pattern| "-ignore='Path #{pattern}'" } + args
         end
         args.push(@options['src'])
@@ -84,7 +84,7 @@ module Docker_Sync
           exists = `docker ps --filter "status=exited" --filter "name=#{container_name}" | grep #{container_name}`
           if exists == ''
             say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
-            cmd = "docker run -p '#{@options['sync_host_port']}:#{UNISON_CONTAINER_PORT}' -v #{volume_name}:#{@options['dest']} -e UNISON_VERSION=#{UNISON_VERSION} -e UNISON_WORKING_DIR=#{@options['dest']} --name #{container_name} -d #{UNISON_IMAGE}"
+            cmd = "docker run -p '#{@options['sync_host_port']}:#{UNISON_CONTAINER_PORT}' -v #{volume_name}:#{@options['dest']} -e UNISON_DIR=#{@options['dest']} --name #{container_name} -d #{@docker_image}"
           else
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
             cmd = "docker start #{container_name}"

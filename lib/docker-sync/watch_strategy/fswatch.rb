@@ -1,13 +1,12 @@
 require 'thor/shell'
-require 'execution'
-require 'preconditions'
+require 'docker-sync/execution'
+require 'docker-sync/preconditions'
 
 module Docker_Sync
   module WatchStrategy
     class Fswatch
       include Thor::Shell
       include Execution
-      include Preconditions
 
       @options
       @sync_name
@@ -18,7 +17,7 @@ module Docker_Sync
         @options = options
 
         begin
-          fswatch_available
+          Preconditions::fswatch_available
         rescue Exception => e
           say_status 'error', e.message, :red
           exit 1
@@ -56,7 +55,7 @@ module Docker_Sync
 
         sync_command = 'thor sync:sync'
         begin
-          docker_sync_available
+          Preconditions::docker_sync_available
           sync_command = 'docker-sync sync'
         rescue Exception => e
           say_status 'warning', 'docker-sync not available, assuming dev mode, using thor', :yellow

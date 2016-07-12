@@ -1,8 +1,8 @@
 require 'thor/shell'
 # noinspection RubyResolve
-require 'docker_sync/sync_process'
+require 'docker-sync/sync_process'
 # noinspection RubyResolve
-require 'execution'
+require 'docker-sync/execution'
 require 'yaml'
 
 module Docker_Rsync
@@ -12,6 +12,7 @@ module Docker_Rsync
     @sync_processes
     @configurations
     @config_path
+
     def initialize(options)
       @sync_processes = []
       @config_syncs = []
@@ -26,7 +27,7 @@ module Docker_Rsync
         raise "Config could not be loaded from #{@config_path} - it does not exist"
       end
 
-      config =  YAML.load_file(@config_path)
+      config = YAML.load_file(@config_path)
       validate_config(config)
       @config_options = config['options'] || {}
       @config_syncs = config['syncs']
@@ -40,11 +41,22 @@ module Docker_Rsync
     def upgrade_syncs_config
       @config_syncs.each do |name, config|
         @config_syncs[name]['config_path'] = @config_path
+        # expand the sync source to remove ~ and similar expressions in the path
         @config_syncs[name]['src'] = File.expand_path(@config_syncs[name]['src'])
+
+        # set the global verbose setting, if the sync-endpoint does not define a own one
         unless config.key?('verbose')
           @config_syncs[name]['verbose'] = false
           if @config_options.key?('verbose')
             @config_syncs[name]['verbose'] = @config_options['verbose']
+          end
+        end
+
+        # for each strategy check if a custom image has been defined and inject that into the sync-endpoints
+        # which do fit for this strategy
+        %w(rsync unison).each do |strategy|
+          if config.key?("#{strategy}_image") && @config_syncs[name]['sync_strategy'] == strategy
+            @config_syncs[name]['image'] = config["#{strategy}_image"]
           end
         end
       end
@@ -70,7 +82,7 @@ module Docker_Rsync
 
     def init_sync_processes(sync_name = nil)
       if sync_name.nil?
-        @config_syncs.each { |name,sync_configuration|
+        @config_syncs.each { |name, sync_configuration|
           @sync_processes.push(create_sync(name, sync_configuration))
         }
       else
@@ -102,27 +114,23 @@ module Docker_Rsync
       @sync_processes.each { |sync_process|
         sync_process.run
       }
+    end
 
+    def join_threads
       begin
         @sync_processes.each do |sync_process|
           sync_process.watch_thread.join
         end
 
       rescue SystemExit, Interrupt
-
-        puts "Shutting down..."
+        say_status 'shutdown', 'Shutting down...', :blue
         @sync_processes.each do |sync_process|
           sync_process.stop
         end
-        @sync_processes.each do |sync_process|
-          sync_process.watch_thread.kill
-        end
 
       rescue Exception => e
-
         puts "EXCEPTION: #{e.inspect}"
         puts "MESSAGE: #{e.message}"
-
       end
     end
 
@@ -132,7 +140,12 @@ module Docker_Rsync
     end
 
     def stop
-
+      @sync_processes.each { |sync_process|
+        sync_process.stop
+        unless sync_process.watch_thread.nil?
+          sync_process.watch_thread.kill
+        end
+      }
     end
   end
 end

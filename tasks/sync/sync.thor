@@ -1,11 +1,9 @@
-require 'docker_sync/sync_manager'
-require 'config'
-require 'preconditions'
-require 'update_check'
+require 'docker-sync/sync_manager'
+require 'docker-sync/config'
+require 'docker-sync/preconditions'
+require 'docker-sync/update_check'
 
 class Sync < Thor
-  include DockerSyncConfig
-  include Preconditions
 
   class_option :config, :aliases => '-c',:default => nil, :type => :string, :desc => 'Path of the docker_sync config'
   class_option :sync_name, :aliases => '-n',:type => :string, :desc => 'If given, only this sync configuration will be references/started/synced'
@@ -17,7 +15,7 @@ class Sync < Thor
     updates.run
 
     begin
-      check_all_preconditions
+      Preconditions::check_all_preconditions
     rescue Exception => e
       say_status 'error', e.message, :red
       exit 1
@@ -27,7 +25,7 @@ class Sync < Thor
       config_path = options[:config]
     else
       begin
-        config_path = find_config
+        config_path = DockerSyncConfig::project_config_path
       rescue Exception => e
         say_status 'error', e.message, :red
         return
@@ -35,12 +33,13 @@ class Sync < Thor
     end
     @sync_manager = Docker_Rsync::SyncManager.new(:config_path => config_path)
     @sync_manager.run(options[:sync_name])
+    @sync_manager.join_threads
   end
 
-  desc 'sync_only', 'sync - do not start a watcher'
+  desc 'sync', 'sync - do not start a watcher'
   def sync
     begin
-      check_all_preconditions
+      Preconditions::check_all_preconditions
     rescue Exception => e
       say_status 'error', e.message, :red
       exit 1
@@ -50,7 +49,7 @@ class Sync < Thor
       config_path = options[:config]
     else
       begin
-        config_path = find_config
+        config_path = DockerSyncConfig::project_config_path
       rescue Exception => e
         say_status 'error', e.message, :red
         return
@@ -63,7 +62,7 @@ class Sync < Thor
   desc 'clean', 'Stop and clean up all sync endpoints'
   def clean
     begin
-      check_all_preconditions
+      Preconditions::check_all_preconditions
     rescue Exception => e
       say_status 'error', e.message, :red
       exit 1
@@ -73,7 +72,7 @@ class Sync < Thor
       config_path = options[:config]
     else
       begin
-        config_path = find_config
+        config_path = DockerSyncConfig::project_config_path
       rescue Exception => e
         say_status 'error', e.message, :red
         return
@@ -87,9 +86,8 @@ class Sync < Thor
   desc 'list', 'List all sync-points of the project configuration path'
   method_option :verbose, :default => false, :type => :boolean, :desc => 'Verbose output'
   def list
-    pp Gem.configuration
     begin
-      check_all_preconditions
+      Preconditions::check_all_preconditions
     rescue Exception => e
       say_status 'error', e.message, :red
       exit 1
@@ -99,7 +97,7 @@ class Sync < Thor
       config_path = options[:config]
     else
       begin
-        config_path = find_config
+        config_path = DockerSyncConfig::project_config_path
       rescue Exception => e
         say_status 'error', e.message, :red
         return

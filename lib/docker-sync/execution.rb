@@ -17,14 +17,16 @@ module Execution
     end
 
     Thread.new {
-      Open3.popen3(command) do |stdin, stdout, stderr, wait_thr|
+      Open3.popen3(command) do |_, stdout, stderr, _|
 
-        while lineOut = stdout.gets
-          say_status prefix, lineOut, color
+        # noinspection RubyAssignmentExpressionInConditionalInspection
+        while line_out = stdout.gets
+          say_status prefix, line_out, color
         end
 
-        while lineErr = stderr.gets
-          say_status prefix, lineErr, :red
+        # noinspection RubyAssignmentExpressionInConditionalInspection
+        while line_err = stderr.gets
+          say_status prefix, line_err, :red
         end
 
       end

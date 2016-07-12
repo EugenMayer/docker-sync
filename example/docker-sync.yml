@@ -2,18 +2,24 @@
 options:
   # optional, activate this if you need to debug something, default is false
   verbose: true
+  # ADVANVED: default:eugenmayer/rsync -  the image to use for the rsync container. Do not change this until you exactly know, what you are doing
+  # you cannot just use "some unison" container, you entrypoint needs features, check the Dockerfiles
+  rsync_image: 'eugenmayer/rsync'
+  # ADVANVED: default:eugenmayer/unison -  the image to use for the unison container. Do not change this until you exactly know, what you are doing
+  # you cannot just use "some unison" container, you entrypoint needs features, check the Dockerfiles
+  unison_image: 'eugenmayer/unison'
 syncs:
-  # IMPORTANT: this name must be unique and should NOT match your real applciation container name!
+  # IMPORTANT: this name must be unique and should NOT match your real application container name!
   fullexample-sync:
     # which folder to watch / sync from - you can use tiled, it will get expanded. Be aware the then trailing slash makes a difference
     # if you add them, only the inner parts of the folder gets synced, otherwise the parent folder will be synced as top-level folder
-    src: './data1'
+    src: './data1/'
     # which destination on the sync-container. Since you will use volumes_from to mount this, this should match your code-deployment location in the real container
     dest: '/var/www'
     # when a port of a container is exposed, on which IP does it get exposed. Localhost for docker for mac, something else for docker-machine
     sync_host_ip: 'localhost'
     # should be a unique port this sync instance uses on the host to offer the rsync service on
-    sync_host_port: 10871
+    sync_host_port: 20871
     # optionl, a list of excludes for rsync - see rsync docs for details
     sync_excludes: ['Gemfile.lock', 'Gemfile', 'config.rb', '.sass-cache/', 'sass/', 'sass-cache/', 'composer.json' , 'bower.json', 'package.json', 'Gruntfile*', 'bower_components/', 'node_modules/', '.gitignore', '.git/', '*.coffee', '*.scss', '*.sass']
     # optional: use this to switch to rsync verbose mode
@@ -38,8 +44,8 @@ syncs:
     # optional: use this to switch to fswatch verbose mode
     watch_args: '-v'
   simpleexample-sync: # IMPORTANT: this name must be unique and should NOT match your real applciation container name!
-    src: './data2'
+    src: './data2/'
     dest: '/app/code'
     sync_host_ip: 'localhost'
-    sync_host_port: 10872
+    sync_host_port: 20872
     sync_strategy: 'unison' # this time we pick unison

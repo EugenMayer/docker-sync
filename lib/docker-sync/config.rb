@@ -4,13 +4,19 @@ require 'yaml'
 # this has basically completely reused from Thor::runner.rb - thank you!
 
 module DockerSyncConfig
-  def global_config_location
+  def self.global_config_location
     return File.expand_path('~/.docker-sync-global.yml')
   end
 
-  def global_config
+  def self.is_first_run
+    global_config_path = global_config_location
+    return !File.exist?(global_config_path)
+  end
+
+  def self.global_config
     global_config_path = global_config_location
     date = DateTime.new(2001, 1, 1) #paste
+    # noinspection RubyStringKeysInHashInspection
     defaults = {'update_check'=>true, 'update_last_check' => date.iso8601(9), 'update_enforce' => true}
     if File.exist?(global_config_path)
       config =  YAML.load_file(global_config_path)
@@ -21,21 +27,22 @@ module DockerSyncConfig
     end
   end
 
-  def global_config_save(config)
+  def self.global_config_save(config)
     global_config_path = global_config_location
     File.open(global_config_path, 'w') {|f| f.write config.to_yaml }
   end
 
-  def find_config
-    files = find_config_file
+  def self.project_config_path
+    files = project_config_find
     if files.length > 0
       return files.pop
     else
       raise('No docker-sync.yml configuration found in your path ( traversing up ) Did you define it for your project?')
     end
   end
+
   # this has been ruthlessly stolen from Thor/runner.rb - please do not hunt me for that :)
-  def find_config_file(skip_lookup = false)
+  def self.project_config_find(skip_lookup = false)
     # Finds docker-sync.yml by traversing from your current directory down to the root
     # directory of your system. If at any time we find a docker-sync.yml file, we stop.
     #
@@ -60,7 +67,7 @@ module DockerSyncConfig
 
     unless skip_lookup
       Pathname.pwd.ascend do |path|
-        docker_sync_files = globs_for_config(path).map { |g| Dir[g] }.flatten
+        docker_sync_files = globs_for_project_config(path).map { |g| Dir[g] }.flatten
         break unless docker_sync_files.empty?
       end
     end
@@ -71,12 +78,12 @@ module DockerSyncConfig
 
   # Where to look for docker-sync.yml files.
   #
-  def globs_for_config(path)
+  def self.globs_for_project_config(path)
     path = escape_globs(path)
     ["#{path}/docker-sync.yml"]
   end
 
-  def escape_globs(path)
+  def self.escape_globs(path)
     path.to_s.gsub(/[*?{}\[\]]/, '\\\\\\&')
   end
 end

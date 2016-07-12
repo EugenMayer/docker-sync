@@ -1,11 +1,10 @@
 require 'thor/shell'
-require 'preconditions'
+require 'docker-sync/preconditions'
 
 module Docker_Sync
   module SyncStrategy
     class Rsync
       include Thor::Shell
-      include Preconditions
 
       @options
       @sync_name
@@ -14,9 +13,15 @@ module Docker_Sync
       def initialize(sync_name, options)
         @sync_name = sync_name
         @options = options
+        # if a custom image is set, apply it
+        if @options.key?('image')
+          @docker_image = @options['image']
+        else
+          @docker_image = 'eugenmayer/rsync'
+        end
 
         begin
-          rsync_available
+          Preconditions::rsync_available
         rescue Exception => e
           say_status 'error', "#{@sync_name} has been configured to sync with rsync, but no rsync binary available", :red
           say_status 'error', e.message, :red
@@ -88,7 +93,7 @@ module Docker_Sync
             user_mapping = get_user_mapping
             group_mapping = get_group_mapping
 
-            cmd = "docker run -p '#{@options['sync_host_port']}:873' -v #{volume_name}:#{@options['dest']} #{user_mapping} #{group_mapping} -e VOLUME=#{@options['dest']} --name #{container_name} -d eugenmayer/rsync"
+            cmd = "docker run -p '#{@options['sync_host_port']}:873' -v #{volume_name}:#{@options['dest']} #{user_mapping} #{group_mapping} -e VOLUME=#{@options['dest']} --name #{container_name} -d #{@docker_image}"
           else # container already created, just start / reuse it
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
             cmd = "docker start #{container_name}"
