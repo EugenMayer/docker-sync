@@ -11,5 +11,6 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/EugenMayer/docker_sync'
   s.add_runtime_dependency 'thor', '~> 0.19', '>= 0.19.0'
   s.add_runtime_dependency 'gem_update_checker', '~> 0.2.0', '>= 0.2.0'
+  s.add_runtime_dependency 'docker-compose', '0.8.3'
   #s.add_runtime_dependency 'docker-compose', '~> 0' # dynamic dependency
 end

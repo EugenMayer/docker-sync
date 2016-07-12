@@ -41,11 +41,22 @@ module Docker_Rsync
     def upgrade_syncs_config
       @config_syncs.each do |name, config|
         @config_syncs[name]['config_path'] = @config_path
+        # expand the sync source to remove ~ and similar expressions in the path
         @config_syncs[name]['src'] = File.expand_path(@config_syncs[name]['src'])
+
+        # set the global verbose setting, if the sync-endpoint does not define a own one
         unless config.key?('verbose')
           @config_syncs[name]['verbose'] = false
           if @config_options.key?('verbose')
             @config_syncs[name]['verbose'] = @config_options['verbose']
+          end
+        end
+
+        # for each strategy check if a custom image has been defined and inject that into the sync-endpoints
+        # which do fit for this strategy
+        %w(rsync unison).each do |strategy|
+          if config.key?("#{strategy}_image") && @config_syncs[name]['sync_strategy'] == strategy
+            @config_syncs[name]['image'] = config["#{strategy}_image"]
           end
         end
       end

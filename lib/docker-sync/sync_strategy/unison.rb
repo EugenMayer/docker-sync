@@ -10,13 +10,17 @@ module Docker_Sync
       @options
       @sync_name
       @watch_thread
-      UNISON_IMAGE = 'leighmcculloch/unison'
       UNISON_VERSION = '2.48.3'
       UNISON_CONTAINER_PORT = '5000'
       def initialize(sync_name, options)
         @sync_name = sync_name
         @options = options
-
+        # if a custom image is set, apply it
+        if @options.key?('image')
+          @docker_image = @options['image']
+        else
+          @docker_image = 'leighmcculloch/unison'
+        end
         begin
           Preconditions::unison_available
         rescue Exception => e
@@ -78,7 +82,7 @@ module Docker_Sync
           exists = `docker ps --filter "status=exited" --filter "name=#{container_name}" | grep #{container_name}`
           if exists == ''
             say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
-            cmd = "docker run -p '#{@options['sync_host_port']}:#{UNISON_CONTAINER_PORT}' -v #{volume_name}:#{@options['dest']} -e UNISON_VERSION=#{UNISON_VERSION} -e UNISON_WORKING_DIR=#{@options['dest']} --name #{container_name} -d #{UNISON_IMAGE}"
+            cmd = "docker run -p '#{@options['sync_host_port']}:#{UNISON_CONTAINER_PORT}' -v #{volume_name}:#{@options['dest']} -e UNISON_VERSION=#{UNISON_VERSION} -e UNISON_WORKING_DIR=#{@options['dest']} --name #{container_name} -d #{@docker_image}"
           else
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
             cmd = "docker start #{container_name}"

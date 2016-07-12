@@ -13,6 +13,12 @@ module Docker_Sync
       def initialize(sync_name, options)
         @sync_name = sync_name
         @options = options
+        # if a custom image is set, apply it
+        if @options.key?('image')
+          @docker_image = @options['image']
+        else
+          @docker_image = 'eugenmayer/rsync'
+        end
 
         begin
           Preconditions::rsync_available
@@ -87,7 +93,7 @@ module Docker_Sync
             user_mapping = get_user_mapping
             group_mapping = get_group_mapping
 
-            cmd = "docker run -p '#{@options['sync_host_port']}:873' -v #{volume_name}:#{@options['dest']} #{user_mapping} #{group_mapping} -e VOLUME=#{@options['dest']} --name #{container_name} -d eugenmayer/rsync"
+            cmd = "docker run -p '#{@options['sync_host_port']}:873' -v #{volume_name}:#{@options['dest']} #{user_mapping} #{group_mapping} -e VOLUME=#{@options['dest']} --name #{container_name} -d #{@docker_image}"
           else # container already created, just start / reuse it
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
             cmd = "docker start #{container_name}"

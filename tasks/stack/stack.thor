@@ -2,7 +2,7 @@ require 'docker-sync/sync_manager'
 require 'docker-sync/config'
 require 'docker-sync/preconditions'
 require 'docker-sync/update_check'
-require 'compose'
+require 'docker/compose'
 
 class Stack < Thor
   class_option :config, :aliases => '-c', :default => nil, :type => :string, :desc => 'Path of the docker_sync config'

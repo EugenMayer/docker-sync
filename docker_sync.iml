@@ -11,4 +11,8 @@
     <orderEntry type="library" scope="PROVIDED" name="gem_update_checker (v0.2.0, rbenv: 2.2.4) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="thor (v0.19.1, rbenv: 2.2.4) [gem]" level="application" />
   </component>
+  <component name="RModuleSettingsStorage">
+    <LOAD_PATH number="1" string0="$MODULE_DIR$/lib" />
+    <I18N_FOLDERS number="0" />
+  </component>
 </module>
