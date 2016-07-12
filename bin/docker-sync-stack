@@ -4,15 +4,15 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'thor'
 require 'docker-sync/update_check'
 
-# ensure docker-compose is installed, if not, do so
-begin
-  gem 'docker-compose'
-rescue Gem::LoadError
-  puts "docker-compose gem is missing, installing 'gem install docker-compose'"
-  system('gem install docker-compose')
-  puts 'docker-compose ruby gem installed, please start docker-sync-stack again'
-  exit 0
-end
+# TODO: remove this later, not longer needed
+#begin
+#  gem 'docker-compose'
+#rescue Gem::LoadError
+#  puts "docker-compose gem is missing, installing 'gem install docker-compose'"
+#  system('gem install docker-compose')
+#  puts 'docker-compose ruby gem installed, please start docker-sync-stack again'
+#  exit 0
+#end
 
 thor = File.expand_path('../../tasks/stack', __FILE__)
 Dir.glob(File.join(thor, '/**/*.thor')).each { |taskfile|

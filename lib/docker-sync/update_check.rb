@@ -17,7 +17,7 @@ class UpdateChecker
     unless should_run
       return
     end
-    check_rsync_image unless is_first_run # do not check the image if its the first run - since this it will be downloaded anyway
+    check_rsync_image unless DockerSyncConfig::is_first_run # do not check the image if its the first run - since this it will be downloaded anyway
     check_and_warn(@config['update_enforce'])
   end
 
