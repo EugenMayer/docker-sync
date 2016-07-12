@@ -3,8 +3,18 @@ require 'docker/compose'
 class ComposeManager
   include Thor::Shell
   @compose_session
-  def initialize
-    @compose_session = Docker::Compose::Session.new(dir:'./')
+  @global_options
+  def initialize(global_options)
+    @global_options = global_options
+    compose_file_path = 'docker-compose.yml'
+    if @global_options.key?('compose-file-path')
+      path = File.expand_path(@global_options['compose-file-path'])
+      unless File.exist?(path)
+        raise("Your referenced docker-compose file in docker-sync.yml was not found at #{@global_options['compose-file-path']}")
+      end
+      compose_file_path = @global_options['compose-file-path']
+    end
+    @compose_session = Docker::Compose::Session.new(dir:'./', :file => compose_file_path)
   end
 
   def run

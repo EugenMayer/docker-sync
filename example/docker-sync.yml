@@ -1,5 +1,7 @@
 # for a simpler example, see the boilerplate at https://github.com/EugenMayer/docker-sync-boilerplate
 options:
+  # default: docker-compose.yml if you like, you can set a custom location (path) of your compose file
+  compose-file-path: 'docker-compose.yml'
   # optional, activate this if you need to debug something, default is false
   verbose: true
   # ADVANVED: default:eugenmayer/rsync -  the image to use for the rsync container. Do not change this until you exactly know, what you are doing
@@ -43,6 +45,8 @@ syncs:
     watch_excludes: ['.*/.git', '.*/node_modules', '.*/bower_components', '.*/sass-cache', '.*/.sass-cache', '.*/.sass-cache', '.coffee', '.scss', '.sass', '.gitignore']
     # optional: use this to switch to fswatch verbose mode
     watch_args: '-v'
+    # optional: default is fswatch, if set to disable, no watcher will be used and you would need to start the sync manually
+    watch_strategy: 'fswatch'
   simpleexample-sync: # IMPORTANT: this name must be unique and should NOT match your real applciation container name!
     src: './data2/'
     dest: '/app/code'

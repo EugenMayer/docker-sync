@@ -4,6 +4,7 @@ require 'docker-sync/sync_strategy/rsync'
 require 'docker-sync/sync_strategy/unison'
 # noinspection RubyResolve
 require 'docker-sync/watch_strategy/fswatch'
+require 'docker-sync/watch_strategy/dummy'
 
 module Docker_Sync
   class SyncProcess
@@ -48,6 +49,10 @@ module Docker_Sync
         case @options['watch_strategy']
           when 'fswatch'
             @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
+          when 'disable'
+            @watch_strategy = Docker_Sync::WatchStrategy::Dummy.new(@sync_name, @options)
+          when 'dummy'
+            @watch_strategy = Docker_Sync::WatchStrategy::Dummy.new(@sync_name, @options)
           else
             @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
         end
