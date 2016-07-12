@@ -47,7 +47,7 @@ syncs:
     watch_args: '-v'
     # optional: default is fswatch, if set to disable, no watcher will be used and you would need to start the sync manually
     watch_strategy: 'fswatch'
-  simpleexample-sync: # IMPORTANT: this name must be unique and should NOT match your real applciation container name!
+  simpleexample-sync: # IMPORTANT: this name must be unique and should NOT match your real application container name!
     src: './data2/'
     dest: '/app/code'
     sync_host_ip: 'localhost'
