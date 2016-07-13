@@ -118,7 +118,7 @@ module Docker_Sync
         end
         say_status 'ok', "starting initial #{container_name} of src", :white if @options['verbose']
         # this sleep is needed since the container could be not started
-        sleep 1
+        sleep 5 # TODO: replace with unison -testserver
         sync
         say_status 'success', 'Unison server started', :green
       end
