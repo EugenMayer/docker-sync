@@ -1,6 +1,7 @@
 require 'thor/shell'
 require 'docker-sync/preconditions'
 require 'open3'
+require 'socket'
 
 module Docker_Sync
   module SyncStrategy
@@ -79,14 +80,33 @@ module Docker_Sync
         say_status 'ok', 'Starting unison', :white
         container_name = get_container_name
         volume_name = get_volume_name
+        env = {}
 
+        if @options['watch_in_container']
+          env['ENABLE_WATCH'] = 'true'
+          env['FSWATCH_EXCLUDES'] = @options['watch_excludes'].map { |pattern| "--exclude='#{pattern}'" }.join(' ')
+          env['UNISON_EXCLUDES'] = @options['sync_excludes'].map { |pattern| "-ignore='Path #{pattern}'" }.join(' ')
+          env['HOST_IP'] = get_host_ip
+          env['UNISON_HOST_PORT'] = @options['sync_local_server_port']
+        end
+
+        if @options['sync_userid'] == 'from_host'
+          env['UNISON_DIR_OWNER'] = Process.uid
+        end
+
+        additional_docker_env = env.map{ |key,value| "-e #{key}=\"#{value}\"" }.join(' ')
         running = `docker ps --filter 'status=running' --filter 'name=#{container_name}' | grep #{container_name}`
         if running == ''
           say_status 'ok', "#{container_name} container not running", :white if @options['verbose']
           exists = `docker ps --filter "status=exited" --filter "name=#{container_name}" | grep #{container_name}`
           if exists == ''
             say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
-            cmd = "docker run -p '#{@options['sync_host_port']}:#{UNISON_CONTAINER_PORT}' -v #{volume_name}:#{@options['dest']} -e UNISON_DIR=#{@options['dest']} --name #{container_name} -d #{@docker_image}"
+            cmd = "docker run -p '#{@options['sync_host_port']}:#{UNISON_CONTAINER_PORT}' \
+                              -v #{volume_name}:#{@options['dest']} \
+                              -e UNISON_DIR=#{@options['dest']} \
+                              #{additional_docker_env} \
+                              --name #{container_name} \
+                              -d #{@docker_image}"
           else
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
             cmd = "docker start #{container_name}"
@@ -113,6 +133,15 @@ module Docker_Sync
             `#{cmd}` || raise('Start of local unison server failed')
           }
         end
+      end
+
+      def get_host_ip
+        if @options['host_ip'] != 'auto' && @options.key?('host_ip')
+          host_ip = @options['host_ip']
+        elsif @options['host_ip'] == 'auto' || (not @options.key?('host_ip'))
+          host_ip = Socket.ip_address_list.find { |ai| ai.ipv4? && !ai.ipv4_loopback? }.ip_address
+        end
+        return host_ip
       end
 
       def stop_local_server
