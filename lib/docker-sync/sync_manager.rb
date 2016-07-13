@@ -17,7 +17,6 @@ module Docker_Rsync
       @sync_processes = []
       @config_syncs = []
       @config_options = []
-      @config_syncs = []
       @config_path = options[:config_path]
       load_configuration
     end
@@ -32,6 +31,10 @@ module Docker_Rsync
       @config_options = config['options'] || {}
       @config_syncs = config['syncs']
       upgrade_syncs_config
+    end
+
+    def global_options
+      return @config_options
     end
 
     def get_sync_points
@@ -119,7 +122,7 @@ module Docker_Rsync
     def join_threads
       begin
         @sync_processes.each do |sync_process|
-          sync_process.watch_thread.join
+          sync_process.watch_thread.join unless sync_process.watch_thread.nil?
         end
 
       rescue SystemExit, Interrupt
@@ -143,7 +146,7 @@ module Docker_Rsync
       @sync_processes.each { |sync_process|
         sync_process.stop
         unless sync_process.watch_thread.nil?
-          sync_process.watch_thread.kill
+          sync_process.watch_thread.kill unless sync_process.watch_thread.nil?
         end
       }
     end
