@@ -1,5 +1,5 @@
 require 'docker/compose'
-
+require 'pp'
 class ComposeManager
   include Thor::Shell
   @compose_session
@@ -25,7 +25,7 @@ class ComposeManager
         raise("Your referenced docker-compose-dev file in docker-sync.yml was not found at #{@global_options['compose-dev-file-path']}")
       end
       say_status 'ok',"Found explicit docker-compose-dev.yml and using it from #{@global_options['compose-dev-file-path']}", :green
-      compose_files.push @global_options[path]  # add
+      compose_files.push path  # add
     else
       # try to find docker-compose-dev.yml
       e = compose_files.to_enum
