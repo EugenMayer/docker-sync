@@ -15,6 +15,7 @@ module Docker_Sync
       def initialize(sync_name, options)
         @sync_name = sync_name
         @options = options
+        @events_to_watch = %w(AttributeModified Created Link MovedFrom MovedTo Renamed Removed Updated)
 
         begin
           Preconditions::fswatch_available
@@ -50,6 +51,7 @@ module Docker_Sync
           args = @options['watch_excludes'].map { |pattern| "--exclude='#{pattern}'" } + args
         end
         args.push('-orIE')
+        args.push(@events_to_watch.map { |pattern| "--event #{pattern}" })
         args.push(@options['watch_args']) if @options.key?('watch_args')
         args.push(@options['src'])
 
