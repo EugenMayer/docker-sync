@@ -1,0 +1,17 @@
+# Development environment reusing production and just adding mounts for docker-sync
+version: "2"
+services:
+  someapp:
+    environment:
+      RAILS_ENV: 'development'
+    volumes_from:
+      - container:fullexample-sync:rw # will be mounted on /var/www
+  otherapp:
+    volumes_from:
+      - container:simpleexample-sync:rw # will be mounted on /app/code
+
+volumes:
+  fullexample-sync:
+    external: true
+  simpleexample-sync:
+    external: true
