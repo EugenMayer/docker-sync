@@ -44,17 +44,15 @@ class Stack < Thor
 
     begin
       compose_thread.join
-        #@sync_manager.join_threads
-    rescue SystemExit, Interrupt
-      say_status 'shutdown', 'Shutting down...', :blue
+      #@sync_manager.join_threads
+      rescue SystemExit, Interrupt
+        say_status 'shutdown', 'Shutting down...', :blue
 
-      @sync_manager.stop
-      @compose_manager.stop
-    rescue Exception => e
-
-      puts "EXCEPTION: #{e.inspect}"
-      puts "MESSAGE: #{e.message}"
-
+        @sync_manager.stop
+        @compose_manager.stop
+      rescue Exception => e
+        puts "EXCEPTION: #{e.inspect}"
+        puts "MESSAGE: #{e.message}"
     end
   end
 

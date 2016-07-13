@@ -1,7 +1,10 @@
 # for a simpler example, see the boilerplate at https://github.com/EugenMayer/docker-sync-boilerplate
 options:
-  # default: docker-compose.yml if you like, you can set a custom location (path) of your compose file
+  # optional, default: docker-compose.yml if you like, you can set a custom location (path) of your compose file
   compose-file-path: 'docker-compose.yml'
+  # optional, default: docker-compose-dev.yml if you like, you can set a custom location (path) of your compose file. Do not set it, if you do not want to use it at all
+  # if its there, it gets used, if you name it explicitly, it HAS to exist
+  compose-dev-file-path: 'docker-compose-dev.yml'
   # optional, activate this if you need to debug something, default is false
   verbose: true
   # ADVANVED: default:eugenmayer/rsync -  the image to use for the rsync container. Do not change this until you exactly know, what you are doing
