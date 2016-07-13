@@ -15,7 +15,7 @@ module Docker_Sync
       def initialize(sync_name, options)
         @sync_name = sync_name
         @options = options
-        @events_to_watch = %w(AttributeModified Created Removed Updated)
+        @events_to_watch = %w(AttributeModified Created Link MovedFrom MovedTo Renamed Removed Updated)
 
         begin
           Preconditions::fswatch_available
