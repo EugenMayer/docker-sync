@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+file = File.symlink?(__FILE__) ? File.readlink(__FILE__) : __FILE__
+$LOAD_PATH.unshift File.expand_path('../../lib', file)
+
 
 require 'thor'
 require 'docker-sync/update_check'
@@ -14,7 +16,7 @@ require 'docker-sync/update_check'
 #  exit 0
 #end
 
-thor = File.expand_path('../../tasks/stack', __FILE__)
+thor = File.expand_path('../../tasks/stack', file)
 Dir.glob(File.join(thor, '/**/*.thor')).each { |taskfile|
   # noinspection RubyResolve
   load taskfile
