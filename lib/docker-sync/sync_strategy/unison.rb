@@ -65,13 +65,15 @@ module Docker_Sync
         args.push('-auto')
         args.push('-batch')
         args.push('-owner') if @options['sync_userid'] == 'from_host'
-        args.push('-group') if @options['sync_groupid'] == 'from_host'
         args.push('-numericids') if @options['sync_userid'] == 'from_host'
         args.push(@options['sync_args']) if @options.key?('sync_args')
         args.push("socket://#{@options['sync_host_ip']}:#{@options['sync_host_port']}/")
         args.push('-debug verbose') if @options['verbose']
-        if @options.key?('sync_user') || @options.key?('sync_group') || @options.key?('sync_groupid') && @options['sync_groupid'] != 'from_host' || @options.key?('sync_userid') && @options['sync_userid'] != 'from_host'
-           raise('Unison does not support sync_user, sync_group, sync_groupid or sync_userid - please use rsync if you need that')
+        if @options.key?('sync_user') || @options.key?('sync_group') || @options.key?('sync_groupid')
+           raise('Unison does not support sync_user, sync_group, sync_groupid - please use rsync if you need that')
+        end
+        if  @options.key?('sync_userid') && @options['sync_userid'] != 'from_host'
+          raise('Unison does not support sync_userid with a parameter different than \'from_host\'')
         end
         return args
       end
