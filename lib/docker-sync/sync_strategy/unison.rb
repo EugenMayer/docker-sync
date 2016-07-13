@@ -10,6 +10,7 @@ module Docker_Sync
       @options
       @sync_name
       @watch_thread
+      @local_server_pid
       UNISON_CONTAINER_PORT = '5000'
       def initialize(sync_name, options)
         @sync_name = sync_name
@@ -31,6 +32,7 @@ module Docker_Sync
 
       def run
         start_container
+        start_local_server if @options['watch_in_container']
         sync
       end
 
@@ -101,6 +103,23 @@ module Docker_Sync
         say_status 'success', 'Unison server started', :green
       end
 
+      def start_local_server
+        say_status 'ok', 'Starting local unison server', :white
+
+        cmd = "unison -socket #{@options['sync_local_server_port']}"
+        say_status 'command', cmd, :white if @options['verbose']
+        @local_server_pid = Process.fork do
+          Dir.chdir(@options['src']){
+            `#{cmd}` || raise('Start of local unison server failed')
+          }
+        end
+      end
+
+      def stop_local_server
+        Process.kill "TERM", @local_server_pid
+        Process.wait @local_server_pid
+      end
+
       def get_container_name
         return "#{@sync_name}"
       end
@@ -127,6 +146,7 @@ module Docker_Sync
         say_status 'ok', "Stopping sync container #{get_container_name}"
         begin
           stop_container
+          stop_local_server
         rescue Exception => e
           say_status 'error', "Stopping failed of #{get_container_name}:", :red
           puts e.message
