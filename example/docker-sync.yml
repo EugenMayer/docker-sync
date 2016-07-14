@@ -57,6 +57,8 @@ syncs:
     watch_excludes: ['.*/.git', '.*/node_modules', '.*/bower_components', '.*/sass-cache', '.*/.sass-cache', '.*/.sass-cache', '.coffee', '.scss', '.sass', '.gitignore']
     # optional: use this to switch to fswatch verbose mode
     watch_args: '-v'
+    # optional: enable fswatch in the container side (unison only) to automatically retrieve files created in the container to the host
+    watch_in_container: true
     # optional: default is fswatch, if set to disable, no watcher will be used and you would need to start the sync manually
     watch_strategy: 'fswatch'
   simpleexample-sync: # IMPORTANT: this name must be unique and should NOT match your real application container name!
