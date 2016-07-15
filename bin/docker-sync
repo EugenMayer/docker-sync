@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 file = File.symlink?(__FILE__) ? File.readlink(__FILE__) : __FILE__
-file = File.dirname(file)
-$LOAD_PATH.unshift File.expand_path('../../lib', file)
+file = File.expand_path(File.dirname(file))
+$LOAD_PATH.unshift File.expand_path('../lib', file)
 
 require 'thor'
 require 'docker-sync/update_check'
 
-thor = File.expand_path('../../tasks/sync', file)
+thor = File.expand_path('../tasks/sync', file)
 Dir.glob(File.join(thor, '/**/*.thor')).each { |taskfile|
   load taskfile
 }
