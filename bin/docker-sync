@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 file = File.symlink?(__FILE__) ? File.readlink(__FILE__) : __FILE__
+file = File.dirname(file)
 $LOAD_PATH.unshift File.expand_path('../../lib', file)
 
 require 'thor'
