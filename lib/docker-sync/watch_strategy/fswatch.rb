@@ -1,6 +1,7 @@
 require 'thor/shell'
 require 'docker-sync/execution'
 require 'docker-sync/preconditions'
+require 'pathname'
 
 module Docker_Sync
   module WatchStrategy
@@ -56,13 +57,11 @@ module Docker_Sync
         args.push(@options['src'])
 
         sync_command = 'thor sync:sync'
-        begin
-          Preconditions::docker_sync_available
+        exec_name =File.basename($PROGRAM_NAME)
+        if exec_name != 'thor'
           sync_command = 'docker-sync sync'
-        rescue Exception => e
-          say_status 'warning', 'docker-sync not available, assuming dev mode, using thor', :yellow
-          puts e.message
-          sync_command = 'thor sync:sync'
+        else
+          say_status 'warning', 'Called user thor, not docker-sync* wise, assuming dev mode, using thor', :yellow
         end
         args.push(" | xargs -I -n1 #{sync_command} -n #{@sync_name} --config='#{@options['config_path']}'")
       end
