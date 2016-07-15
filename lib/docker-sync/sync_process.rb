@@ -52,9 +52,7 @@ module Docker_Sync
         case @options['watch_strategy']
           when 'fswatch'
             @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
-          when 'disable'
-            @watch_strategy = Docker_Sync::WatchStrategy::Dummy.new(@sync_name, @options)
-          when 'dummy'
+          when 'disable','dummy'
             @watch_strategy = Docker_Sync::WatchStrategy::Dummy.new(@sync_name, @options)
           else
             @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
