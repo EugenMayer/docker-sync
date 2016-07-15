@@ -150,5 +150,17 @@ module Docker_Rsync
         end
       }
     end
+
+    def watch_stop
+      @sync_processes.each { |sync_process|
+        sync_process.watch_thread.kill unless sync_process.watch_thread.nil?
+      }
+    end
+
+    def watch_start
+      @sync_processes.each { |sync_process|
+        sync_process.watch
+      }
+    end
   end
 end
