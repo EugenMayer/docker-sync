@@ -45,7 +45,7 @@ module Docker_Rsync
       @config_syncs.each do |name, config|
         @config_syncs[name]['config_path'] = @config_path
         # expand the sync source to remove ~ and similar expressions in the path
-        @config_syncs[name]['src'] = File.expand_path(@config_syncs[name]['src'])
+        @config_syncs[name]['src'] = File.expand_path(@config_syncs[name]['src'], File.dirname(@config_path))
 
         # set the global verbose setting, if the sync-endpoint does not define a own one
         unless config.key?('verbose')
@@ -148,6 +148,18 @@ module Docker_Rsync
         unless sync_process.watch_thread.nil?
           sync_process.watch_thread.kill unless sync_process.watch_thread.nil?
         end
+      }
+    end
+
+    def watch_stop
+      @sync_processes.each { |sync_process|
+        sync_process.watch_thread.kill unless sync_process.watch_thread.nil?
+      }
+    end
+
+    def watch_start
+      @sync_processes.each { |sync_process|
+        sync_process.watch
       }
     end
   end
