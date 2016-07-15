@@ -45,7 +45,7 @@ module Docker_Rsync
       @config_syncs.each do |name, config|
         @config_syncs[name]['config_path'] = @config_path
         # expand the sync source to remove ~ and similar expressions in the path
-        @config_syncs[name]['src'] = File.expand_path(@config_syncs[name]['src'], File.dirname(DockerSyncConfig::project_config_path))
+        @config_syncs[name]['src'] = File.expand_path(@config_syncs[name]['src'], File.dirname(@config_path))
 
         # set the global verbose setting, if the sync-endpoint does not define a own one
         unless config.key?('verbose')
