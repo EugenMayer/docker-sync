@@ -11,8 +11,8 @@ module Docker_Sync
       @watch_thread
 
       def initialize(sync_name, options)
-        @sync_name = sync_name
         @options = options
+        @sync_name = @options['project'] != '' ? @options['project'] + '_' + sync_name : sync_name
         # if a custom image is set, apply it
         if @options.key?('image')
           @docker_image = @options['image']

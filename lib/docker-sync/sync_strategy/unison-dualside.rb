@@ -14,8 +14,8 @@ module Docker_Sync
       @local_server_pid
       UNISON_CONTAINER_PORT = '5000'
       def initialize(sync_name, options)
-        @sync_name = sync_name
         @options = options
+        @sync_name = @options['project'] != '' ? @options['project'] + '_' + sync_name : sync_name
         # if a custom image is set, apply it
         if @options.key?('image')
           @docker_image = @options['image']
