@@ -13,6 +13,8 @@ options:
   # ADVANVED: default:eugenmayer/unison -  the image to use for the unison container. Do not change this until you exactly know, what you are doing
   # you cannot just use "some unison" container, you entrypoint needs features, check the Dockerfiles
   unison_image: 'eugenmayer/unison'
+  # You can specify a project name (like the -p option of docker-compose). This will prefix all volume container names with it.
+  project: 'project_name'
 syncs:
   # IMPORTANT: this name must be unique and should NOT match your real application container name!
   fullexample-sync:
