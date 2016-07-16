@@ -59,7 +59,7 @@ module Docker_Rsync
         unless config.key?('project')
           @config_syncs[name]['project'] = ''
           if @config_options.key?('project')
-            @config_syncs[name]['project'] = sanitize_project_name(@config_options['project'])
+            @config_syncs[name]['project'] = set_project_name(@config_options['project'])
           end
         end
 
@@ -70,6 +70,14 @@ module Docker_Rsync
             @config_syncs[name]['image'] = config["#{strategy}_image"]
           end
         end
+      end
+    end
+
+    def set_project_name(project_name)
+      if project_name == 'auto'
+        sanitize_project_name(File.basename(File.dirname(@config_path)))
+      else
+        sanitize_project_name(project_name)
       end
     end
 
