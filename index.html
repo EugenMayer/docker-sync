@@ -37,8 +37,9 @@
 </li>
 <li>it uses either <strong>rsync</strong> or <strong>unison</strong> to sync. The container performance is not influenced at all, see <a href="https://github.com/EugenMayer/docker_sync/wiki/4.-Performance">performance</a>
 </li>
-<li>efficient in its way to watch for file changes - even for 12k+ files it will not eat up you CPU</li>
-<li>supports either one-way sync ( rsync ) or two way sync ( unison )</li>
+<li>Efficient in its way to watch for file changes - even for 12k+ files it will not eat up you CPU</li>
+<li>supports either one-way sync ( rsync ) or two way sync ( unison ), see <a href="https://github.com/EugenMayer/docker-sync/wiki/8.-Strategies">strategies</a></li>
+<li>Supports real 2-way-syn, also when app-container has changes</li>
 <li><strong>supports user-remapping</strong> on sync to avoid permission problems on the container</li>
 <li><strong>support for docker-compose</strong> to start sync and stack with one single command</li>
 <li>using overalys to keep your production docker-compose.yml untouched an portable</li>
