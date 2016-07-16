@@ -59,7 +59,7 @@ module Docker_Rsync
         unless config.key?('project')
           @config_syncs[name]['project'] = ''
           if @config_options.key?('project')
-            @config_syncs[name]['project'] = @config_options['project']
+            @config_syncs[name]['project'] = sanitize_project_name(@config_options['project'])
           end
         end
 
@@ -71,6 +71,10 @@ module Docker_Rsync
           end
         end
       end
+    end
+
+    def sanitize_project_name(project_name)
+      project_name.gsub(/[^a-zA-Z0-9]/, '')
     end
 
     def validate_config(config)
