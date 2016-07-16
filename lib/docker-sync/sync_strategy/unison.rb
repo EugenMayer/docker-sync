@@ -91,7 +91,7 @@ module Docker_Sync
         else
           say_status 'ok', "#{container_name} container still running", :blue
         end
-        say_status 'ok', "starting initial #{container_name} of src", :white if @options['verbose']
+        say_status 'ok', "starting initial sync of #{container_name}", :white if @options['verbose']
         # this sleep is needed since the container could be not started
         sleep 1
         sync
