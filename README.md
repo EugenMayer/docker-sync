@@ -8,3 +8,6 @@ Main Contributors:
  - [mickaelperrin](https://github.com/mickaelperrin)
 
 
+
+
+[![Join the chat at https://gitter.im/EugenMayer/docker-sync](https://badges.gitter.im/EugenMayer/docker-sync.svg)](https://gitter.im/EugenMayer/docker-sync?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
