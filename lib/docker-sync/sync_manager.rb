@@ -55,6 +55,14 @@ module Docker_Rsync
           end
         end
 
+        # set the global project setting, if the sync-endpoint does not define a own one
+        unless config.key?('project')
+          @config_syncs[name]['project'] = ''
+          if @config_options.key?('project')
+            @config_syncs[name]['project'] = @config_options['project']
+          end
+        end
+
         # for each strategy check if a custom image has been defined and inject that into the sync-endpoints
         # which do fit for this strategy
         %w(rsync unison).each do |strategy|
