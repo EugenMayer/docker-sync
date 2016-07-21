@@ -96,13 +96,7 @@ module Docker_Sync
         volume_name = get_volume_name
         env = {}
 
-        env['ENABLE_WATCH'] = 'true'
-        # Excludes for fswatch and unison uses the same value both in the host and in the container
-        env['FSWATCH_EXCLUDES'] = @options['watch_excludes'].map { |pattern| "--exclude='#{pattern}'" }.join(' ') if @options.key?('watch_excludes')
         env['UNISON_EXCLUDES'] = @options['sync_excludes'].map { |pattern| "-ignore='Path #{pattern}'" }.join(' ') if @options.key?('sync_excludes')
-        # Specify the IP of the host to call the host unison server from the container
-        env['HOST_IP'] = get_host_ip
-        env['UNISON_HOST_PORT'] = @options['unison-dualside_host_server_port']
 
         if @options['sync_userid'] == 'from_host'
           env['UNISON_OWNER_UID'] = Process.uid
@@ -135,17 +129,6 @@ module Docker_Sync
         sleep 5 # TODO: replace with unison -testserver
         sync
         say_status 'success', 'Unison server started', :green
-      end
-
-      # Try to guess the IP of the host to call the unison server from the container
-      # Or use the value specified in the config option
-      def get_host_ip
-        if @options['unison-dualside_host_ip'] != 'auto' && @options.key?('unison-dualside_host_ip')
-          host_ip = @options['host_ip']
-        elsif @options['unison-dualside_host_ip'] == 'auto' || (not @options.key?('unison-dualside_host_ip'))
-          host_ip = Socket.ip_address_list.find { |ai| ai.ipv4? && !ai.ipv4_loopback? }.ip_address
-        end
-        return host_ip
       end
 
       # Kill the local unison server
