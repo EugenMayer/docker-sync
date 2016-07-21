@@ -64,7 +64,11 @@ module Docker_Sync
             @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
         end
       else
-        @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
+        if @options['sync_strategy'] == 'unison-unox'
+          @watch_strategy = Docker_Sync::WatchStrategy::Unison.new(@sync_name, @options)
+        else
+          @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
+        end
       end
     end
 

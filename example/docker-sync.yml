@@ -83,7 +83,6 @@ syncs:
     image: 'mickaelperrin/docker-unison-unox'
     sync_host_ip: 'localhost'
     sync_strategy: 'unison-unox'
-    watch_strategy: 'unison'
     sync_user: 'www-data'
     sync_userid: '33'
 
