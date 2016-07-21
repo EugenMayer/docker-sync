@@ -140,12 +140,6 @@ module Docker_Sync
         return stdout.gsub("\n",'')
       end
 
-      # Kill the local unison server
-      def stop_local_server
-        Process.kill "TERM", @local_server_pid
-        Process.wait @local_server_pid
-      end
-
       def get_container_name
         return "#{@sync_name}"
       end
@@ -172,7 +166,6 @@ module Docker_Sync
         say_status 'ok', "Stopping sync container #{get_container_name}"
         begin
           stop_container
-          stop_local_server
         rescue Exception => e
           say_status 'error', "Stopping failed of #{get_container_name}:", :red
           puts e.message
