@@ -10,7 +10,11 @@ services:
     image: alpine
     container_name: 'simpleexample_app'
     command: ['watch', '-n1', 'cat /app/code/somefile.txt']
-  appthatproducedata:
+#  appthatproducedata:
+#    build: ./create-data
+#    container_name: 'unison-dualside_app'
+#    command: ['watch', '-n1', 'cat /data/filefromhost.txt']
+  newapp:
     build: ./create-data
-    container_name: 'unison-dualside_app'
+    container_name: 'unison-unox_app'
     command: ['watch', '-n1', 'cat /data/filefromhost.txt']

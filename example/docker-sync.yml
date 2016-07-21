@@ -68,13 +68,24 @@ syncs:
     sync_host_ip: 'localhost'
     sync_host_port: 20872
     sync_strategy: 'unison' # this time we pick unison
-  unison-dualside-sync:
-    src: './data3/'
+#  unison-dualside-sync:
+#    src: './data3/'
+#    dest: '/data'
+#    sync_host_ip: '172.16.210.131'
+#    sync_host_port: 20873
+#    sync_userid: 'from_host'
+#    unison-dualside_host_ip: 'auto'
+#    unison-dualside_host_server_port: 6000
+#    sync_strategy: 'unison-dualside'
+  unison-unox:
+    src: './data4/'
     dest: '/data'
-    image: 'mickaelperrin/docker-unison-fsevents'
-    sync_host_ip: '172.16.210.131'
+    image: 'mickaelperrin/docker-unison-unox'
+    sync_host_ip: 'localhost'
     sync_host_port: 20873
-    sync_userid: 'from_host'
-    unison-dualside_host_ip: 'auto'
-    unison-dualside_host_server_port: 6000
-    sync_strategy: 'unison-dualside'
+    sync_strategy: 'unison-unox'
+    watch_strategy: 'unison'
+    sync_user: 'www-data'
+    sync_userid: '33'
+
+

@@ -9,14 +9,19 @@ services:
   otherapp:
     volumes_from:
       - container:simpleexample-sync:rw # will be mounted on /app/code
-  appthatproducedata:
+#  appthatproducedata:
+#    volumes_from:
+#      - container:unison-dualside-sync:rw # will be mounted on /data
+  newapp:
     volumes_from:
-      - container:unison-dualside-sync:rw # will be mounted on /data
+      - container:unison-unox:rw # will be mounted on /data
 
 volumes:
   fullexample-sync:
     external: true
   simpleexample-sync:
     external: true
-  unison-dualside-sync:
+#  unison-dualside-sync:
+#    external: true
+  unison-unox:
     external: true
