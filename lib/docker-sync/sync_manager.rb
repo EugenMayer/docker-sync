@@ -121,9 +121,15 @@ module Docker_Rsync
 
     def join_threads
       begin
+        has_threads = false
         @sync_processes.each do |sync_process|
-          sync_process.watch_thread.join unless sync_process.watch_thread.nil?
+          if sync_process.watch_thread
+            sync_process.watch_thread.join
+            has_threads = true
+          end
         end
+
+        sleep unless has_threads
 
       rescue SystemExit, Interrupt
         say_status 'shutdown', 'Shutting down...', :blue
