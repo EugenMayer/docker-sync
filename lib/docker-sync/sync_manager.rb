@@ -78,7 +78,9 @@ module Docker_Rsync
     end
 
     def validate_sync_config(name, sync_config)
-      %w[src dest sync_host_port].each do |key|
+      config_mandatory = %w[src dest]
+      config_mandatory.push('sync_host_port') unless name == 'unison-unox' #TODO: Implement autodisovery for other strategies
+      %w[src dest].each do |key|
         raise ("#{name} does not have #{key} condiguration value set - this is mandatory") unless sync_config.key?(key)
       end
     end

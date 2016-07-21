@@ -82,7 +82,6 @@ syncs:
     dest: '/data'
     image: 'mickaelperrin/docker-unison-unox'
     sync_host_ip: 'localhost'
-    sync_host_port: 20873
     sync_strategy: 'unison-unox'
     watch_strategy: 'unison'
     sync_user: 'www-data'

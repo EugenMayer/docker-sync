@@ -76,7 +76,8 @@ module Docker_Sync
         args.push('-auto')
         args.push('-batch')
         args.push(@options['sync_args']) if @options.key?('sync_args')
-        args.push("socket://#{@options['sync_host_ip']}:#{@options['sync_host_port']}/")
+        sync_host_port = get_host_port(get_container_name, UNISON_CONTAINER_PORT)
+        args.push("socket://#{@options['sync_host_ip']}:#{sync_host_port}")
 
         if @options.key?('sync_group') || @options.key?('sync_groupid')
           raise('Unison does not support sync_user, sync_group, sync_groupid - please use rsync if you need that')
@@ -105,7 +106,7 @@ module Docker_Sync
           exists = `docker ps --filter "status=exited" --filter "name=#{container_name}" | grep #{container_name}`
           if exists == ''
             say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
-            cmd = "docker run -p '#{@options['sync_host_port']}:#{UNISON_CONTAINER_PORT}' \
+            cmd = "docker run -p '127.0.0.1::#{UNISON_CONTAINER_PORT}' \
                               -v #{volume_name}:#{@options['dest']} \
                               -e UNISON_DIR=#{@options['dest']} \
                               #{additional_docker_env} \
@@ -125,6 +126,18 @@ module Docker_Sync
         sleep 5 # TODO: replace with unison -testserver
         sync
         say_status 'success', 'Unison server started', :green
+      end
+
+      def get_host_port(container_name, container_port)
+        cmd = 'docker inspect --format=" {{ .NetworkSettings.Ports }} " ' + container_name + ' | sed -r "s/.*map\[' + container_port + '[^ ]+\s([0-9]+).*/\1/"'
+        say_status 'command', cmd, :white if @options['verbose']
+        stdout, stderr, exit_status = Open3.capture3(cmd)
+        if not exit_status.success?
+          say_status 'command', cmd
+          say_status 'error', "Error getting mapped port, exit code #{$?.exitstatus}", :red
+          say_status 'message', stderr
+        end
+        return stdout.gsub("\n",'')
       end
 
       # Kill the local unison server
