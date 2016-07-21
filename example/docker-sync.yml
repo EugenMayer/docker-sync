@@ -16,6 +16,9 @@ options:
 syncs:
   # IMPORTANT: this name must be unique and should NOT match your real application container name!
   fullexample-sync:
+    # enable terminal_notifier. On every sync sends a Terminal Notification regarding files being synced. ( Mac Only ).
+    # good thing incase you are developing and want to know exactly when your changes took effect.
+    notify_terminal: true
     # which folder to watch / sync from - you can use tiled, it will get expanded. Be aware the then trailing slash makes a difference
     # if you add them, only the inner parts of the folder gets synced, otherwise the parent folder will be synced as top-level folder
     src: './data1/'

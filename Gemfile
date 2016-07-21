@@ -4,3 +4,4 @@ gem 'thor'
 # otherwise installed on demand
 gem 'docker-compose', '0.8.3'
 gem 'gem_update_checker'
+gem 'terminal-notifier', '1.6.3'
