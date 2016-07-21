@@ -75,17 +75,11 @@ module Docker_Sync
         args.push(@options['src'])
         args.push('-auto')
         args.push('-batch')
-        args.push('-owner') if @options['sync_userid'] == 'from_host'
-        args.push('-numericids') if @options['sync_userid'] == 'from_host'
         args.push(@options['sync_args']) if @options.key?('sync_args')
         args.push("socket://#{@options['sync_host_ip']}:#{@options['sync_host_port']}/")
-        #args.push('-debug all') if @options['verbose']
 
-        if @options.key?('sync_user') || @options.key?('sync_group') || @options.key?('sync_groupid')
+        if @options.key?('sync_group') || @options.key?('sync_groupid')
           raise('Unison does not support sync_user, sync_group, sync_groupid - please use rsync if you need that')
-        end
-        if  @options.key?('sync_userid') && @options['sync_userid'] != 'from_host'
-          raise('Unison does not support sync_userid with a parameter different than \'from_host\'')
         end
         return args
       end
@@ -97,9 +91,11 @@ module Docker_Sync
         env = {}
 
         env['UNISON_EXCLUDES'] = @options['sync_excludes'].map { |pattern| "-ignore='Path #{pattern}'" }.join(' ') if @options.key?('sync_excludes')
-
+        env['UNISON_OWNER'] = @options['sync_user'] if @options.key?('sync_user')
         if @options['sync_userid'] == 'from_host'
           env['UNISON_OWNER_UID'] = Process.uid
+        else
+          env['UNISON_OWNER_UID'] = @options['sync_userid'] if @options.key?('sync_userid')
         end
 
         additional_docker_env = env.map{ |key,value| "-e #{key}=\"#{value}\"" }.join(' ')
