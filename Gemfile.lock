@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     backticks (0.5.0)
+    daemons (1.2.3)
     docker-compose (0.8.3)
       backticks (~> 0.5)
     gem_update_checker (0.2.0)
@@ -12,6 +13,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  daemons (= 1.2.3)
   docker-compose (= 0.8.3)
   gem_update_checker
   terminal-notifier (= 1.6.3)

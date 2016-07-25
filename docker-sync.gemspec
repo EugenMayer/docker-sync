@@ -13,5 +13,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'gem_update_checker', '~> 0.2.0', '>= 0.2.0'
   s.add_runtime_dependency 'docker-compose', '0.8.3'
   s.add_runtime_dependency 'terminal-notifier', '1.6.3'
+  s.add_runtime_dependency 'daemons', '~> 1.2', '>= 1.2.3'
   #s.add_runtime_dependency 'docker-compose', '~> 0' # dynamic dependency
 end
