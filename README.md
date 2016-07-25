@@ -1,6 +1,6 @@
 [![Gem Version](https://badge.fury.io/rb/docker-sync.svg)](https://badge.fury.io/rb/docker-sync) [![Join the chat at https://gitter.im/EugenMayer/docker-sync](https://badges.gitter.im/EugenMayer/docker-sync.svg)](https://gitter.im/EugenMayer/docker-sync?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Codewake](https://www.codewake.com/badges/codewake2.svg)](https://www.codewake.com/p/docker-sync)[![Codewake](https://www.codewake.com/badges/codewake.svg)](https://www.codewake.com/p/docker-sync)
+[![Codewake](https://www.codewake.com/badges/codewake2.svg)](https://www.codewake.com/p/docker-sync) [![Codewake](https://www.codewake.com/badges/codewake.svg)](https://www.codewake.com/p/docker-sync)
 
 Anything under [http://docker-sync.io](http://docker-sync.io)
 
