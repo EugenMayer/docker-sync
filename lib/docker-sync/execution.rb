@@ -5,22 +5,6 @@ module Execution
 
   Thread.abort_on_exception = true
 
-  def exec(command, prefix, color)
-    Open3.popen3(command) do |_, stdout, stderr, _|
-
-      # noinspection RubyAssignmentExpressionInConditionalInspection
-      while line_out = stdout.gets
-        say_status prefix, line_out, color
-      end
-
-      # noinspection RubyAssignmentExpressionInConditionalInspection
-      while line_err = stderr.gets
-        say_status prefix, line_err, :red
-      end
-
-    end
-  end
-
   def threadexec(command, prefix = nil, color = nil)
 
     if prefix.nil?
@@ -33,7 +17,19 @@ module Execution
     end
 
     Thread.new {
-     exec(command, prefix, color)
+      Open3.popen3(command) do |_, stdout, stderr, _|
+
+        # noinspection RubyAssignmentExpressionInConditionalInspection
+        while line_out = stdout.gets
+          say_status prefix, line_out, color
+        end
+
+        # noinspection RubyAssignmentExpressionInConditionalInspection
+        while line_err = stderr.gets
+          say_status prefix, line_err, :red
+        end
+
+      end
     }
 
   end
@@ -49,9 +45,21 @@ module Execution
       color = :cyan
     end
 
-    Process.fork do
-      exec(command, prefix, color)
-    end
+    Process.fork  {
+      Open3.popen3(command) do |_, stdout, stderr, _|
+
+        # noinspection RubyAssignmentExpressionInConditionalInspection
+        while line_out = stdout.gets
+          say_status prefix, line_out, color
+        end
+
+        # noinspection RubyAssignmentExpressionInConditionalInspection
+        while line_err = stderr.gets
+          say_status prefix, line_err, :red
+        end
+
+      end
+    }
 
   end
 
