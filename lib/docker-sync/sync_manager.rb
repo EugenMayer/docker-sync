@@ -132,6 +132,12 @@ module Docker_Rsync
           end
         end
 
+        # when docker-sync runs with unison:unox processes created
+        # are not new threads but differents processes
+        # the previous .join method has no effect to keep the process
+        # running. If the main process exits, sync will continue to work
+        # but we have no way to kill created sync processes. This sleep
+        # prevents this.
         sleep unless has_threads
 
       rescue SystemExit, Interrupt

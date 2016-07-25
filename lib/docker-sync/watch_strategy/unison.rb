@@ -16,6 +16,10 @@ module Docker_Sync
         @options = options
         @sync_name = sync_name
         @watch_fork = nil
+        # instantiate the sync task to easily access all common parameters between
+        # unison sync and watch
+        # basically unison watch is the command with the additionnal -repeat watch option
+        # note: this doesn't run a sync
         @unison = Docker_Sync::SyncStrategy::Unison_Unox.new(@sync_name, @options)
       end
 
