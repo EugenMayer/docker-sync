@@ -117,13 +117,14 @@ module Docker_Sync
                               -d #{@docker_image}"
           else
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
-            cmd = "docker start #{container_name}"
+            cmd = "docker start #{container_name} && docker exec #{container_name} supervisorctl restart unison"
           end
-          say_status 'command', cmd, :white if @options['verbose']
-          `#{cmd}` || raise('Start failed')
         else
-          say_status 'ok', "#{container_name} container still running", :blue
+          say_status 'ok', "#{container_name} container still running, restarting unison in container", :blue
+          cmd = "docker exec #{container_name} supervisorctl restart unison"
         end
+        say_status 'command', cmd, :white if @options['verbose']
+        `#{cmd}` || raise('Start failed')
         say_status 'ok', "starting initial sync of #{container_name}", :white if @options['verbose']
         # this sleep is needed since the container could be not started
         sleep 5 # TODO: replace with unison -testserver
