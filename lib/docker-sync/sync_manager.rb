@@ -16,7 +16,7 @@ module Docker_Rsync
     def initialize(options)
       @sync_processes = []
       @config_syncs = []
-      @config_options = []
+      @config_global = []
       @config_path = options[:config_path]
       load_configuration
     end
@@ -28,13 +28,13 @@ module Docker_Rsync
 
       config = YAML.load_file(@config_path)
       validate_config(config)
-      @config_options = config['options'] || {}
+      @config_global = config['options'] || {}
       @config_syncs = config['syncs']
       upgrade_syncs_config
     end
 
     def global_options
-      return @config_options
+      return @config_global
     end
 
     def get_sync_points
@@ -46,12 +46,13 @@ module Docker_Rsync
         @config_syncs[name]['config_path'] = @config_path
         # expand the sync source to remove ~ and similar expressions in the path
         @config_syncs[name]['src'] = File.expand_path(@config_syncs[name]['src'], File.dirname(@config_path))
+        @config_syncs[name]['cli_mode'] = @config_global['cli_mode'] || 'auto'
 
         # set the global verbose setting, if the sync-endpoint does not define a own one
         unless config.key?('verbose')
           @config_syncs[name]['verbose'] = false
-          if @config_options.key?('verbose')
-            @config_syncs[name]['verbose'] = @config_options['verbose']
+          if @config_global.key?('verbose')
+            @config_syncs[name]['verbose'] = @config_global['verbose']
           end
         end
 

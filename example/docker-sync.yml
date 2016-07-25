@@ -13,9 +13,11 @@ options:
   # ADVANVED: default:eugenmayer/unison -  the image to use for the unison container. Do not change this until you exactly know, what you are doing
   # you cannot just use "some unison" container, you entrypoint needs features, check the Dockerfiles
   unison_image: 'eugenmayer/unison'
+  # can be docker-sync, thor or auto and defines, how the sync will be invoked on the cli. Mostly depending if your are using docker-sync solo, scaffolded or in development ( thor )
+  cli_mode: 'auto'
 syncs:
   # IMPORTANT: this name must be unique and should NOT match your real application container name!
-  fullexample-sync:
+  rync-sync:
     # enable terminal_notifier. On every sync sends a Terminal Notification regarding files being synced. ( Mac Only ).
     # good thing incase you are developing and want to know exactly when your changes took effect.
     notify_terminal: true
@@ -62,7 +64,7 @@ syncs:
     watch_args: '-v'
     # optional: default is fswatch, if set to disable, no watcher will be used and you would need to start the sync manually
     watch_strategy: 'fswatch'
-  simpleexample-sync: # IMPORTANT: this name must be unique and should NOT match your real application container name!
+  unison-sync: # IMPORTANT: this name must be unique and should NOT match your real application container name!
     src: './data2/'
     dest: '/app/code'
     sync_host_ip: 'localhost'

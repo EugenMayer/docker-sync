@@ -1,15 +1,15 @@
 # Development environment reusing production and just adding mounts for docker-sync
 version: "2"
 services:
-  someapp:
+  rsyncapp:
     environment:
       RAILS_ENV: 'development'
     volumes_from:
-      - container:fullexample-sync:rw # will be mounted on /var/www
-  otherapp:
+      - container:rsync-sync:rw # will be mounted on /var/www
+  unisonapp:
     volumes_from:
-      - container:simpleexample-sync:rw # will be mounted on /app/code
-#  appthatproducedata:
+      - container:unison-sync:rw # will be mounted on /app/code
+# appthatproducedata:
 #    volumes_from:
 #      - container:unison-dualside-sync:rw # will be mounted on /data
   newapp:
@@ -17,9 +17,9 @@ services:
       - container:unison-unox:rw # will be mounted on /data
 
 volumes:
-  fullexample-sync:
+  rsync-sync:
     external: true
-  simpleexample-sync:
+  unison-sync:
     external: true
 #  unison-dualside-sync:
 #    external: true
