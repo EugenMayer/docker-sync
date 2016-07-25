@@ -20,12 +20,12 @@ class Sync < Thor
     UpdateChecker.new().run
     UpgradeChecker.new().run
 
-    config_path = config_preconditions
+    config_path = config_preconditions # Preconditions and Define config_path from shared method
 
-    start_dir = Dir.pwd
+    start_dir = Dir.pwd # Set start_dir variable to be equal to pre-daemonized folder, since daemonizing will change dir to '/'
     daemonize if options['daemon']
 
-    Dir.chdir(start_dir) do
+    Dir.chdir(start_dir) do # We want run these in pre-daemonized folder/directory since provided config_path might not be full_path
       @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
       @sync_manager.run(options[:sync_name])
       @sync_manager.join_threads
@@ -36,15 +36,14 @@ class Sync < Thor
   method_option :app_name, :aliases => '--name', :default => 'dsync', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
   method_option :dir, :aliases => '--dir', :default => '/tmp', :type => :string, :desc => 'Full path to PID and OUTPUT file Directory'
   def stop
-    config_preconditions
+    config_preconditions # Preconditions, don't need returned back variable
 
     begin
-      pid = File.read("#{options['dir']}/#{options['app_name']}.pid")
-      # Send INT signal to all processes in given Group PID
-      Process.kill(:INT, -(Process.getpgid(pid.to_i)))
+      pid = File.read("#{options['dir']}/#{options['app_name']}.pid") # Read PID from PIDFILE created by Daemons
+      Process.kill(:INT, -(Process.getpgid(pid.to_i))) # Send INT signal to group PID, which means INT will be sent to all sub-processes and Threads spawned by docker-sync
       say_status 'shutdown', 'Background dsync has been stopped'
     rescue Errno::ESRCH, Errno::ENOENT => e
-      say_status 'error', e.message, :red
+      say_status 'error', e.message, :red # Rescue incase PIDFILE does not exist or there is no process with such PID
       say_status(
         'error', 'Check if your PIDFILE and process with such PID exists', :red
       )
@@ -53,7 +52,7 @@ class Sync < Thor
 
   desc 'sync', 'sync - do not start a watcher'
   def sync
-    config_path = config_preconditions
+    config_path = config_preconditions # Preconditions and Define config_path from shared method
 
     @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
     @sync_manager.sync(options[:sync_name])
@@ -61,7 +60,7 @@ class Sync < Thor
 
   desc 'clean', 'Stop and clean up all sync endpoints'
   def clean
-    config_path = config_preconditions
+    config_path = config_preconditions # Preconditions and Define config_path from shared method
 
     @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
     @sync_manager.clean(options[:sync_name])
@@ -71,7 +70,7 @@ class Sync < Thor
   desc 'list', 'List all sync-points of the project configuration path'
   method_option :verbose, :default => false, :type => :boolean, :desc => 'Verbose output'
   def list
-    config_path = config_preconditions
+    config_path = config_preconditions # Preconditions and Define config_path from shared method
 
     say_status 'ok',"Found configuration at #{config_path}"
     @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
@@ -83,7 +82,7 @@ class Sync < Thor
   end
 
   no_tasks do
-    def config_preconditions
+    def config_preconditions # Moved shared preconditions block into separate method to have less/cleaner code
       begin
         Preconditions::check_all_preconditions
       rescue Exception => e
@@ -107,7 +106,7 @@ class Sync < Thor
         dir_mode: :normal,
         dir: options['dir'],
         log_output: options['logd']
-      }
+      } # List of options accepted by Daemonize, can be customized pretty nicely with provided CLI options
 
       say_status 'success', 'Starting Docker-Sync in the background', :green
       Daemons.daemonize(dopts)
