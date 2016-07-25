@@ -87,5 +87,11 @@ syncs:
     sync_strategy: 'unison-unox'
     sync_user: 'www-data'
     sync_userid: '33'
+    # If you need to sync a lot of files, you can reach out the system limit
+    # of inotify watches. You can set the limit by using this parameter (affects
+    # currently only the container side. see sudo sysctl -w kern.maxfiles=XXX,
+    # sudo sysctl -w kern.maxfilesperproc=XXX and ulimit -n XXXX
+    # to increase this limit on OSX on the host side).
+    max_inotify_watches: 100000
 
 

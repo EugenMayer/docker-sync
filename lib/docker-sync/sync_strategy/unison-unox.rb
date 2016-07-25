@@ -93,6 +93,7 @@ module Docker_Sync
 
         env['UNISON_EXCLUDES'] = @options['sync_excludes'].map { |pattern| "-ignore='Path #{pattern}'" }.join(' ') if @options.key?('sync_excludes')
         env['UNISON_OWNER'] = @options['sync_user'] if @options.key?('sync_user')
+        env['MAX_INOTIFY_WATCHES'] = @options['max_inotify_watches'] if @options.key?('max_inotify_watches')
         if @options['sync_userid'] == 'from_host'
           env['UNISON_OWNER_UID'] = Process.uid
         else
@@ -106,10 +107,12 @@ module Docker_Sync
           exists = `docker ps --filter "status=exited" --filter "name=#{container_name}" | grep #{container_name}`
           if exists == ''
             say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
+            run_privileged = '--privileged' if @options.key?('max_inotify_watches') #TODO: replace by the minimum capabilities required
             cmd = "docker run -p '127.0.0.1::#{UNISON_CONTAINER_PORT}' \
                               -v #{volume_name}:#{@options['dest']} \
                               -e UNISON_DIR=#{@options['dest']} \
                               #{additional_docker_env} \
+                              #{run_privileged} \
                               --name #{container_name} \
                               -d #{@docker_image}"
           else
