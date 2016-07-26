@@ -33,7 +33,7 @@ class Stack < Thor
       end
     end
 
-    @sync_manager = Docker_Rsync::SyncManager.new(:config_path => config_path)
+    @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
     @sync_manager.run(options[:sync_name])
     global_options = @sync_manager.global_options
     @compose_manager = ComposeManager.new(global_options)
@@ -76,7 +76,7 @@ class Stack < Thor
         return
       end
     end
-    @sync_manager = Docker_Rsync::SyncManager.new(:config_path => config_path)
+    @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
     global_options = @sync_manager.global_options
     # shutdown compose first
     @compose_manager = ComposeManager.new(global_options)
