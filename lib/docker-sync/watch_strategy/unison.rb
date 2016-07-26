@@ -41,6 +41,10 @@ module Docker_Sync
       def watch_options
       end
 
+      def watch_fork
+        return @watch_fork
+      end
+
       def watch_thread
         return nil
       end

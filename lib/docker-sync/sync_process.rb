@@ -100,6 +100,10 @@ module Docker_Sync
       @watch_strategy.run
     end
 
+    def watch_fork
+      return @watch_strategy.watch_fork
+    end
+
     def watch_thread
       return @watch_strategy.watch_thread
     end
