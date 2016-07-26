@@ -36,14 +36,36 @@ module Docker_Sync
       end
 
       def run
+        increase_watcher_limit if @options.key?('max_inotify_watches')
         start_container
         sync
+      end
+
+      def increase_watcher_limit
+        current_max_files_per_proc = `sysctl kern.maxfilesperproc | awk '{print $2}'`
+        if current_max_files_per_proc.to_f < @options['max_inotify_watches']
+          cmd = 'sudo sysctl -w kern.maxfilesperproc=' + @options['max_inotify_watches'].to_s
+          say_status 'command', cmd, :white
+          `#{cmd}` || raise('Unable to increase maxfilesperproc')
+        else
+          say_status 'command', 'Current maxfilesperproc set to ' + current_max_files_per_proc.to_s, :white
+        end
+        current_max_files = `sysctl kern.maxfiles | awk '{print $2}'`
+        if current_max_files.to_f < @options['max_inotify_watches']
+          cmd = 'sudo sysctl -w kern.maxfiles=' + @options['max_inotify_watches'].to_s
+          say_status 'command', cmd, :white
+          `#{cmd}` || raise('Unable to increase maxfiles')
+        else
+          say_status 'command', 'Current maxfiles set to ' + current_max_files.to_s, :white
+        end
       end
 
       def watch
         args = sync_options
         args.push("-repeat watch")
-        cmd = 'unison ' + args.join(' ')
+        cmd = ''
+        cmd = cmd + 'ulimit -n ' + @options['max_inotify_watches'].to_s + ' && ' if @options.key?('max_inotify_watches')
+        cmd = cmd + 'unison ' + args.join(' ')
 
         say_status 'command', cmd, :white if @options['verbose']
         forkexec(cmd, "Sync #{@sync_name}", :blue)
