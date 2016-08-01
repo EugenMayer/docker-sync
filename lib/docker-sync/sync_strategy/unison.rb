@@ -7,7 +7,7 @@ require 'terminal-notifier'
 
 module Docker_Sync
   module SyncStrategy
-    class Unison_Unox
+    class Unison
       include Thor::Shell
       include Execution
 
