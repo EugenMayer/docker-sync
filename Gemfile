@@ -5,3 +5,4 @@ gem 'thor'
 gem 'docker-compose', '0.8.3'
 gem 'gem_update_checker'
 gem 'terminal-notifier', '1.6.3'
+#ruby '>= 2.0' not possible
