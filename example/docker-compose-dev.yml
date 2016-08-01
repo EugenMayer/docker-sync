@@ -6,12 +6,12 @@ services:
       RAILS_ENV: 'development'
     volumes_from:
       - container:rsync-sync:rw # will be mounted on /var/www
-  unisonapp:
+  unisononsidedapp:
     volumes_from:
       - container:unison-sync:rw # will be mounted on /app/code
 
 volumes:
   rsync-sync:
     external: true
-  unison-sync:
+  unison-onesided-sync:
     external: true
