@@ -37,8 +37,6 @@ module Docker_Sync
             @sync_strategy = Docker_Sync::SyncStrategy::Rsync.new(@sync_name, @options)
           when 'unison'
             @sync_strategy = Docker_Sync::SyncStrategy::Unison.new(@sync_name, @options)
-          when 'unison-dualside'
-            @sync_strategy = Docker_Sync::SyncStrategy::Unison_DualSide.new(@sync_name, @options)
           else
             @sync_strategy = Docker_Sync::SyncStrategy::Rsync.new(@sync_name, @options)
         end

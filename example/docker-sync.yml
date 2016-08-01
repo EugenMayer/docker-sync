@@ -51,12 +51,6 @@ syncs:
     # this does not user groupmap but rather configures the server to map
     sync_groupid: '6000'
 
-    # required for strategy unison-dualside.
-    # Specify the host IP in the docker or public network or set it to 'auto' to try to guess it automatically
-    unison-dualside_host_ip: 'auto'
-    # required for unison-dualside, specify the port of the unison server that runs directly on the host
-    unison-dualside_host_server_port: 6000
-
     # optional: enable fswatch in the container side (unison only) to automatically retrieve files created in the container to the host
     watch_in_container: true
     watch_excludes: ['.*/.git', '.*/node_modules', '.*/bower_components', '.*/sass-cache', '.*/.sass-cache', '.*/.sass-cache', '.coffee', '.scss', '.sass', '.gitignore']
@@ -70,12 +64,3 @@ syncs:
     sync_host_ip: 'localhost'
     sync_host_port: 20872
     sync_strategy: 'unison' # this time we pick unison
-  unison-dualside-sync:
-    src: './data3/'
-    dest: '/data'
-    sync_host_ip: '172.16.210.131'
-    sync_host_port: 20873
-    sync_userid: 'from_host'
-    unison-dualside_host_ip: 'auto'
-    unison-dualside_host_server_port: 6000
-    sync_strategy: 'unison-dualside'
