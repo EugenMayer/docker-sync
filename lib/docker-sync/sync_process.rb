@@ -2,7 +2,6 @@ require 'thor/shell'
 # noinspection RubyResolve
 require 'docker-sync/sync_strategy/rsync'
 require 'docker-sync/sync_strategy/unison'
-require 'docker-sync/sync_strategy/unison-dualside'
 require 'docker-sync/sync_strategy/unison-unox'
 # noinspection RubyResolve
 require 'docker-sync/watch_strategy/fswatch'
@@ -37,10 +36,8 @@ module Docker_Sync
         case @options['sync_strategy']
           when 'rsync'
             @sync_strategy = Docker_Sync::SyncStrategy::Rsync.new(@sync_name, @options)
-          when 'unison'
-            @sync_strategy = Docker_Sync::SyncStrategy::Unison.new(@sync_name, @options)
-          when 'unison-dualside'
-            @sync_strategy = Docker_Sync::SyncStrategy::Unison_DualSide.new(@sync_name, @options)
+          when 'unison-onesided'
+            @sync_strategy = Docker_Sync::SyncStrategy::Unison_Onesided.new(@sync_name, @options)
           when 'unison-unox'
             @sync_strategy = Docker_Sync::SyncStrategy::Unison_Unox.new(@sync_name, @options)
           else
@@ -67,7 +64,7 @@ module Docker_Sync
         if @options['sync_strategy'] == 'unison-unox'
           @watch_strategy = Docker_Sync::WatchStrategy::Unison.new(@sync_name, @options)
         else
-          @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
+        @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
         end
       end
     end

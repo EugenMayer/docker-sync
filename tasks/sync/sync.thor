@@ -31,7 +31,7 @@ class Sync < Thor
         return
       end
     end
-    @sync_manager = Docker_Rsync::SyncManager.new(:config_path => config_path)
+    @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
     @sync_manager.run(options[:sync_name])
     @sync_manager.join_threads
   end
@@ -55,7 +55,7 @@ class Sync < Thor
         return
       end
     end
-    @sync_manager = Docker_Rsync::SyncManager.new(:config_path => config_path)
+    @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
     @sync_manager.sync(options[:sync_name])
   end
 
@@ -78,7 +78,7 @@ class Sync < Thor
         return
       end
     end
-    @sync_manager = Docker_Rsync::SyncManager.new(:config_path => config_path)
+    @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
     @sync_manager.clean(options[:sync_name])
     say_status 'success', 'Finished cleanup. Removed stopped, removed sync container and removed there volumes', :green
   end
@@ -105,7 +105,7 @@ class Sync < Thor
     end
 
     say_status 'ok',"Found configuration at #{config_path}"
-    @sync_manager = Docker_Rsync::SyncManager.new(:config_path => config_path)
+    @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
     @sync_manager.get_sync_points.each do |name, config|
       say_status name, "On address #{config['sync_host_ip']}:#{config['sync_host_port']}",:white unless options['verbose']
       puts "\n---------------[#{name}] #{config['sync_host_ip']}:#{config['sync_host_port']} ---------------\n" if options['verbose']
