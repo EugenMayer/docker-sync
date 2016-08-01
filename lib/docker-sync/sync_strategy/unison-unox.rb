@@ -23,7 +23,7 @@ module Docker_Sync
         if @options.key?('image')
           @docker_image = @options['image']
         else
-          @docker_image = 'eugenmayer/unison:unox'
+          @docker_image = 'eugenmayer/unison'
         end
         begin
           Preconditions::unison_available
