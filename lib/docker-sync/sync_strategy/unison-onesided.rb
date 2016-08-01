@@ -5,7 +5,7 @@ require 'terminal-notifier'
 
 module Docker_Sync
   module SyncStrategy
-    class Unison
+    class Unison_Onesided
       include Thor::Shell
 
       @options
@@ -19,7 +19,7 @@ module Docker_Sync
         if @options.key?('image')
           @docker_image = @options['image']
         else
-          @docker_image = 'eugenmayer/unison'
+          @docker_image = 'eugenmayer/unison:onesided'
         end
         begin
           Preconditions::unison_available
