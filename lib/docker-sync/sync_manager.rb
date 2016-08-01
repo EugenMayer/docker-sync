@@ -5,7 +5,7 @@ require 'docker-sync/sync_process'
 require 'docker-sync/execution'
 require 'yaml'
 
-module Docker_Rsync
+module Docker_sync
   class SyncManager
     include Thor::Shell
 
