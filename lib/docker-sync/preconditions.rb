@@ -46,7 +46,9 @@ module Preconditions
 
   def self.unox_available
     if (find_executable0 'unison-fsmonitor').nil?
-      raise('Could not find unison-fsmonitor binary in path. Please install it, see https://github.com/hnsl/unox')
+      raise('Could not find unison-fsmonitor binary in path. Please install it, see https://github.com/hnsl/unox, or simply run :
+      wget -O /usr/local/bin/unison-fsmonitor https://raw.githubusercontent.com/hnsl/unox/master/unox.py \
+      && chmod +x /usr/local/bin/unison-fsmonitor')
     end
   end
 end
