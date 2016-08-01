@@ -8,15 +8,10 @@ services:
       - container:rsync-sync:rw # will be mounted on /var/www
   unisononsidedapp:
     volumes_from:
-      - container:unison-onesided-sync:rw # will be mounted on /app/code
-  appthatproducedata:
-    volumes_from:
-      - container:unison-dualside-sync:rw # will be mounted on /data
+      - container:unison-sync:rw # will be mounted on /app/code
 
 volumes:
   rsync-sync:
     external: true
   unison-onesided-sync:
-    external: true
-  unison-dualside-sync:
     external: true
