@@ -135,6 +135,7 @@ module Docker_Sync
             cmd = "docker run -p '127.0.0.1::#{UNISON_CONTAINER_PORT}' \
                               -v #{volume_name}:#{@options['dest']} \
                               -e UNISON_DIR=#{@options['dest']} \
+                              -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} \
                               #{additional_docker_env} \
                               #{run_privileged} \
                               --name #{container_name} \
