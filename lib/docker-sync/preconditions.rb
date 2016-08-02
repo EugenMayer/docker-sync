@@ -46,9 +46,14 @@ module Preconditions
 
   def self.unox_available
     if (find_executable0 'unison-fsmonitor').nil?
-      raise('Could not find unison-fsmonitor binary in path. Please install it, see https://github.com/hnsl/unox, or simply run :
-      curl "https://raw.githubusercontent.com/hnsl/unox/master/unox.py" -o "/usr/local/bin/unison-fsmonitor" \
-      && chmod +x /usr/local/bin/unison-fsmonitor')
+      cmd = 'curl "https://raw.githubusercontent.com/hnsl/unox/master/unox.py" -o "/usr/local/bin/unison-fsmonitor" \
+      && chmod +x /usr/local/bin/unison-fsmonitor'
+      Thor::Shell::Basic.new.say_status 'warning', "Could not find unison-fsmonitor binary in path. Please install unox before you continue, see https://github.com/hnsl/unox.", :yellow
+      if Thor::Shell::Basic.new.yes?("Shall I install unison-fsmonitor for you?")
+        `#{cmd}`
+      else
+        raise("Please install it, see https://github.com/hnsl/unox, or simply run :\n #{cmd}")
+      end
     end
   end
 end
