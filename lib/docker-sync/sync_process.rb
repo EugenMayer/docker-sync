@@ -2,9 +2,11 @@ require 'thor/shell'
 # noinspection RubyResolve
 require 'docker-sync/sync_strategy/rsync'
 require 'docker-sync/sync_strategy/unison-onesided'
+require 'docker-sync/sync_strategy/unison'
 # noinspection RubyResolve
 require 'docker-sync/watch_strategy/fswatch'
 require 'docker-sync/watch_strategy/dummy'
+require 'docker-sync/watch_strategy/unison'
 
 module Docker_Sync
   class SyncProcess
@@ -36,6 +38,8 @@ module Docker_Sync
             @sync_strategy = Docker_Sync::SyncStrategy::Rsync.new(@sync_name, @options)
           when 'unison-onesided'
             @sync_strategy = Docker_Sync::SyncStrategy::Unison_Onesided.new(@sync_name, @options)
+          when 'unison'
+            @sync_strategy = Docker_Sync::SyncStrategy::Unison.new(@sync_name, @options)
           else
             @sync_strategy = Docker_Sync::SyncStrategy::Rsync.new(@sync_name, @options)
         end
@@ -51,11 +55,17 @@ module Docker_Sync
             @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
           when 'disable','dummy'
             @watch_strategy = Docker_Sync::WatchStrategy::Dummy.new(@sync_name, @options)
+          when 'unison'
+            @watch_strategy = Docker_Sync::WatchStrategy::Unison.new(@sync_name, @options)
           else
             @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
         end
       else
-        @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
+        if @options['sync_strategy'] == 'unison'
+          @watch_strategy = Docker_Sync::WatchStrategy::Unison.new(@sync_name, @options)
+        else
+          @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
+        end
       end
     end
 
@@ -85,6 +95,10 @@ module Docker_Sync
 
     def watch
       @watch_strategy.run
+    end
+
+    def watch_fork
+      return @watch_strategy.watch_fork
     end
 
     def watch_thread

@@ -79,7 +79,9 @@ module Docker_sync
     end
 
     def validate_sync_config(name, sync_config)
-      %w[src dest sync_host_port].each do |key|
+      config_mandatory = %w[src dest]
+      config_mandatory.push('sync_host_port') unless sync_config['sync_strategy'] == 'unison' #TODO: Implement autodisovery for other strategies
+      config_mandatory.each do |key|
         raise ("#{name} does not have #{key} condiguration value set - this is mandatory") unless sync_config.key?(key)
       end
     end
@@ -123,7 +125,12 @@ module Docker_sync
     def join_threads
       begin
         @sync_processes.each do |sync_process|
-          sync_process.watch_thread.join unless sync_process.watch_thread.nil?
+          if sync_process.watch_thread
+            sync_process.watch_thread.join
+          end
+          if sync_process.watch_fork
+            Process.wait(sync_process.watch_fork)
+          end
         end
 
       rescue SystemExit, Interrupt
