@@ -85,7 +85,7 @@ module Docker_Sync
           exists = `docker ps --filter "status=exited" --filter "name=#{container_name}" | grep #{container_name}`
           if exists == ''
             say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
-            cmd = "docker run -p '#{@options['sync_host_port']}:#{UNISON_CONTAINER_PORT}' -v #{volume_name}:#{@options['dest']} -e UNISON_DIR=#{@options['dest']} --name #{container_name} -d #{@docker_image}"
+            cmd = "docker run -p '#{@options['sync_host_port']}:#{UNISON_CONTAINER_PORT}' -v #{volume_name}:#{@options['dest']} -e UNISON_DIR=#{@options['dest']} -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} --name #{container_name} -d #{@docker_image}"
           else
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
             cmd = "docker start #{container_name}"
