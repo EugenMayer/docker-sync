@@ -2,15 +2,15 @@
 
 version: "2"
 services:
-  someapp:
+  rsyncapp:
     image: alpine
-    container_name: 'fullexample_app'
+    container_name: 'rsyncapp'
     command: ['watch', '-n1', 'cat /var/www/somefile.txt']
-  otherapp:
+  unisononsidedapp:
     image: alpine
-    container_name: 'simpleexample_app'
+    container_name: 'unisononsidedapp'
     command: ['watch', '-n1', 'cat /app/code/somefile.txt']
-  appthatproducedata:
-    build: ./create-data
-    container_name: 'unison-dualside_app'
-    command: ['watch', '-n1', 'cat /data/filefromhost.txt']
+  unison:
+    image: alpine
+    container_name: 'unison'
+    command: ['watch', '-n1', 'cat /app/code/somefile.txt']

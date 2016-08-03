@@ -18,6 +18,8 @@ class UpdateChecker
       return
     end
     check_rsync_image unless DockerSyncConfig::is_first_run # do not check the image if its the first run - since this it will be downloaded anyway
+    check_unison_onesided_image unless DockerSyncConfig::is_first_run
+    check_unison_image unless DockerSyncConfig::is_first_run
     check_and_warn(@config['update_enforce'])
   end
 
@@ -37,6 +39,30 @@ class UpdateChecker
 
     if system("docker pull eugenmayer/rsync | grep 'Downloaded newer image for'")
       say_status 'warning', 'Downloaded newer image for rsync', :red
+      say_status 'warning', 'Please use "docker-sync clean" before you start docker-sync again', :red
+
+      exit 0
+    end
+    say_status 'success','Image is (now) up to date'
+  end
+
+  def check_unison_image
+    say_status 'ok','Checking if a newer unison image is available'
+
+    if system("docker pull eugenmayer/unison | grep 'Downloaded newer image for'")
+      say_status 'warning', 'Downloaded newer image for unison', :red
+      say_status 'warning', 'Please use "docker-sync clean" before you start docker-sync again', :red
+
+      exit 0
+    end
+    say_status 'success','Image is (now) up to date'
+  end
+
+  def check_unison_onesided_image
+    say_status 'ok','Checking if a newer unison:onesided image is available'
+
+    if system("docker pull eugenmayer/unison:onesided | grep 'Downloaded newer image for'")
+      say_status 'warning', 'Downloaded newer image for unison:onesided', :red
       say_status 'warning', 'Please use "docker-sync clean" before you start docker-sync again', :red
 
       exit 0

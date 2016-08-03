@@ -87,17 +87,17 @@ module Docker_Sync
         say_status 'ok', 'Starting rsync', :white
         container_name = get_container_name
         volume_name = get_volume_name
-        running = `docker ps --filter 'status=running' --filter 'name=#{container_name}' | grep #{container_name}`
+        running = `docker ps --filter 'status=running' --filter 'name=#{container_name}' | sed -E -n 's/.*\\s(.*)$/\\1/p' | grep '^#{container_name}$'`
         if running == '' # container is yet not running
           say_status 'ok', "#{container_name} container not running", :white if @options['verbose']
-          exists = `docker ps --filter "status=exited" --filter "name=#{container_name}" | grep #{container_name}`
+          exists = `docker ps --filter "status=exited" --filter "name=#{container_name}" | sed -E -n 's/.*\\s(.*)$/\\1/p' | grep '^#{container_name}$'`
           if exists == '' # container has yet not been created
             say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
 
             user_mapping = get_user_mapping
             group_mapping = get_group_mapping
 
-            cmd = "docker run -p '#{@options['sync_host_port']}:873' -v #{volume_name}:#{@options['dest']} #{user_mapping} #{group_mapping} -e VOLUME=#{@options['dest']} --name #{container_name} -d #{@docker_image}"
+            cmd = "docker run -p '#{@options['sync_host_port']}:873' -v #{volume_name}:#{@options['dest']} #{user_mapping} #{group_mapping} -e VOLUME=#{@options['dest']} -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} --name #{container_name} -d #{@docker_image}"
           else # container already created, just start / reuse it
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
             cmd = "docker start #{container_name}"

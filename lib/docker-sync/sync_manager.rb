@@ -5,7 +5,7 @@ require 'docker-sync/sync_process'
 require 'docker-sync/execution'
 require 'yaml'
 
-module Docker_Rsync
+module Docker_sync
   class SyncManager
     include Thor::Shell
 
@@ -16,7 +16,7 @@ module Docker_Rsync
     def initialize(options)
       @sync_processes = []
       @config_syncs = []
-      @config_options = []
+      @config_global = []
       @config_path = options[:config_path]
       load_configuration
     end
@@ -28,13 +28,13 @@ module Docker_Rsync
 
       config = YAML.load_file(@config_path)
       validate_config(config)
-      @config_options = config['options'] || {}
+      @config_global = config['options'] || {}
       @config_syncs = config['syncs']
       upgrade_syncs_config
     end
 
     def global_options
-      return @config_options
+      return @config_global
     end
 
     def get_sync_points
@@ -46,12 +46,13 @@ module Docker_Rsync
         @config_syncs[name]['config_path'] = @config_path
         # expand the sync source to remove ~ and similar expressions in the path
         @config_syncs[name]['src'] = File.expand_path(@config_syncs[name]['src'], File.dirname(@config_path))
+        @config_syncs[name]['cli_mode'] = @config_global['cli_mode'] || 'auto'
 
         # set the global verbose setting, if the sync-endpoint does not define a own one
         unless config.key?('verbose')
           @config_syncs[name]['verbose'] = false
-          if @config_options.key?('verbose')
-            @config_syncs[name]['verbose'] = @config_options['verbose']
+          if @config_global.key?('verbose')
+            @config_syncs[name]['verbose'] = @config_global['verbose']
           end
         end
 
@@ -78,7 +79,9 @@ module Docker_Rsync
     end
 
     def validate_sync_config(name, sync_config)
-      %w[src dest sync_host_port].each do |key|
+      config_mandatory = %w[src dest]
+      config_mandatory.push('sync_host_port') unless sync_config['sync_strategy'] == 'unison' #TODO: Implement autodisovery for other strategies
+      config_mandatory.each do |key|
         raise ("#{name} does not have #{key} condiguration value set - this is mandatory") unless sync_config.key?(key)
       end
     end
@@ -122,7 +125,12 @@ module Docker_Rsync
     def join_threads
       begin
         @sync_processes.each do |sync_process|
-          sync_process.watch_thread.join unless sync_process.watch_thread.nil?
+          if sync_process.watch_thread
+            sync_process.watch_thread.join
+          end
+          if sync_process.watch_fork
+            Process.wait(sync_process.watch_fork)
+          end
         end
 
       rescue SystemExit, Interrupt

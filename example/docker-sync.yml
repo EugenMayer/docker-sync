@@ -13,9 +13,11 @@ options:
   # ADVANVED: default:eugenmayer/unison -  the image to use for the unison container. Do not change this until you exactly know, what you are doing
   # you cannot just use "some unison" container, you entrypoint needs features, check the Dockerfiles
   unison_image: 'eugenmayer/unison'
+  # can be docker-sync, thor or auto and defines, how the sync will be invoked on the cli. Mostly depending if your are using docker-sync solo, scaffolded or in development ( thor )
+  cli_mode: 'auto'
 syncs:
   # IMPORTANT: this name must be unique and should NOT match your real application container name!
-  fullexample-sync:
+  rsync-sync:
     # enable terminal_notifier. On every sync sends a Terminal Notification regarding files being synced. ( Mac Only ).
     # good thing incase you are developing and want to know exactly when your changes took effect.
     notify_terminal: true
@@ -49,12 +51,6 @@ syncs:
     # this does not user groupmap but rather configures the server to map
     sync_groupid: '6000'
 
-    # required for strategy unison-dualside.
-    # Specify the host IP in the docker or public network or set it to 'auto' to try to guess it automatically
-    unison-dualside_host_ip: 'auto'
-    # required for unison-dualside, specify the port of the unison server that runs directly on the host
-    unison-dualside_host_server_port: 6000
-
     # optional: enable fswatch in the container side (unison only) to automatically retrieve files created in the container to the host
     watch_in_container: true
     watch_excludes: ['.*/.git', '.*/node_modules', '.*/bower_components', '.*/sass-cache', '.*/.sass-cache', '.*/.sass-cache', '.coffee', '.scss', '.sass', '.gitignore']
@@ -62,19 +58,21 @@ syncs:
     watch_args: '-v'
     # optional: default is fswatch, if set to disable, no watcher will be used and you would need to start the sync manually
     watch_strategy: 'fswatch'
-  simpleexample-sync: # IMPORTANT: this name must be unique and should NOT match your real application container name!
+  unison-onesided-sync: # IMPORTANT: this name must be unique and should NOT match your real application container name!
     src: './data2/'
     dest: '/app/code'
     sync_host_ip: 'localhost'
     sync_host_port: 20872
-    sync_strategy: 'unison' # this time we pick unison
-  unison-dualside-sync:
-    src: './data3/'
-    dest: '/data'
-    image: 'mickaelperrin/docker-unison-fsevents'
-    sync_host_ip: '172.16.210.131'
-    sync_host_port: 20873
-    sync_userid: 'from_host'
-    unison-dualside_host_ip: 'auto'
-    unison-dualside_host_server_port: 6000
-    sync_strategy: 'unison-dualside'
+    sync_strategy: 'unison-onesided' # this time we pick unison-onesided
+  unison-sync:
+      src: './data4/'
+      dest: '/data'
+      image: 'mickaelperrin/docker-unison-unox'
+      sync_host_ip: 'localhost'
+      sync_strategy: 'unison'
+      sync_user: 'www-data'
+      sync_userid: '33'
+      # If you need to sync a lot of files, you can reach out the system limit
+      # of inotify watches. You can set the limit by using this parameter. This will
+      # prompt you for your sudo password to modify the system configuration.
+      #max_inotify_watches: 100000

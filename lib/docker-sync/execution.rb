@@ -34,4 +34,23 @@ module Execution
 
   end
 
+  # unison doesn't work when ran in a new thread
+  # this functions creates a full new process instead
+  def forkexec(command, prefix = nil, color = nil)
+
+    if prefix.nil?
+      # TODO: probably pick the command name without args
+      prefix = 'unknown'
+    end
+
+    if color.nil?
+      color = :cyan
+    end
+
+    Process.fork  {
+      `#{command}` || raise(command + ' failed')
+    }
+
+  end
+
 end

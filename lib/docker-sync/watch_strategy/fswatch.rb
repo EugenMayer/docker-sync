@@ -55,17 +55,33 @@ module Docker_Sync
         args.push(@events_to_watch.map { |pattern| "--event #{pattern}" })
         args.push(@options['watch_args']) if @options.key?('watch_args')
         args.push(@options['src'])
-
-        sync_command = 'thor sync:sync'
-        exec_name =File.basename($PROGRAM_NAME)
-        if exec_name != 'thor'
-          sync_command = 'docker-sync sync'
-        else
-          say_status 'warning', 'Called user thor, not docker-sync* wise, assuming dev mode, using thor', :yellow
-        end
+        sync_command = get_sync_cli_call
         args.push(" | xargs -I -n1 #{sync_command} -n #{@sync_name} --config='#{@options['config_path']}'")
       end
 
+      def get_sync_cli_call
+        sync_command = 'thor sync:'
+        case @options['cli_mode']
+          when 'docker-sync'
+            say_status 'ok','Forcing cli mode docker-sync',:yellow if @options['verbose']
+            sync_command = 'docker-sync '
+          when 'thor'
+            say_status 'ok','Forcing cli mode thor',:yellow if @options['verbose']
+            sync_command = 'thor sync:'
+          else # 'auto' or any other, try to guss
+            say_status 'ok','Cli mode is auto, selecting .. ',:white if @options['verbose']
+            exec_name = File.basename($PROGRAM_NAME)
+            if exec_name != 'thor'
+              sync_command = 'docker-sync '
+            else
+              say_status 'warning', 'Called user thor, not docker-sync* wise, assuming dev mode, using thor', :yellow
+            end
+            say_status 'ok',".. #{sync_command}",:white if @options['verbose']
+        end
+
+        # append the actual operation
+        return "#{sync_command}sync"
+      end
       def watch_thread
         return @watch_thread
       end

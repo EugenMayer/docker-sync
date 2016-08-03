@@ -24,7 +24,7 @@ class Sync < Thor
     daemonize if options['daemon']
 
     Dir.chdir(start_dir) do # We want run these in pre-daemonized folder/directory since provided config_path might not be full_path
-      @sync_manager = Docker_Rsync::SyncManager.new(:config_path => config_path)
+      @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
       @sync_manager.run(options[:sync_name])
       @sync_manager.join_threads
     end
@@ -52,7 +52,7 @@ class Sync < Thor
   def sync
     config_path = config_preconditions # Preconditions and Define config_path from shared method
 
-    @sync_manager = Docker_Rsync::SyncManager.new(:config_path => config_path)
+    @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
     @sync_manager.sync(options[:sync_name])
   end
 
@@ -60,7 +60,7 @@ class Sync < Thor
   def clean
     config_path = config_preconditions # Preconditions and Define config_path from shared method
 
-    @sync_manager = Docker_Rsync::SyncManager.new(:config_path => config_path)
+    @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
     @sync_manager.clean(options[:sync_name])
     say_status 'success', 'Finished cleanup. Removed stopped, removed sync container and removed there volumes', :green
   end
@@ -71,7 +71,7 @@ class Sync < Thor
     config_path = config_preconditions # Preconditions and Define config_path from shared method
 
     say_status 'ok',"Found configuration at #{config_path}"
-    @sync_manager = Docker_Rsync::SyncManager.new(:config_path => config_path)
+    @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
     @sync_manager.get_sync_points.each do |name, config|
       say_status name, "On address #{config['sync_host_ip']}:#{config['sync_host_port']}",:white unless options['verbose']
       puts "\n---------------[#{name}] #{config['sync_host_ip']}:#{config['sync_host_port']} ---------------\n" if options['verbose']
