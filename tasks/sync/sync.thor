@@ -2,6 +2,7 @@ require 'docker-sync/sync_manager'
 require 'docker-sync/config'
 require 'docker-sync/preconditions'
 require 'docker-sync/update_check'
+require 'docker-sync/upgrade_check'
 
 class Sync < Thor
 
@@ -13,7 +14,8 @@ class Sync < Thor
     # do run update check in the start command only
     updates = UpdateChecker.new
     updates.run
-
+    upgrades = UpgradeChecker.new
+    upgrades.run
     begin
       Preconditions::check_all_preconditions
     rescue Exception => e
@@ -111,6 +113,12 @@ class Sync < Thor
       puts "\n---------------[#{name}] #{config['sync_host_ip']}:#{config['sync_host_port']} ---------------\n" if options['verbose']
       print_table(config) if options['verbose']
     end
+  end
+  desc 'start', 'Start all sync configurations in this project'
+  def upgrade
+    # do run update check in the start command only
+    upgrades = UpgradeChecker.new
+    upgrades.run
   end
 
 end

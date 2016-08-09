@@ -2,6 +2,7 @@ require 'docker-sync/sync_manager'
 require 'docker-sync/config'
 require 'docker-sync/preconditions'
 require 'docker-sync/update_check'
+require 'docker-sync/upgrade_check'
 require 'docker/compose'
 require 'docker-sync/compose'
 class Stack < Thor
@@ -14,6 +15,9 @@ class Stack < Thor
     # do run update check in the start command only
     updates = UpdateChecker.new
     updates.run
+
+    upgrades = UpgradeChecker.new
+    upgrades.run
 
     begin
       Preconditions::check_all_preconditions
