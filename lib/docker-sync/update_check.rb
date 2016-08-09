@@ -49,7 +49,7 @@ class UpdateChecker
   def check_unison_image
     say_status 'ok','Checking if a newer unison image is available'
 
-    if system("docker pull eugenmayer/unison | grep 'Downloaded newer image for'")
+    if system("docker pull eugenmayer/unison:unox | grep 'Downloaded newer image for'")
       say_status 'warning', 'Downloaded newer image for unison', :red
       say_status 'warning', 'Please use "docker-sync clean" before you start docker-sync again', :red
 
