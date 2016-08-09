@@ -46,13 +46,16 @@ module Preconditions
 
   def self.unox_available
     if (find_executable0 'unison-fsmonitor').nil?
-      cmd = 'curl "https://raw.githubusercontent.com/hnsl/unox/master/unox.py" -o "/usr/local/bin/unison-fsmonitor" \
+      cmd1 = 'curl "https://raw.githubusercontent.com/hnsl/unox/master/unox.py" -o "/usr/local/bin/unison-fsmonitor" \
       && chmod +x /usr/local/bin/unison-fsmonitor'
-      Thor::Shell::Basic.new.say_status 'warning', "Could not find unison-fsmonitor binary in path. Please install unox before you continue, see https://github.com/hnsl/unox.", :yellow
-      if Thor::Shell::Basic.new.yes?("Shall I install unison-fsmonitor for you?")
-        `#{cmd}`
+      cmd2 = 'easy_install pip && pip install macfsevents'
+      Thor::Shell::Basic.new.say_status 'warning', 'Could not find unison-fsmonitor (for file watching) binary in $PATH. Please install unox before you continue, see https://github.com/hnsl/unox.', :yellow
+      if Thor::Shell::Basic.new.yes?('Shall I install unison-fsmonitor for you?')
+        `#{cmd1}`
+        Thor::Shell::Basic.new.say_status 'ok','install macfsevents using pip', :yellow
+        `#{cmd2}`
       else
-        raise("Please install it, see https://github.com/hnsl/unox, or simply run :\n #{cmd}")
+        raise("Please install it, see https://github.com/hnsl/unox, or simply run :\n #{cmd1} && #{cmd2}")
       end
     end
   end

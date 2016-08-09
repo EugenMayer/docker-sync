@@ -82,7 +82,9 @@ module Docker_Sync
           say_status 'error', "Error starting sync, exit code #{$?.exitstatus}", :red
           say_status 'message', stderr
         else
-          TerminalNotifier.notify("Synced #{@options['src']}", :title => 'Docker-Sync')
+          TerminalNotifier.notify(
+              "Synced #{@options['src']}", :title => @sync_name
+          ) if @options['notify_terminal']
           say_status 'ok', "Synced #{@options['src']}", :white
           if @options['verbose']
             say_status 'output', stdout
