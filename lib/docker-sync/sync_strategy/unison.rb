@@ -80,6 +80,7 @@ module Docker_Sync
         stdout, stderr, exit_status = Open3.capture3(cmd)
         if not exit_status.success?
           say_status 'error', "Error starting sync, exit code #{$?.exitstatus}", :red
+          say_status 'message', stdout
           say_status 'message', stderr
         else
           TerminalNotifier.notify(
