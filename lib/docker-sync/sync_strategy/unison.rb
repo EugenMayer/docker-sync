@@ -134,7 +134,7 @@ module Docker_Sync
           if exists == ''
             say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
             run_privileged = '--privileged' if @options.key?('max_inotify_watches') #TODO: replace by the minimum capabilities required
-            cmd = "docker run -p '127.0.0.1::#{UNISON_CONTAINER_PORT}' \
+            cmd = "docker run -p '#{@options['sync_host_ip']}::#{UNISON_CONTAINER_PORT}' \
                               -v #{volume_name}:#{@options['dest']} \
                               -e UNISON_DIR=#{@options['dest']} \
                               -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} \
