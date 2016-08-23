@@ -114,11 +114,4 @@ class Sync < Thor
       print_table(config) if options['verbose']
     end
   end
-  desc 'start', 'Start all sync configurations in this project'
-  def upgrade
-    # do run update check in the start command only
-    upgrades = UpgradeChecker.new
-    upgrades.run
-  end
-
 end
