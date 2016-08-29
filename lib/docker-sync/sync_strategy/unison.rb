@@ -128,10 +128,10 @@ module Docker_Sync
         end
 
         additional_docker_env = env.map{ |key,value| "-e #{key}=\"#{value}\"" }.join(' ')
-        running = `docker ps --filter 'status=running' --filter 'name=#{container_name}' | sed -E -n 's/.*\\s(.*)$/\\1/p' | grep '^#{container_name}$'`
+        running = `docker ps --filter 'status=running' --filter 'name=#{container_name}' --format "{{.Names}}" | grep '^#{container_name}$'`
         if running == ''
           say_status 'ok', "#{container_name} container not running", :white if @options['verbose']
-          exists = `docker ps --filter "status=exited" --filter "name=#{container_name}" | sed -E -n 's/.*\\s(.*)$/\\1/p' | grep '^#{container_name}$'`
+          exists = `docker ps --filter "status=exited" --filter "name=#{container_name}" --format "{{.Names}}" | grep '^#{container_name}$'`
           if exists == ''
             say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
             run_privileged = '--privileged' if @options.key?('max_inotify_watches') #TODO: replace by the minimum capabilities required
