@@ -65,30 +65,39 @@ syncs:
     sync_host_port: 20872
     sync_strategy: 'unison-onesided' # this time we pick unison-onesided
   unison-sync:
-      # unison strategy differs from unison-onsesided as:
-      # - it implements a native unison watcher through unox which allow granular syncing instead of full sync
-      # - it reacts from changes made also on the container side (and on the host of course)
-      sync_strategy: 'unison'
-      # common options
-      # see rsync documentation for all these common options
-      src: './data4/'
-      dest: '/data'
-      notify_terminal: true
-      sync_host_ip: 'localhost'
-      sync_user: 'www-data'
-      sync_userid: '33'
-      # Additional unison options
-      # @see http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#prefs
-      # For example, these provided options will automatically resolve conflicts by using the newer version of the file
-      # and append a suffix to the conflicted file to prevent its deletion.
-      sync_args: [ '-prefer newer', '-copyonconflict' ]
-      # Exclude some files / directories that matches **exactly** the path
-      # this currently use the the -Path option of unison, additionnal ways to exclude are available
-      # @see http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#pathspec
-      # use them in sync_args if you need a specific exclude, for example: sync_args = [ "-ignore='Regex sites/.*\.dev'" ]
-      sync_excludes: [ '.git', '.idea', 'node_modules' ]
-      # specific options
-      # If you need to sync a lot of files, you can reach out the system limit
-      # of inotify watches. You can set the limit by using this parameter. This will
-      # prompt you for your sudo password to modify the system configuration.
-      #max_inotify_watches: 100000
+    # unison strategy differs from unison-onsesided as:
+    # - it implements a native unison watcher through unox which allow granular syncing instead of full sync
+    # - it reacts from changes made also on the container side (and on the host of course)
+    sync_strategy: 'unison'
+    # common options
+    # see rsync documentation for all these common options
+    src: './data4/'
+    dest: '/data'
+    notify_terminal: true
+    sync_host_ip: 'localhost'
+    sync_user: 'www-data'
+    sync_userid: '33'
+    # specific options
+    # If you need to sync a lot of files, you can reach out the system limit
+    # of inotify watches. You can set the limit by using this parameter. This will
+    # prompt you for your sudo password to modify the system configuration.
+    #max_inotify_watches: 100000
+
+    # Additional unison options
+    # @see http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#prefs
+    # For example, these provided options will automatically resolve conflicts by using the newer version of the file
+    # and append a suffix to the conflicted file to prevent its deletion.
+    sync_args: [ '-prefer newer', '-copyonconflict' ]
+    # Exclude some files / directories that matches **exactly** the path
+    # this currently use the the -Path option of unison, use sync_excludes_type to change this behavior
+    # see http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#pathspec for more
+    sync_excludes: [ '.git', '.idea', 'node_modules' ]
+
+    # use this to change the exclude syntax.
+    # Path: you match the exact path ( nesting problem )
+    # Name: If a file or a folder does match this string ( solves nesting problem )
+    # Regex: Define a regular expression
+    # none: You can define a type for each sync exclude, so sync_excludes: ['Name .git', 'Path Gemlock']
+    #
+    # for more see http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#pathspec
+    sync_excludes_type: 'Path'

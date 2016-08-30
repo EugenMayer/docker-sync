@@ -95,9 +95,21 @@ module Docker_Sync
 
       def sync_options
         args = []
+        exclude_type = 'Path'
+        unless @options['sync_excludes_type'].nil?
+          exclude_type = @options['sync_excludes_type']
+        end
 
         unless @options['sync_excludes'].nil?
-          args = @options['sync_excludes'].map { |pattern| "-ignore='Path #{pattern}'" } + args
+          args = @options['sync_excludes'].map do |pattern|
+            if exclude_type == 'none'
+              # the ignore type like Name / Path are part of the pattern
+              ignore_string = "#{pattern}"
+            else
+              ignore_string = "#{exclude_type} #{pattern}"
+            end
+            "-ignore='#{ignore_string}'"
+          end + args
         end
         args.push(@options['src'])
         args.push('-auto')
