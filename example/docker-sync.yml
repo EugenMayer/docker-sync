@@ -27,7 +27,7 @@ syncs:
     # which destination on the sync-container. Since you will use volumes_from to mount this, this should match your code-deployment location in the real container
     dest: '/var/www'
     # when a port of a container is exposed, on which IP does it get exposed. Localhost for docker for mac, something else for docker-machine
-    sync_host_ip: 'localhost'
+    sync_host_ip: '127.0.0.1'
     # should be a unique port this sync instance uses on the host to offer the rsync service on
     sync_host_port: 20871
     # optionl, a list of excludes for rsync - see rsync docs for details
@@ -61,7 +61,7 @@ syncs:
   unison-onesided-sync: # IMPORTANT: this name must be unique and should NOT match your real application container name!
     src: './data2/'
     dest: '/app/code'
-    sync_host_ip: 'localhost'
+    sync_host_ip: '127.0.0.1'
     sync_host_port: 20872
     sync_strategy: 'unison-onesided' # this time we pick unison-onesided
   unison-sync:
@@ -76,7 +76,7 @@ syncs:
     # be aware, this only gives you a notification on the initial sync, not the syncs after changes. this is a difference
     # to the rsync implementation
     notify_terminal: true
-    sync_host_ip: 'localhost'
+    sync_host_ip: '127.0.0.1'
     sync_user: 'www-data'
     sync_userid: '33'
     # specific options
