@@ -41,9 +41,8 @@ class ComposeManager
   end
 
   def run
-    say_status 'ok','starting compose',:white
+    say_status 'ok','starting compose',:green
     @compose_session.up
-    say_status 'success','started compose',:green
   end
 
   def stop
