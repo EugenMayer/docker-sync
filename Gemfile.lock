@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    docker-sync (0.1.1)
+    docker-sync (0.1.2)
       docker-compose (= 0.8.3)
       gem_update_checker (~> 0.2.0, >= 0.2.0)
       terminal-notifier (= 1.6.3)
