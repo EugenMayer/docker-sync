@@ -73,6 +73,8 @@ syncs:
     # see rsync documentation for all these common options
     src: './data4/'
     dest: '/data'
+    # be aware, this only gives you a notification on the initial sync, not the syncs after changes. this is a difference
+    # to the rsync implementation
     notify_terminal: true
     sync_host_ip: 'localhost'
     sync_user: 'www-data'
