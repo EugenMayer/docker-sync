@@ -67,6 +67,9 @@ module Docker_Sync
         # in the config - see start_container
         #args.push("--usermap='*:#{@options['sync_user']}'") if @options.key?('sync_user')
         #args.push("--groupmap='*:#{@options['sync_group']}'") if @options.key?('sync_group')
+        if @options['copy_symlinks']
+          args.push('-L')
+        end
         args.push("#{@options['src']}/") # add a trailing slash
         args.push("rsync://#{@options['sync_host_ip']}:#{@options['sync_host_port']}/volume")
         return args
@@ -96,8 +99,9 @@ module Docker_Sync
 
             user_mapping = get_user_mapping
             group_mapping = get_group_mapping
+            allowed_mapping = get_allowed_mapping
 
-            cmd = "docker run -p '#{@options['sync_host_port']}:873' -v #{volume_name}:#{@options['dest']} #{user_mapping} #{group_mapping} -e VOLUME=#{@options['dest']} -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} --name #{container_name} -d #{@docker_image}"
+            cmd = "docker run -p '#{@options['sync_host_port']}:873' -v #{volume_name}:#{@options['dest']} #{user_mapping} #{group_mapping} #{allowed_mapping} -e VOLUME=#{@options['dest']} -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} --name #{container_name} -d #{@docker_image}"
           else # container already created, just start / reuse it
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
             cmd = "docker start #{container_name}"
@@ -138,6 +142,14 @@ module Docker_Sync
           raise("#{get_container_name}: You have set a sync_groupid but no sync_group - you need to set both")
         end
         return group_mapping
+      end
+
+      def get_allowed_mapping
+        allowed_mapping = ''
+        if @options.key?('rsync_allowed_cidr')
+          allowed_mapping = "-e ALLOW='#{@options['rsync_allowed_cidr']}'"
+        end
+        return allowed_mapping
       end
 
       def stop_container
