@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     docker-sync (0.1.2)
-      docker-compose (= 0.8.3)
+      docker-compose (= 1.0.0)
       gem_update_checker (~> 0.2.0, >= 0.2.0)
       terminal-notifier (= 1.6.3)
       thor (~> 0.19, >= 0.19.0)
@@ -10,9 +10,9 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    backticks (0.5.0)
-    docker-compose (0.8.3)
-      backticks (~> 0.5)
+    backticks (1.0.0)
+    docker-compose (1.0.0)
+      backticks (~> 1.0)
     gem_update_checker (0.2.0)
     terminal-notifier (1.6.3)
     thor (0.19.1)
@@ -24,4 +24,4 @@ DEPENDENCIES
   docker-sync!
 
 BUNDLED WITH
-   1.12.5
+   1.13.1
