@@ -82,7 +82,7 @@ class Sync < Thor
     end
     @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
     @sync_manager.clean(options[:sync_name])
-    say_status 'success', 'Finished cleanup. Removed stopped, removed sync container and removed there volumes', :green
+    say_status 'success', 'Finished cleanup. Removed stopped, removed sync container and removed their volumes', :green
   end
 
   desc 'list', 'List all sync-points of the project configuration path'

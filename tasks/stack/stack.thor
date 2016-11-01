@@ -89,7 +89,7 @@ class Stack < Thor
 
     # now shutdown sync
     @sync_manager.clean(options[:sync_name])
-    say_status 'success', 'Finished cleanup. Removed stopped, removed sync container and removed there volumes', :green
+    say_status 'success', 'Finished cleanup. Removed stopped, removed sync container and removed their volumes', :green
   end
 end
 
