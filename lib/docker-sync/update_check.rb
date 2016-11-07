@@ -5,8 +5,11 @@ require 'docker-sync/config'
 class UpdateChecker
   include Thor::Shell
   @config
+  @newer_image_found
+
   def initialize
     @config = DockerSyncConfig::global_config
+    @newer_image_found = false
   end
 
   def run
@@ -17,9 +20,21 @@ class UpdateChecker
     unless should_run
       return
     end
-    check_rsync_image unless DockerSyncConfig::is_first_run # do not check the image if its the first run - since this it will be downloaded anyway
-    check_unison_onesided_image unless DockerSyncConfig::is_first_run
-    check_unison_image unless DockerSyncConfig::is_first_run
+
+    # do not check the image if its the first run - since this it will be downloaded anyway
+    unless DockerSyncConfig::is_first_run
+      check_rsync_image
+      check_unison_onesided_image
+      check_unison_image
+
+      # stop if there was an update
+      if @newer_image_found
+        say_status 'warning', 'One or more images have been updated. Please use "docker-sync clean" before you start docker-sync again', :red
+        exit 0
+      end
+
+    end
+
     check_and_warn(@config['update_enforce'])
   end
 
@@ -38,36 +53,36 @@ class UpdateChecker
     say_status 'ok','Checking if a newer rsync image is available'
 
     if system("docker pull eugenmayer/rsync | grep 'Downloaded newer image for'")
-      say_status 'warning', 'Downloaded newer image for rsync', :red
-      say_status 'warning', 'Please use "docker-sync clean" before you start docker-sync again', :red
-
-      exit 0
+      say_status 'ok', 'Downloaded newer image for rsync', :green
+      @newer_image_found = true
+    else
+      say_status 'ok', 'No newer image found - current image is up to date.'
     end
-    say_status 'success','Image is (now) up to date'
+
   end
 
   def check_unison_image
     say_status 'ok','Checking if a newer unison image is available'
 
     if system("docker pull eugenmayer/unison:unox | grep 'Downloaded newer image for'")
-      say_status 'warning', 'Downloaded newer image for unison', :red
-      say_status 'warning', 'Please use "docker-sync clean" before you start docker-sync again', :red
-
-      exit 0
+      say_status 'ok', 'Downloaded newer image for unison', :green
+      @newer_image_found = true
+    else
+      say_status 'ok', 'No newer image found - current image is up to date.'
     end
-    say_status 'success','Image is (now) up to date'
+
   end
 
   def check_unison_onesided_image
     say_status 'ok','Checking if a newer unison:onesided image is available'
 
     if system("docker pull eugenmayer/unison:onesided | grep 'Downloaded newer image for'")
-      say_status 'warning', 'Downloaded newer image for unison:onesided', :red
-      say_status 'warning', 'Please use "docker-sync clean" before you start docker-sync again', :red
-
-      exit 0
+      say_status 'ok', 'Downloaded newer image for unison:onesided', :green
+      @newer_image_found = true
+    else
+      say_status 'ok', 'No newer image found - current image is up to date.'
     end
-    say_status 'success','Image is (now) up to date'
+
   end
 
   def get_current_version
