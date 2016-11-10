@@ -93,15 +93,16 @@ module Docker_Sync
         end
       end
 
-      def sync_options
-        args = []
+      def expand_ignore_strings
+        expanded_ignore_strings = []
+
         exclude_type = 'Path'
         unless @options['sync_excludes_type'].nil?
           exclude_type = @options['sync_excludes_type']
         end
 
         unless @options['sync_excludes'].nil?
-          args = @options['sync_excludes'].map do |pattern|
+          expanded_ignore_strings = @options['sync_excludes'].map do |pattern|
             if exclude_type == 'none'
               # the ignore type like Name / Path are part of the pattern
               ignore_string = "#{pattern}"
@@ -109,8 +110,14 @@ module Docker_Sync
               ignore_string = "#{exclude_type} #{pattern}"
             end
             "-ignore='#{ignore_string}'"
-          end + args
+          end
         end
+        expanded_ignore_strings
+      end
+
+      def sync_options
+        args = []
+        args = expand_ignore_strings + args
         args.push(@options['src'])
         args.push('-auto')
         args.push('-batch')
@@ -129,8 +136,8 @@ module Docker_Sync
         container_name = get_container_name
         volume_name = get_volume_name
         env = {}
-
-        env['UNISON_EXCLUDES'] = @options['sync_excludes'].map { |pattern| "-ignore='Path #{pattern}'" }.join(' ') if @options.key?('sync_excludes')
+        ignore_strings = expand_ignore_strings
+        env['UNISON_EXCLUDES'] = ignore_strings.join(' ')
         env['UNISON_OWNER'] = @options['sync_user'] if @options.key?('sync_user')
         env['MAX_INOTIFY_WATCHES'] = @options['max_inotify_watches'] if @options.key?('max_inotify_watches')
         if @options['sync_userid'] == 'from_host'

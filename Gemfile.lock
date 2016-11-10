@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    docker-sync (0.1.4)
+    docker-sync (0.1.5)
       docker-compose (~> 1.0, >= 1.0.2)
       gem_update_checker (~> 0.2.0, >= 0.2.0)
       terminal-notifier (= 1.6.3)
@@ -11,7 +11,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     backticks (1.0.0)
-    docker-compose (1.0.2)
+    docker-compose (1.0.3)
       backticks (~> 1.0)
     gem_update_checker (0.2.0)
     terminal-notifier (1.6.3)
