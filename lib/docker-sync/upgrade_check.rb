@@ -47,7 +47,7 @@ class UpgradeChecker
     # this is the upgrade hook for the unison-unox introduction / rename of unison
     if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.1.0')
       Thor::Shell::Basic.new.say_status 'warning', 'Please be aware that with the strategy "unison" is now called unison-onesided and you might need to migrate. See https://github.com/EugenMayer/docker-sync/wiki/Migration-Guide for more informations', :red
-      unless Thor::Shell::Basic.new.yes?('Shall we continue?')
+      unless Thor::Shell::Basic.new.yes?('Shall we continue? (y/N)')
         exit 1
       end
     end

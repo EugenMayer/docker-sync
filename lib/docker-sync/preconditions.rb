@@ -50,7 +50,7 @@ module Preconditions
       && chmod +x /usr/local/bin/unison-fsmonitor'
       cmd2 = 'sudo easy_install pip && sudo pip install macfsevents'
       Thor::Shell::Basic.new.say_status 'warning', 'Could not find unison-fsmonitor (for file watching) binary in $PATH. Please install unox before you continue, see https://github.com/hnsl/unox.', :yellow
-      if Thor::Shell::Basic.new.yes?('Shall I install unison-fsmonitor for you? ')
+      if Thor::Shell::Basic.new.yes?('Shall I install unison-fsmonitor for you? (y/N)')
         system cmd1
         if $?.exitstatus > 0
           raise('Failed to install unison-fsmonitor, please file an issue with the output of the error')
