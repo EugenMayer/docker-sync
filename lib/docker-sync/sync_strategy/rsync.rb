@@ -67,7 +67,7 @@ module Docker_Sync
         # in the config - see start_container
         #args.push("--usermap='*:#{@options['sync_user']}'") if @options.key?('sync_user')
         #args.push("--groupmap='*:#{@options['sync_group']}'") if @options.key?('sync_group')
-        args.push("#{@options['src']}/") # add a trailing slash
+        args.push("#{@options['src']}")
         args.push("rsync://#{@options['sync_host_ip']}:#{@options['sync_host_port']}/volume")
         return args
       end
