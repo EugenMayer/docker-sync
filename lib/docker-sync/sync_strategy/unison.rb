@@ -180,7 +180,8 @@ module Docker_Sync
       end
 
       def get_host_port(container_name, container_port)
-        cmd = 'docker inspect --format=" {{ .NetworkSettings.Ports }} " ' + container_name + ' | /usr/bin/sed  -E "s/.*map\[' + container_port + '[^ ]+ ([0-9]*)[^0-9].*/\1/"'
+        File.exist?('/usr/bin/sed') ? sed = '/usr/bin/sed' : sed = `which sed`.chomp # use macOS native sed in /usr/bin/sed first, fallback to sed in $PATH if it's not there
+        cmd = 'docker inspect --format=" {{ .NetworkSettings.Ports }} " ' + container_name + " | #{sed} " + '-E "s/.*map\[' + container_port + '[^ ]+ ([0-9]*)[^0-9].*/\1/"'
         say_status 'command', cmd, :white if @options['verbose']
         stdout, stderr, exit_status = Open3.capture3(cmd)
         if not exit_status.success?
