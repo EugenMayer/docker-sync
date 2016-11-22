@@ -2,8 +2,8 @@ require 'docker-sync/sync_manager'
 require 'docker-sync/config'
 require 'docker-sync/preconditions'
 require 'docker-sync/update_check'
-require 'daemons'
 require 'docker-sync/upgrade_check'
+require 'daemons'
 
 class Sync < Thor
 
@@ -30,6 +30,7 @@ class Sync < Thor
       @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
       @sync_manager.run(options[:sync_name])
       @sync_manager.join_threads
+    end
   end
 
   desc 'stop', 'Stop docker-sync daemon'
