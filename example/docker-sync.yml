@@ -21,8 +21,16 @@ syncs:
     # enable terminal_notifier. On every sync sends a Terminal Notification regarding files being synced. ( Mac Only ).
     # good thing incase you are developing and want to know exactly when your changes took effect.
     notify_terminal: true
-    # which folder to watch / sync from - you can use tilde, it will get expanded. Be aware the then trailing slash makes a difference
-    # if you add them, only the inner parts of the folder gets synced, otherwise the parent folder will be synced as top-level folder
+    # which folder to watch / sync from - you can use tilde, it will get expanded.
+
+    # if you want to sync a full directory, set it up like this:
+    # src: '/local/path/to/my/code/*'
+    # dest: '/docker/path/to/my/code/'
+
+    # if you want to sync a single file, set it up like this
+    # src: '/local/path/to/file.ini'
+    # dest: '/docker/path/to'
+
     src: './data1/'
     # which destination on the sync-container. Since you will use volumes_from to mount this, this should match your code-deployment location in the real container
     dest: '/var/www'
