@@ -70,7 +70,7 @@ module Docker_Sync
     end
 
     def get_host_ip
-      return 'localhost'
+      return '127.0.0.1'
     end
 
     def run

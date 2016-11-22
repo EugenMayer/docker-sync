@@ -3,6 +3,7 @@ require 'docker-sync/config'
 require 'docker-sync/preconditions'
 require 'docker-sync/update_check'
 require 'daemons'
+require 'docker-sync/upgrade_check'
 
 class Sync < Thor
 
@@ -15,8 +16,10 @@ class Sync < Thor
   method_option :dir, :aliases => '--dir', :default => '/tmp', :type => :string, :desc => 'Full path to PID and OUTPUT file Directory'
   method_option :logd, :aliases => '--logd', :default => true, :type => :boolean, :desc => 'To log OUPUT to file on Daemon or not'
   def start
-    # do run update check in the start command only
-    UpdateChecker.new().run
+    updates = UpdateChecker.new
+    updates.run
+    upgrades = UpgradeChecker.new
+    upgrades.run
 
     config_path = config_preconditions # Preconditions and Define config_path from shared method
 
@@ -27,7 +30,6 @@ class Sync < Thor
       @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
       @sync_manager.run(options[:sync_name])
       @sync_manager.join_threads
-    end
   end
 
   desc 'stop', 'Stop docker-sync daemon'
@@ -62,7 +64,7 @@ class Sync < Thor
 
     @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
     @sync_manager.clean(options[:sync_name])
-    say_status 'success', 'Finished cleanup. Removed stopped, removed sync container and removed there volumes', :green
+    say_status 'success', 'Finished cleanup. Removed stopped, removed sync container and removed their volumes', :green
   end
 
   desc 'list', 'List all sync-points of the project configuration path'
@@ -88,13 +90,15 @@ class Sync < Thor
         exit 1
       end
 
-      return options[:config] if options[:config]
-
-      begin
-        DockerSyncConfig::project_config_path
-      rescue Exception => e
-        say_status 'error', e.message, :red
-        exit 1
+      if options[:config]
+        options[:config]
+      else
+        begin
+          DockerSyncConfig::project_config_path
+        rescue Exception => e
+          say_status 'error', e.message, :red
+          return
+        end
       end
     end
 

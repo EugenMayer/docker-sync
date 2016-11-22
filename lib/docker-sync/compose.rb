@@ -41,9 +41,12 @@ class ComposeManager
   end
 
   def run
-    say_status 'ok','starting compose',:white
-    @compose_session.up
-    say_status 'success','started compose',:green
+    say_status 'ok','starting compose',:green
+    options = Hash.new
+    if @global_options['compose-force-build']
+      options['build'] = true
+    end
+    @compose_session.up(options)
   end
 
   def stop

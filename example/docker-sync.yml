@@ -21,13 +21,13 @@ syncs:
     # enable terminal_notifier. On every sync sends a Terminal Notification regarding files being synced. ( Mac Only ).
     # good thing incase you are developing and want to know exactly when your changes took effect.
     notify_terminal: true
-    # which folder to watch / sync from - you can use tiled, it will get expanded. Be aware the then trailing slash makes a difference
+    # which folder to watch / sync from - you can use tilde, it will get expanded. Be aware the then trailing slash makes a difference
     # if you add them, only the inner parts of the folder gets synced, otherwise the parent folder will be synced as top-level folder
     src: './data1/'
     # which destination on the sync-container. Since you will use volumes_from to mount this, this should match your code-deployment location in the real container
     dest: '/var/www'
     # when a port of a container is exposed, on which IP does it get exposed. Localhost for docker for mac, something else for docker-machine
-    sync_host_ip: 'localhost'
+    sync_host_ip: '127.0.0.1'
     # should be a unique port this sync instance uses on the host to offer the rsync service on
     sync_host_port: 20871
     # optionl, a list of excludes for rsync - see rsync docs for details
@@ -61,18 +61,45 @@ syncs:
   unison-onesided-sync: # IMPORTANT: this name must be unique and should NOT match your real application container name!
     src: './data2/'
     dest: '/app/code'
-    sync_host_ip: 'localhost'
+    sync_host_ip: '127.0.0.1'
     sync_host_port: 20872
     sync_strategy: 'unison-onesided' # this time we pick unison-onesided
   unison-sync:
-      src: './data4/'
-      dest: '/data'
-      image: 'mickaelperrin/docker-unison-unox'
-      sync_host_ip: 'localhost'
-      sync_strategy: 'unison'
-      sync_user: 'www-data'
-      sync_userid: '33'
-      # If you need to sync a lot of files, you can reach out the system limit
-      # of inotify watches. You can set the limit by using this parameter. This will
-      # prompt you for your sudo password to modify the system configuration.
-      #max_inotify_watches: 100000
+    # unison strategy differs from unison-onsesided as:
+    # - it implements a native unison watcher through unox which allow granular syncing instead of full sync
+    # - it reacts from changes made also on the container side (and on the host of course)
+    sync_strategy: 'unison'
+    # common options
+    # see rsync documentation for all these common options
+    src: './data4/'
+    dest: '/data'
+    # be aware, this only gives you a notification on the initial sync, not the syncs after changes. this is a difference
+    # to the rsync implementation
+    notify_terminal: true
+    sync_host_ip: '127.0.0.1'
+    sync_user: 'www-data'
+    sync_userid: '33'
+    # specific options
+    # If you need to sync a lot of files, you can reach out the system limit
+    # of inotify watches. You can set the limit by using this parameter. This will
+    # prompt you for your sudo password to modify the system configuration.
+    #max_inotify_watches: 100000
+
+    # Additional unison options
+    # @see http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#prefs
+    # For example, these provided options will automatically resolve conflicts by using the newer version of the file
+    # and append a suffix to the conflicted file to prevent its deletion.
+    sync_args: [ '-prefer newer', '-copyonconflict' ]
+    # Exclude some files / directories that matches **exactly** the path
+    # this currently use the the -Path option of unison, use sync_excludes_type to change this behavior
+    # see http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#pathspec for more
+    sync_excludes: [ '.git', '.idea', 'node_modules' ]
+
+    # use this to change the exclude syntax.
+    # Path: you match the exact path ( nesting problem )
+    # Name: If a file or a folder does match this string ( solves nesting problem )
+    # Regex: Define a regular expression
+    # none: You can define a type for each sync exclude, so sync_excludes: ['Name .git', 'Path Gemlock']
+    #
+    # for more see http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#pathspec
+    sync_excludes_type: 'Path'
