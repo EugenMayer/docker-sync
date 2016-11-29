@@ -24,10 +24,14 @@ syncs:
     # which folder to watch / sync from - you can use tilde, it will get expanded.
 
     # if you want to sync a full directory, set it up like this:
-    # src: '/local/path/to/my/code/*'
-    # dest: '/docker/path/to/my/code/'
+    # This will create /docker/path/to/my/code/ on the container
+    #
+    # src: '/local/path/to/my/code/'
+    # dest: '/docker/path/to/my'
 
     # if you want to sync a single file, set it up like this
+    # This will create /docker/path/to/file.ini on the container
+    #
     # src: '/local/path/to/file.ini'
     # dest: '/docker/path/to'
 
