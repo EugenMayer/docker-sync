@@ -26,14 +26,16 @@ syncs:
     # if you want to sync a full directory, set it up like this:
     # This will create /docker/path/to/my/code/ on the container
     #
-    # src: '/local/path/to/my/code/'
-    # dest: '/docker/path/to/my'
+    # src: '/local/path/to/my/code'
+    # dest: '/docker/path/to/my/'
 
     # if you want to sync a single file, set it up like this
     # This will create /docker/path/to/file.ini on the container
     #
     # src: '/local/path/to/file.ini'
     # dest: '/docker/path/to'
+
+    # TODO: include other examples of how to set these up to get the desired paths
 
     src: './data1/'
     # which destination on the sync-container. Since you will use volumes_from to mount this, this should match your code-deployment location in the real container
