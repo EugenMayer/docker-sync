@@ -126,7 +126,7 @@ module Docker_Sync
         args.push("socket://#{@options['sync_host_ip']}:#{sync_host_port}")
 
         if @options.key?('sync_group') || @options.key?('sync_groupid')
-          raise('Unison does not support sync_user, sync_group, sync_groupid - please use rsync if you need that')
+          raise('Unison does not support sync_group, sync_groupid - please use rsync if you need that')
         end
         return args
       end
