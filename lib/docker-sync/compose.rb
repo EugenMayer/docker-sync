@@ -44,9 +44,9 @@ class ComposeManager
     say_status 'ok','starting compose',:green
     options = Hash.new
     if @global_options['compose-force-build']
-      options['build'] = true
+      options[:build] = true
     end
-    @compose_session.up(options)
+    @compose_session.up(**options)
   end
 
   def stop
