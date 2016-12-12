@@ -12,7 +12,7 @@ class Sync < Thor
 
   desc 'start', 'Start all sync configurations in this project'
   method_option :daemon, :aliases => '-d', :default => false, :type => :boolean, :desc => 'Run in the background'
-  method_option :app_name, :aliases => '--name', :default => 'dsync', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
+  method_option :app_name, :aliases => '--name', :default => nil, :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
   method_option :dir, :aliases => '--dir', :default => '/tmp', :type => :string, :desc => 'Full path to PID and OUTPUT file Directory'
   method_option :logd, :aliases => '--logd', :default => true, :type => :boolean, :desc => 'To log OUPUT to file on Daemon or not'
   def start
@@ -21,25 +21,34 @@ class Sync < Thor
     UpgradeChecker.new().run
 
     config_path = config_preconditions # Preconditions and Define config_path from shared method
+    @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
+
+    # By default use the first sync point as the name for the daemonized process (if applicable)
+    @app_name = options[:app_name]
+    @app_name ||= @sync_manager.get_sync_points.keys.first
 
     start_dir = Dir.pwd # Set start_dir variable to be equal to pre-daemonized folder, since daemonizing will change dir to '/'
     daemonize if options['daemon']
 
     Dir.chdir(start_dir) do # We want run these in pre-daemonized folder/directory since provided config_path might not be full_path
-      @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
       @sync_manager.run(options[:sync_name])
       @sync_manager.join_threads
     end
   end
 
   desc 'stop', 'Stop docker-sync daemon'
-  method_option :app_name, :aliases => '--name', :default => 'dsync', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
+  method_option :app_name, :aliases => '--name', :default => nil, :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
   method_option :dir, :aliases => '--dir', :default => '/tmp', :type => :string, :desc => 'Full path to PID and OUTPUT file Directory'
   def stop
-    config_preconditions # Preconditions, don't need returned back variable
+    config_path = config_preconditions
+    sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
+
+    # By default use the first sync point as the name for the daemonized process (if applicable)
+    app_name = options[:app_name]
+    app_name ||= sync_manager.get_sync_points.keys.first
 
     begin
-      pid = File.read("#{options['dir']}/#{options['app_name']}.pid") # Read PID from PIDFILE created by Daemons
+      pid = File.read("#{options['dir']}/#{app_name}.pid") # Read PID from PIDFILE created by Daemons
       Process.kill(:INT, -(Process.getpgid(pid.to_i))) # Send INT signal to group PID, which means INT will be sent to all sub-processes and Threads spawned by docker-sync
       say_status 'shutdown', 'Background dsync has been stopped'
     rescue Errno::ESRCH, Errno::ENOENT => e
@@ -102,7 +111,7 @@ class Sync < Thor
 
     def daemonize
       dopts = {
-        app_name: options['app_name'],
+        app_name: @app_name,
         dir_mode: :normal,
         dir: options['dir'],
         log_output: options['logd']
