@@ -87,7 +87,7 @@ module Docker_sync
       config_mandatory = %w[src dest]
       config_mandatory.push('sync_host_port') unless sync_config['sync_strategy'] == 'unison' #TODO: Implement autodisovery for other strategies
       config_mandatory.each do |key|
-        raise ("#{name} does not have #{key} condiguration value set - this is mandatory") unless sync_config.key?(key)
+        raise ("#{name} does not have #{key} configuration value set - this is mandatory") unless sync_config.key?(key)
       end
     end
 
