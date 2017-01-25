@@ -10,22 +10,15 @@ class ComposeManager
     ### production docker-compose.yml
     compose_files = [File.expand_path('docker-compose.yml')]
     if @global_options.key?('compose-file-path')
-      path = File.expand_path(@global_options['compose-file-path'])
-      unless File.exist?(path)
-        raise("Your referenced docker-compose file in docker-sync.yml was not found at #{@global_options['compose-file-path']}")
-      end
-      compose_files = [path]  # replace
+      compose_files = [] # replace
+      apply_path_settings(compose_files, @global_options['compose-file-path'], 'compose-file-path')
     end
 
     ### development docker-compose-dev.yml
     if @global_options.key?('compose-dev-file-path')
       # explicit path given
-      path = File.expand_path(@global_options['compose-dev-file-path'])
-      unless File.exist?(path)
-        raise("Your referenced docker-compose-dev file in docker-sync.yml was not found at #{@global_options['compose-dev-file-path']}")
-      end
+      apply_path_settings(compose_files, @global_options['compose-dev-file-path'], 'compose-dev-file-path')
       say_status 'ok',"Found explicit docker-compose-dev.yml and using it from #{@global_options['compose-dev-file-path']}", :green
-      compose_files.push path  # add
     else
       # try to find docker-compose-dev.yml
       e = compose_files.to_enum
@@ -56,4 +49,28 @@ class ComposeManager
   def clean
     @compose_session.down
   end
+
+  protected
+    def apply_path_settings(compose_files, settings, error_key)
+      if settings.kind_of?(Array)
+        apply_filepaths(compose_files, settings, error_key)
+      else
+        apply_filepath(compose_files, settings, error_key)
+      end
+    end
+
+  private
+    def apply_filepath(array, filepath, error_key)
+      path = File.expand_path(filepath)
+      unless File.exist?(path)
+        raise("Your referenced docker-compose file in docker-sync.yml was not found at #{error_key}")
+      end
+      array.push path
+    end
+
+    def apply_filepaths(array, filepath_array, error_key)
+      filepath_array.each do |filepath|
+        apply_filepath(array, filepath, error_key)
+      end
+    end
 end
