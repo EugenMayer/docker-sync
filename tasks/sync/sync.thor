@@ -110,6 +110,15 @@ class Sync < Thor
     end
 
     def daemonize
+      # Check to see if we're already running:
+      pid_file = Daemons::PidFile.find_files(options['dir'], @app_name).first || ''
+      if File.file?(pid_file)
+        if Daemons::Pid.running?(File.read(pid_file).to_i)
+          say_status 'error', "docker-sync already started for #{@app_name}", :red
+          exit 1
+        end
+      end
+
       # If we're daemonizing, run a sync first to ensure the containers exist so that a docker-compose up won't fail:
       @sync_manager.start_container(options[:sync_name])
       # the existing strategies' start_container will also sync, but just in case a strategy doesn't, sync now:
