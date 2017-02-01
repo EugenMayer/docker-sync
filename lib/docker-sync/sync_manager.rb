@@ -97,6 +97,7 @@ module Docker_sync
     end
 
     def init_sync_processes(sync_name = nil)
+      return if @sync_processes.size != 0
       if sync_name.nil?
         @config_syncs.each { |name, sync_configuration|
           @sync_processes.push(create_sync(name, sync_configuration))
@@ -121,6 +122,13 @@ module Docker_sync
       init_sync_processes(sync_name)
       @sync_processes.each { |sync_process|
         sync_process.sync
+      }
+    end
+
+    def start_container(sync_name = nil)
+      init_sync_processes(sync_name)
+      @sync_processes.each { |sync_process|
+        sync_process.start_container
       }
     end
 

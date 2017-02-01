@@ -93,6 +93,10 @@ module Docker_Sync
       @sync_strategy.sync
     end
 
+    def start_container
+      @sync_strategy.start_container
+    end
+
     def watch
       @watch_strategy.run
     end

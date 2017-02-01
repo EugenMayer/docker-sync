@@ -110,6 +110,11 @@ class Sync < Thor
     end
 
     def daemonize
+      # If we're daemonizing, run a sync first to ensure the containers exist so that a docker-compose up won't fail:
+      @sync_manager.start_container(options[:sync_name])
+      # the existing strategies' start_container will also sync, but just in case a strategy doesn't, sync now:
+      @sync_manager.sync(options[:sync_name])
+
       dopts = {
         app_name: @app_name,
         dir_mode: :normal,
