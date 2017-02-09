@@ -29,7 +29,7 @@ syncs:
     # to the rsync implementation
     notify_terminal: true
     sync_host_ip: '127.0.0.1'
-    sync_uid: '33'
+    sync_userid: '33'
     # specific options
     # If you need to sync a lot of files, you can reach out the system limit
     # of inotify watches. You can set the limit by using this parameter. This will
