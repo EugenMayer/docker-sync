@@ -1,9 +1,14 @@
 require 'pp'
 require 'pathname'
 require 'yaml'
+require 'dotenv'
 # this has basically completely reused from Thor::runner.rb - thank you!
-
 module DockerSyncConfig
+
+  def initialize(options)
+    Dotenv.load
+  end
+
   def self.global_config_location
     return File.expand_path('~/.docker-sync-global.yml')
   end

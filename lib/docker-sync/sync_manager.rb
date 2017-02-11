@@ -4,6 +4,7 @@ require 'docker-sync/sync_process'
 # noinspection RubyResolve
 require 'docker-sync/execution'
 require 'yaml'
+require 'dotenv'
 
 module Docker_sync
   class SyncManager
@@ -14,6 +15,8 @@ module Docker_sync
     @config_path
 
     def initialize(options)
+      Dotenv.load
+
       @sync_processes = []
       @config_syncs = []
       @config_global = []
