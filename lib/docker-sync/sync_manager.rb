@@ -29,7 +29,13 @@ module Docker_sync
         raise "Config could not be loaded from #{@config_path} - it does not exist"
       end
 
-      config = YAML.load_file(@config_path)
+      env_hash = {}
+      ENV.each {|k,v| env_hash[k.to_sym] = v }
+      config_string = File.read(@config_path)
+      config_string.gsub!('${', '%{')
+      config_string = config_string % env_hash
+      config = YAML.load(config_string)
+
       validate_config(config)
       @config_global = config['options'] || {}
       @config_syncs = config['syncs']
