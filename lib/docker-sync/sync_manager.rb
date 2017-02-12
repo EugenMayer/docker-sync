@@ -5,6 +5,7 @@ require 'docker-sync/sync_process'
 require 'docker-sync/execution'
 require 'yaml'
 require 'dotenv'
+require 'docker-sync/config_template'
 
 module Docker_sync
   class SyncManager
@@ -29,12 +30,7 @@ module Docker_sync
         raise "Config could not be loaded from #{@config_path} - it does not exist"
       end
 
-      env_hash = {}
-      ENV.each {|k,v| env_hash[k.to_sym] = v }
-      config_string = File.read(@config_path)
-      config_string.gsub!('${', '%{')
-      config_string = config_string % env_hash
-      config = YAML.load(config_string)
+      config = ConfigTemplate::interpolate_config_file(@config_path)
 
       validate_config(config)
       @config_global = config['options'] || {}

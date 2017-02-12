@@ -2,6 +2,8 @@ require 'pp'
 require 'pathname'
 require 'yaml'
 require 'dotenv'
+require 'docker-sync/config_template'
+
 # this has basically completely reused from Thor::runner.rb - thank you!
 module DockerSyncConfig
 
@@ -25,12 +27,7 @@ module DockerSyncConfig
     defaults = {'update_check'=>true, 'update_last_check' => date.iso8601(9), 'update_enforce' => true}
     if File.exist?(global_config_path)
 
-      env_hash = {}
-      ENV.each {|k,v| env_hash[k.to_sym] = v }
-      config_string = File.read(global_config_path)
-      config_string.gsub!('${', '%{')
-      config_string = config_string % env_hash
-      config = YAML.load(config_string)
+      config = ConfigTemplate::interpolate_config_file(global_config_path)
 
       config = defaults.merge(config)
       return config
