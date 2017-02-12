@@ -4,6 +4,8 @@ require 'docker-sync/sync_process'
 # noinspection RubyResolve
 require 'docker-sync/execution'
 require 'yaml'
+require 'dotenv'
+require 'docker-sync/config_template'
 
 module Docker_sync
   class SyncManager
@@ -14,6 +16,8 @@ module Docker_sync
     @config_path
 
     def initialize(options)
+      Dotenv.load
+
       @sync_processes = []
       @config_syncs = []
       @config_global = []
@@ -26,7 +30,8 @@ module Docker_sync
         raise "Config could not be loaded from #{@config_path} - it does not exist"
       end
 
-      config = YAML.load_file(@config_path)
+      config = ConfigTemplate::interpolate_config_file(@config_path)
+
       validate_config(config)
       @config_global = config['options'] || {}
       @config_syncs = config['syncs']

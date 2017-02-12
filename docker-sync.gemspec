@@ -14,4 +14,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'gem_update_checker', '~> 0.2.0', '>= 0.2.0'
   s.add_runtime_dependency 'docker-compose', '~> 1.0', '>= 1.0.2'
   s.add_runtime_dependency 'terminal-notifier', '1.6.3'
+  s.add_runtime_dependency 'dotenv', '~> 2.1', '>= 2.1.1'
 end
