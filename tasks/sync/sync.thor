@@ -110,7 +110,7 @@ class Sync < Thor
       pid_file = Daemons::PidFile.find_files(options['dir'], options['app_name']).first || ''
       if File.file?(pid_file)
         if Daemons::Pid.running?(File.read(pid_file).to_i)
-          say_status 'error', "docker-sync already started for #{@app_name}", :red
+          say_status 'error', "docker-sync already started for this configuration", :red
           exit 1
         end
       end
