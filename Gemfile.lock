@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     docker-sync (0.1.5)
+      daemons (~> 1.2, >= 1.2.3)
       docker-compose (~> 1.0, >= 1.0.2)
       dotenv (~> 2.1, >= 2.1.1)
       gem_update_checker (~> 0.2.0, >= 0.2.0)
@@ -12,6 +13,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     backticks (1.0.0)
+    daemons (1.2.4)
     docker-compose (1.0.3)
       backticks (~> 1.0)
     dotenv (2.1.1)
