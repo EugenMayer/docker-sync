@@ -35,10 +35,8 @@ module Docker_Sync
         case @options['sync_strategy']
           when 'rsync'
             @sync_strategy = Docker_Sync::SyncStrategy::Rsync.new(@sync_name, @options)
-          when 'unison'
-            @sync_strategy = Docker_Sync::SyncStrategy::Unison.new(@sync_name, @options)
           else
-            @sync_strategy = Docker_Sync::SyncStrategy::Rsync.new(@sync_name, @options)
+            @sync_strategy = Docker_Sync::SyncStrategy::Unison.new(@sync_name, @options)
         end
       else
         @sync_strategy = Docker_Sync::SyncStrategy::Rsync.new(@sync_name, @options)
@@ -52,16 +50,14 @@ module Docker_Sync
             @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
           when 'disable','dummy'
             @watch_strategy = Docker_Sync::WatchStrategy::Dummy.new(@sync_name, @options)
-          when 'unison'
-            @watch_strategy = Docker_Sync::WatchStrategy::Unison.new(@sync_name, @options)
           else
-            @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
+            @watch_strategy = Docker_Sync::WatchStrategy::Unison.new(@sync_name, @options)
         end
       else
-        if @options['sync_strategy'] == 'unison'
-          @watch_strategy = Docker_Sync::WatchStrategy::Unison.new(@sync_name, @options)
-        else
+        if @options['sync_strategy'] == 'rsync'
           @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
+        else
+          @watch_strategy = Docker_Sync::WatchStrategy::Unison.new(@sync_name, @options)
         end
       end
     end

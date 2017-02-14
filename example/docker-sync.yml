@@ -90,14 +90,10 @@ syncs:
     # use rsync by setting this
     sync_strategy: 'rsync'
 
-    # optional, use this to map the files to a specific user on sync. Helps fixing permissions. You can use names and uids
-    sync_user: 'test'
     # this does not user groupmap but rather configures the server to map
     # optional: usually if you map users you want to set the user id of your application container here
     # set it to 'from_host' to automatically bound it to the uid of the user who launches docker-sync (unison only at the moment)
     sync_userid: '5000'
-    # optional, use this to map the files to a specific group on sync. Helps fixing permissions, You can use names and guids
-    sync_group: 'testgroup'
     # optional: usually if you map groups you want to set the group id of your application container here
     # this does not user groupmap but rather configures the server to map
     sync_groupid: '6000'

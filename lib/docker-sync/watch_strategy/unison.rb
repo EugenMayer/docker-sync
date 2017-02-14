@@ -28,7 +28,7 @@ module Docker_Sync
       end
 
       def stop
-        Process.kill "TERM", @watch_fork
+        Process.kill 'TERM', @watch_fork
         Process.wait @watch_fork
       end
 
