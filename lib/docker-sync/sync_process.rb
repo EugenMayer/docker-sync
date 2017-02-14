@@ -39,7 +39,7 @@ module Docker_Sync
             @sync_strategy = Docker_Sync::SyncStrategy::Unison.new(@sync_name, @options)
         end
       else
-        @sync_strategy = Docker_Sync::SyncStrategy::Rsync.new(@sync_name, @options)
+        @sync_strategy = Docker_Sync::SyncStrategy::Unison.new(@sync_name, @options)
       end
     end
 
