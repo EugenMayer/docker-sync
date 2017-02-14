@@ -96,7 +96,7 @@ module Docker_Sync
       def expand_ignore_strings
         expanded_ignore_strings = []
 
-        exclude_type = 'Path'
+        exclude_type = 'Name'
         unless @options['sync_excludes_type'].nil?
           exclude_type = @options['sync_excludes_type']
         end
