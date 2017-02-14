@@ -24,7 +24,6 @@ class UpdateChecker
     # do not check the image if its the first run - since this it will be downloaded anyway
     unless DockerSyncConfig::is_first_run
       check_rsync_image
-      check_unison_onesided_image
       check_unison_image
 
       # stop if there was an update
@@ -66,18 +65,6 @@ class UpdateChecker
 
     if system("docker pull eugenmayer/unison:unox | grep 'Downloaded newer image for'")
       say_status 'ok', 'Downloaded newer image for unison', :green
-      @newer_image_found = true
-    else
-      say_status 'ok', 'No newer image found - current image is up to date.'
-    end
-
-  end
-
-  def check_unison_onesided_image
-    say_status 'ok','Checking if a newer unison:onesided image is available'
-
-    if system("docker pull eugenmayer/unison:onesided | grep 'Downloaded newer image for'")
-      say_status 'ok', 'Downloaded newer image for unison:onesided', :green
       @newer_image_found = true
     else
       say_status 'ok', 'No newer image found - current image is up to date.'

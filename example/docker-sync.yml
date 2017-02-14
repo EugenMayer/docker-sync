@@ -17,9 +17,7 @@ options:
   cli_mode: 'auto'
 syncs:
   unison-sync:
-    # unison strategy differs from unison-onsesided as:
-    # - it implements a native unison watcher through unox which allow granular syncing instead of full sync
-    # - it reacts from changes made also on the container side (and on the host of course)
+    # unison 2 way-sync, default since 0.2.0
     sync_strategy: 'unison'
     # common options
     # see rsync documentation for all these common options
@@ -53,7 +51,8 @@ syncs:
     # none: You can define a type for each sync exclude, so sync_excludes: ['Name .git', 'Path Gemlock']
     #
     # for more see http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#pathspec
-    sync_excludes_type: 'Path'
+    # Name is the default since 0.2.0
+    sync_excludes_type: 'Name'
   # IMPORTANT: this name must be unique and should NOT match your real application container name!
   rsync-sync:
     # enable terminal_notifier. On every sync sends a Terminal Notification regarding files being synced. ( Mac Only ).
@@ -88,7 +87,7 @@ syncs:
     sync_args: '-v'
     # optional, a list of regular expressions to exclude from the fswatch - see fswatch docs for details
 
-    # optional, default
+    # use rsync by setting this
     sync_strategy: 'rsync'
 
     # optional, use this to map the files to a specific user on sync. Helps fixing permissions. You can use names and uids
@@ -110,9 +109,3 @@ syncs:
     watch_args: '-v'
     # optional: default is fswatch, if set to disable, no watcher will be used and you would need to start the sync manually
     watch_strategy: 'fswatch'
-  unison-onesided-sync: # IMPORTANT: this name must be unique and should NOT match your real application container name!
-    src: './data2/'
-    dest: '/app/code'
-    sync_host_ip: '127.0.0.1'
-    sync_host_port: 20872
-    sync_strategy: 'unison-onesided' # this time we pick unison-onesided
