@@ -54,7 +54,7 @@ module Docker_Sync
         args.push('-orIE')
         args.push(@events_to_watch.map { |pattern| "--event #{pattern}" })
         args.push(@options['watch_args']) if @options.key?('watch_args')
-        args.push(@options['src'])
+        args.push("'#{@options['src']}'")
         sync_command = get_sync_cli_call
         args.push(" | xargs -I -n1 #{sync_command} -n #{@sync_name} --config='#{@options['config_path']}'")
       end
