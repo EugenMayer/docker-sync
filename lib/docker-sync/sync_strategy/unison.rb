@@ -173,8 +173,18 @@ module Docker_Sync
         say_status 'command', cmd, :white if @options['verbose']
         `#{cmd}` || raise('Start failed')
         say_status 'ok', "starting initial sync of #{container_name}", :white if @options['verbose']
-        # this sleep is needed since the container could be not started
-        sleep 5 # TODO: replace with unison -testserver
+        # wait until container is started, then sync:
+        sync_host_port = get_host_port(get_container_name, UNISON_CONTAINER_PORT)
+        cmd = "unison -testserver #{@options['dest']} \"socket://#{@options['sync_host_ip']}:#{sync_host_port}\""
+        say_status 'command', cmd, :white if @options['verbose']
+        attempt = 0
+        loop do
+          stdout, stderr, exit_status = Open3.capture3(cmd)
+          break if exit_status == 0
+          attempt += 1
+          break if attempt > 5
+          sleep 1
+        end
         sync
         say_status 'success', 'Unison server started', :green
       end
