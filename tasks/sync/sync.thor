@@ -64,6 +64,14 @@ class Sync < Thor
   def clean
     config_path = config_preconditions # Preconditions and Define config_path from shared method
 
+    # Look for any background syncs and stop them if we see them
+    files = Dir[File.join('./.docker-sync', '*.pid')]
+    files.each do |pid_file|
+      pid = File.read(pid_file).to_i
+      Process.kill(:INT, -(Process.getpgid(pid)))
+      say_status 'shutdown', 'Background dsync has been stopped'
+    end
+
     @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
     @sync_manager.clean(options[:sync_name])
     say_status 'success', 'Finished cleanup. Removed stopped, removed sync container and removed their volumes', :green
