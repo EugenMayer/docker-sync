@@ -25,7 +25,11 @@ class Sync < Thor
     @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
 
     start_dir = Dir.pwd # Set start_dir variable to be equal to pre-daemonized folder, since daemonizing will change dir to '/'
-    daemonize if options['daemon']
+    if options['daemon']
+      daemonize
+    else
+      say_status 'note:', 'You can also run docker-sync in the background with --daemon'
+    end
 
     Dir.chdir(start_dir) do # We want run these in pre-daemonized folder/directory since provided config_path might not be full_path
       @sync_manager.run(options[:sync_name])
