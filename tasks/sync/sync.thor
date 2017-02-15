@@ -124,7 +124,8 @@ class Sync < Thor
         app_name: options['app_name'],
         dir_mode: :normal,
         dir: options['dir'],
-        log_output: options['logd']
+        log_output: options['logd'],
+        output_logfilename: "#{options['app_name']}.log"
       } # List of options accepted by Daemonize, can be customized pretty nicely with provided CLI options
 
       say_status 'success', 'Starting Docker-Sync in the background', :green
