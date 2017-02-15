@@ -37,6 +37,8 @@ class Stack < Thor
       end
     end
 
+    say_status 'note:', 'You can also run docker-sync in the background with docker-sync --daemon'
+
     @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
     @sync_manager.run(options[:sync_name])
     global_options = @sync_manager.global_options
