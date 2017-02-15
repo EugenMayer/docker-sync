@@ -71,6 +71,8 @@ class Sync < Thor
       Process.kill(:INT, -(Process.getpgid(pid)))
       say_status 'shutdown', 'Background dsync has been stopped'
     end
+    # Remove the .docker-sync directory
+    FileUtils.rm_r './.docker-sync'
 
     @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
     @sync_manager.clean(options[:sync_name])
