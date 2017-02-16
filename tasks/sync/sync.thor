@@ -98,6 +98,14 @@ class Sync < Thor
     end
   end
 
+  desc 'log', 'Prints last 100 lines of daemon log. Only for use with docker-sync started in background.'
+  method_option :lines, :aliases => '--lines', :default => 100, :type => :numeric, :desc => "Specify number of lines to tail"
+  method_option :app_name, :aliases => '--name', :default => 'daemon', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
+  method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
+  def log
+    print_daemon_logs
+  end
+
   no_tasks do
     def config_preconditions # Moved shared preconditions block into separate method to have less/cleaner code
       begin
@@ -122,12 +130,9 @@ class Sync < Thor
       FileUtils.mkpath(options['dir'])
 
       # Check to see if we're already running:
-      pid_file = Daemons::PidFile.find_files(options['dir'], options['app_name']).first || ''
-      if File.file?(pid_file)
-        if Daemons::Pid.running?(File.read(pid_file).to_i)
-          say_status 'error', "docker-sync already started for this configuration", :red
-          exit 1
-        end
+      if daemon_running?
+        say_status 'error', "docker-sync already started for this configuration", :red
+        exit 1
       end
 
       # If we're daemonizing, run a sync first to ensure the containers exist so that a docker-compose up won't fail:
@@ -146,6 +151,17 @@ class Sync < Thor
       say_status 'success', 'Starting Docker-Sync in the background', :green
       Daemons.daemonize(dopts)
     end
-  end
 
+    def print_daemon_logs
+      log_file = File.join(options['dir'], "#{options['app_name']}.log")
+
+      system("tail -n #{options['lines']} #{log_file}")
+    end
+
+    def daemon_running?
+      pid_file = Daemons::PidFile.find_files(options['dir'], options['app_name']).first || ''
+
+      File.file?(pid_file) && Daemons::Pid.running?(File.read(pid_file).to_i)
+    end
+  end
 end
