@@ -153,8 +153,12 @@ class Sync < Thor
     end
 
     def print_daemon_logs
-      log_file = File.join(options['dir'], "#{options['app_name']}.log")
+      unless daemon_running?
+        say_status 'error', "docker-sync is not running in daemon mode for this configuration", :red
+        exit 1
+      end
 
+      log_file = File.join(options['dir'], "#{options['app_name']}.log")
       system("tail -n #{options['lines']} #{log_file}")
     end
 
