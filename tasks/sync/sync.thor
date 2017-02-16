@@ -102,6 +102,7 @@ class Sync < Thor
   method_option :lines, :aliases => '--lines', :default => 100, :type => :numeric, :desc => "Specify number of lines to tail"
   method_option :app_name, :aliases => '--name', :default => 'daemon', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
   method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
+  method_option :follow, :aliases => '-f', :default => false, :type => :boolean, :desc => "Specify if the logs should be streamed"
   def log
     print_daemon_logs
   end
@@ -159,7 +160,11 @@ class Sync < Thor
       end
 
       log_file = File.join(options['dir'], "#{options['app_name']}.log")
-      system("tail -n #{options['lines']} #{log_file}")
+      begin
+        system("tail #{options['follow'] ? '-f ' : ''}-n #{options['lines']} #{log_file}")
+      rescue Interrupt
+        nil
+      end
     end
 
     def daemon_running?
