@@ -1,3 +1,6 @@
+# mandatory since 0.2.x
+version: "2"
+
 # for a simpler example, see the boilerplate at https://github.com/EugenMayer/docker-sync-boilerplate
 options:
   # optional, default: docker-compose.yml if you like, you can set a custom location (path) of your compose file
