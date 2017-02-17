@@ -26,9 +26,7 @@ module DockerSyncConfig
     # noinspection RubyStringKeysInHashInspection
     defaults = {'update_check'=>true, 'update_last_check' => date.iso8601(9), 'update_enforce' => true}
     if File.exist?(global_config_path)
-
       config = ConfigTemplate::interpolate_config_file(global_config_path)
-
       config = defaults.merge(config)
       return config
     else
@@ -41,13 +39,32 @@ module DockerSyncConfig
     File.open(global_config_path, 'w') {|f| f.write config.to_yaml }
   end
 
+
+  def self.project_required_config_version
+    return '2'
+  end
+
+  def self.project_ensure_configuration_version_compatibility(config)
+    return false unless config.key?('version')
+    return false if config['version'].to_s != project_required_config_version.to_s
+    return true
+  end
+
   def self.project_config_path
     files = project_config_find
     if files.length > 0
-      return files.pop
+      path =  files.pop
     else
       raise('No docker-sync.yml configuration found in your path ( traversing up ) Did you define it for your project?')
     end
+
+    begin
+      config = YAML.load_file(path)
+      raise "Version of docker-sync.yml does not match the reqiured one" unless project_ensure_configuration_version_compatibility(config)
+    rescue Exception => e
+      raise "You docker-sync.yml file does either not include a version: \"#{project_required_config_version}\" setting or your setting (#{config['version']}) does not match the required version (#{project_required_config_version}). (Add this if you migrated from docker-sync 0.1.x)"
+    end
+    return path
   end
 
   # this has been ruthlessly stolen from Thor/runner.rb - please do not hunt me for that :)

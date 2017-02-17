@@ -53,7 +53,7 @@ class UpgradeChecker
     end
 
     if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.2.0')
-      Thor::Shell::Basic.new.say_status 'warning', 'A lot changed with 0.2.0. Unison is the default sync, unison-onesided has been REMOVED. If you have been using rsync, have been using unison excludes or you are not sure, please read the migration guide or your setup will go lala! : https://github.com/EugenMayer/docker-sync/wiki/Migration-Guide', :red
+      Thor::Shell::Basic.new.say_status 'warning', 'A lot changed with 0.2.x! Unison is the default sync, unison-onesided has been REMOVED. If you have been using rsync, have been using unison excludes or you are not sure, please read the upgrade guide or your setup will go lala! : https://github.com/EugenMayer/docker-sync/wiki/1.2-Upgrade-Guide', :red
       unless Thor::Shell::Basic.new.yes?('Shall we continue - DID you read it? (y/N)')
         exit 1
       end

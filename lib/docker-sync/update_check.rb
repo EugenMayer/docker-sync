@@ -88,6 +88,7 @@ class UpdateChecker
     # update the timestamp
     now = DateTime.now
     @config['update_last_check'] = now.iso8601(9)
+
     DockerSyncConfig::global_config_save(@config)
 
     check = docker_sync_update_check
