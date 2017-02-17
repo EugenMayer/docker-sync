@@ -8,10 +8,16 @@ require 'docker-sync/compose'
 class Stack < Thor
   class_option :config, :aliases => '-c', :default => nil, :type => :string, :desc => 'Path of the docker_sync config'
   class_option :sync_name, :aliases => '-n', :type => :string, :desc => 'If given, only this sync configuration will be references/started/synced'
+  class_option :version, :aliases => '-v',:type => :boolean, :default => false, :desc => 'prints out the version of docker-sync and exits'
 
   desc 'start', 'Start sync services, watcher and then your docker-compose defined stack'
 
   def start
+    if options[:version]
+      puts UpgradeChecker.get_current_version
+      exit(0)
+    end
+
     # do run update check in the start command only
     updates = UpdateChecker.new
     updates.run
@@ -65,6 +71,11 @@ class Stack < Thor
   desc 'clean', 'compose down your app stack, stop and clean up all sync endpoints'
 
   def clean
+    if options[:version]
+      puts UpgradeChecker.get_current_version
+      exit(0)
+    end
+
     begin
       Preconditions::check_all_preconditions
     rescue Exception => e

@@ -10,6 +10,7 @@ class Sync < Thor
 
   class_option :config, :aliases => '-c',:default => nil, :type => :string, :desc => 'Path of the docker_sync config'
   class_option :sync_name, :aliases => '-n',:type => :string, :desc => 'If given, only this sync configuration will be references/started/synced'
+  class_option :version, :aliases => '-v',:type => :boolean, :default => false, :desc => 'prints out the version of docker-sync and exits'
 
   desc 'start', 'Start all sync configurations in this project'
   method_option :daemon, :aliases => '-d', :default => false, :type => :boolean, :desc => 'Run in the background'
@@ -17,9 +18,15 @@ class Sync < Thor
   method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
   method_option :logd, :aliases => '--logd', :default => true, :type => :boolean, :desc => 'To log OUPUT to file on Daemon or not'
   def start
+    if options[:version]
+      puts UpgradeChecker.get_current_version
+      exit(0)
+    end
+
     # do run update check in the start command only
     UpdateChecker.new().run
     UpgradeChecker.new().run
+
 
     config_path = config_preconditions # Preconditions and Define config_path from shared method
     @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
@@ -41,6 +48,11 @@ class Sync < Thor
   method_option :app_name, :aliases => '--name', :default => 'daemon', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
   method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
   def stop
+    if options[:version]
+      puts UpgradeChecker.get_current_version
+      exit(0)
+    end
+
     config_path = config_preconditions
     sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
 
@@ -58,6 +70,11 @@ class Sync < Thor
 
   desc 'sync', 'sync - do not start a watcher'
   def sync
+    if options[:version]
+      puts UpgradeChecker.get_current_version
+      exit(0)
+    end
+
     config_path = config_preconditions # Preconditions and Define config_path from shared method
 
     @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
@@ -66,6 +83,11 @@ class Sync < Thor
 
   desc 'clean', 'Stop and clean up all sync endpoints'
   def clean
+    if options[:version]
+      puts UpgradeChecker.get_current_version
+      exit(0)
+    end
+
     config_path = config_preconditions # Preconditions and Define config_path from shared method
 
     # Look for any background syncs and stop them if we see them
@@ -87,6 +109,11 @@ class Sync < Thor
   desc 'list', 'List all sync-points of the project configuration path'
   method_option :verbose, :default => false, :type => :boolean, :desc => 'Verbose output'
   def list
+    if options[:version]
+      puts UpgradeChecker.get_current_version
+      exit(0)
+    end
+
     config_path = config_preconditions # Preconditions and Define config_path from shared method
 
     say_status 'ok',"Found configuration at #{config_path}"
@@ -104,6 +131,11 @@ class Sync < Thor
   method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
   method_option :follow, :aliases => '-f', :default => false, :type => :boolean, :desc => "Specify if the logs should be streamed"
   def log
+    if options[:version]
+      puts UpgradeChecker.get_current_version
+      exit(0)
+    end
+
     print_daemon_logs
   end
 
