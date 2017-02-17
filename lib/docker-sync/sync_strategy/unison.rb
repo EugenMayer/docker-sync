@@ -121,6 +121,7 @@ module Docker_Sync
         args.push(@options['src'])
         args.push('-auto')
         args.push('-batch')
+        args.push(sync_prefer) if @options.key?('sync_prefer')
         args.push(@options['sync_args']) if @options.key?('sync_args')
         sync_host_port = get_host_port(get_container_name, UNISON_CONTAINER_PORT)
         args.push("socket://#{@options['sync_host_ip']}:#{sync_host_port}")
@@ -129,6 +130,14 @@ module Docker_Sync
           raise('Unison does not support sync_group, sync_groupid - please use rsync if you need that')
         end
         return args
+      end
+
+      def sync_prefer
+        case @options['sync_prefer']
+        when 'src' then "-prefer #{@options['src']}"
+        when 'dest' then "-prefer #{@options['dest']}"
+        else "-prefer #{@options['sync_prefer']}"
+        end
       end
 
       def start_container
