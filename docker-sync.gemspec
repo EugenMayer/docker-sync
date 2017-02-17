@@ -1,10 +1,10 @@
 Gem::Specification.new do |s|
   s.name        = 'docker-sync'
-  s.version     = File.read("VERSION")
+  s.version     = File.read('VERSION')
   s.summary     = 'Docker Sync - Fast and efficient way to sync code to docker-containers'
   s.description = 'Sync your code live to docker-containers without losing any performance on OSX'
   s.authors     = ['Eugen Mayer']
-  s.executables = %w[docker-sync docker-sync-stack]
+  s.executables = %w[docker-sync docker-sync-stack docker-sync-daemon]
   s.email       = 'eugen.mayer@kontextwork.de'
   s.files       = Dir['lib/**/*.rb','tasks/**/*.thor','Thorfile','bin/*','VERSION']
   s.license     = 'GPL'

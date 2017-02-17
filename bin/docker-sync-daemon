@@ -6,10 +6,13 @@ $LOAD_PATH.unshift File.expand_path('../lib', file)
 require 'thor'
 require 'docker-sync/update_check'
 
-thor = File.expand_path('../tasks/stack', file)
+thor = File.expand_path('../tasks/daemon', file)
 Dir.glob(File.join(thor, '/**/*.thor')).each { |taskfile|
-  # noinspection RubyResolve
+  load taskfile
+}
+thor = File.expand_path('../tasks/sync', file)
+Dir.glob(File.join(thor, '/**/*.thor')).each { |taskfile|
   load taskfile
 }
 
-Stack.start
+Daemon.start

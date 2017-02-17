@@ -22,11 +22,9 @@ class Sync < Thor
       puts UpgradeChecker.get_current_version
       exit(0)
     end
-
     # do run update check in the start command only
     UpdateChecker.new().run
     UpgradeChecker.new().run
-
 
     config_path = config_preconditions # Preconditions and Define config_path from shared method
     @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
@@ -35,7 +33,7 @@ class Sync < Thor
     if options['daemon']
       daemonize
     else
-      say_status 'note:', 'You can also run docker-sync in the background with --daemon'
+      say_status 'note:', 'You can also run docker-sync in the background with --daemon', :white
     end
 
     Dir.chdir(start_dir) do # We want run these in pre-daemonized folder/directory since provided config_path might not be full_path
@@ -68,7 +66,7 @@ class Sync < Thor
     end
   end
 
-  desc 'sync', 'sync - do not start a watcher'
+  desc 'sync', 'just sync - do not start a watcher though'
   def sync
     if options[:version]
       puts UpgradeChecker.get_current_version
@@ -123,20 +121,6 @@ class Sync < Thor
       puts "\n---------------[#{name}] #{config['sync_host_ip']}:#{config['sync_host_port']} ---------------\n" if options['verbose']
       print_table(config) if options['verbose']
     end
-  end
-
-  desc 'log', 'Prints last 100 lines of daemon log. Only for use with docker-sync started in background.'
-  method_option :lines, :aliases => '--lines', :default => 100, :type => :numeric, :desc => "Specify number of lines to tail"
-  method_option :app_name, :aliases => '--name', :default => 'daemon', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
-  method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
-  method_option :follow, :aliases => '-f', :default => false, :type => :boolean, :desc => "Specify if the logs should be streamed"
-  def log
-    if options[:version]
-      puts UpgradeChecker.get_current_version
-      exit(0)
-    end
-
-    print_daemon_logs
   end
 
   no_tasks do
