@@ -41,7 +41,8 @@ syncs:
     # @see http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#prefs
     # For example, these provided options will automatically resolve conflicts by using the newer version of the file
     # and append a suffix to the conflicted file to prevent its deletion.
-    sync_args: [ '-prefer newer', '-copyonconflict' ]
+    # do not use --copyonconflict or --prefer here, those are handled by the sync_prefer setting
+    sync_args: [ '-v' ]
     # Exclude some files / directories that matches **exactly** the path
     # this currently use the the -Path option of unison, use sync_excludes_type to change this behavior
     # see http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#pathspec for more
@@ -56,8 +57,12 @@ syncs:
     # for more see http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#pathspec
     # Name is the default since 0.2.0
     sync_excludes_type: 'Name'
-  # IMPORTANT: this name must be unique and should NOT match your real application container name!
-  rsync-sync:
+
+    # defines how sync-conflicts should be handled. With default it will prefer the source with --copyonconflict
+    # so on conflict, pick the one from the host and copy the conflicted file for backup
+    sync_prefer: 'default'
+
+  rsync-sync: # IMPORTANT: this name must be unique and should NOT match your real application container name!
     # enable terminal_notifier. On every sync sends a Terminal Notification regarding files being synced. ( Mac Only ).
     # good thing incase you are developing and want to know exactly when your changes took effect.
     notify_terminal: true

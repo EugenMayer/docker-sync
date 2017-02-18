@@ -28,6 +28,7 @@ module Docker_Sync
         begin
           Preconditions::unison_available
           Preconditions::unox_available
+          Preconditions::macfsevents_available
         rescue Exception => e
           say_status 'error', "#{@sync_name} has been configured to sync with unison, but no unison available", :red
           say_status 'error', e.message, :red
@@ -121,7 +122,7 @@ module Docker_Sync
         args.push(@options['src'])
         args.push('-auto')
         args.push('-batch')
-        args.push(sync_prefer) if @options.key?('sync_prefer')
+        args.push(sync_prefer)
         args.push(@options['sync_args']) if @options.key?('sync_args')
         sync_host_port = get_host_port(get_container_name, UNISON_CONTAINER_PORT)
         args.push("socket://#{@options['sync_host_ip']}:#{sync_host_port}")
@@ -132,11 +133,17 @@ module Docker_Sync
         return args
       end
 
+      # cares about conflict resolution
       def sync_prefer
+        # thats our default, if nothing is set
+        unless @options.key?('sync_prefer') || @options['sync_prefer'] == 'default'
+          return "-prefer #{@options['src']} --copyonconflict"
+        end
+
         case @options['sync_prefer']
-        when 'src' then "-prefer #{@options['src']}"
-        when 'dest' then "-prefer #{@options['dest']}"
-        else "-prefer #{@options['sync_prefer']}"
+          when 'src' then "-prefer #{@options['src']}"
+          when 'dest' then "-prefer #{@options['dest']}"
+          else "-prefer #{@options['sync_prefer']}"
         end
       end
 
