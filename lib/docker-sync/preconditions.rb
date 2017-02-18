@@ -87,9 +87,15 @@ module Preconditions
         if $?.exitstatus > 0
           raise('Failed to install macfsevents, please file an issue with the output of the error')
         end
+        `python -c 'import fsevents'`
+        unless $?.success?
+          raise('Somehow could not successfully install macfsevents even though i treed. Please report this issue')
+        end
       else
         raise('Please install macfsevents manually, see https://github.com/EugenMayer/docker-sync/wiki/1.-Installation')
       end
     end
+
+
   end
 end
