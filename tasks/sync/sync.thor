@@ -104,6 +104,18 @@ class Sync < Thor
     say_status 'success', 'Finished cleanup. Removed stopped, removed sync container and removed their volumes', :green
   end
 
+  desc 'log', 'Prints last 100 lines of daemon log. Only for use with docker-sync started in background.'
+  method_option :lines, :aliases => '--lines', :default => 100, :type => :numeric, :desc => 'Specify number of lines to tail'
+  method_option :follow, :aliases => '-f', :default => false, :type => :boolean, :desc => 'Specify if the logs should be streamed'
+  def log
+    if options[:version]
+      puts UpgradeChecker.get_current_version
+      exit(0)
+    end
+
+    print_daemon_logs
+  end
+
   desc 'list', 'List all sync-points of the project configuration path'
   method_option :verbose, :default => false, :type => :boolean, :desc => 'Verbose output'
   def list

@@ -43,11 +43,8 @@ class Daemon < Thor
   method_option :lines, :aliases => '--lines', :default => 100, :type => :numeric, :desc => 'Specify number of lines to tail'
   method_option :follow, :aliases => '-f', :default => false, :type => :boolean, :desc => 'Specify if the logs should be streamed'
   def log
-    if options[:version]
-      puts UpgradeChecker.get_current_version
-      exit(0)
-    end
-
-    print_daemon_logs
+    opt = options.dup
+    sync = Sync.new([], opt)
+    sync.log
   end
 end
