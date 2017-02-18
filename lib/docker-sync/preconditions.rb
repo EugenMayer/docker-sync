@@ -4,7 +4,9 @@ module Preconditions
   def self.check_all_preconditions
     docker_available
     docker_running
-    fswatch_available
+    unison_available
+    unox_available
+    macfsevents_available
   end
 
   def self.docker_available
@@ -48,20 +50,45 @@ module Preconditions
     if (find_executable0 'unison-fsmonitor').nil?
       cmd1 = 'curl "https://raw.githubusercontent.com/hnsl/unox/master/unox.py" -o "/usr/local/bin/unison-fsmonitor" \
       && chmod +x /usr/local/bin/unison-fsmonitor'
-      cmd2 = 'sudo easy_install pip && sudo pip install macfsevents'
-      Thor::Shell::Basic.new.say_status 'warning', 'Could not find unison-fsmonitor (for file watching) binary in $PATH. Please install unox before you continue, see https://github.com/hnsl/unox.', :yellow
+
+      Thor::Shell::Basic.new.say_status 'warning', 'Could not find unison-fsmonitor (for file watching) binary in $PATH. We try to install unox now (for manual instracutions see https://github.com/hnsl/unox.)', :red
       if Thor::Shell::Basic.new.yes?('Shall I install unison-fsmonitor for you? (y/N)')
         system cmd1
-        if $?.exitstatus > 0
-          raise('Failed to install unison-fsmonitor, please file an issue with the output of the error')
-        end
-        Thor::Shell::Basic.new.say_status 'ok','install macfsevents using pip (This will ask for sudo, since we use the system python)', :yellow
+      else
+        raise("Please install it, see https://github.com/hnsl/unox, or simply run :\n #{cmd1} && #{cmd2}")
+      end
+    end
+
+  end
+
+  def self.macfsevents_available
+    `python -c 'import fsevents'`
+    unless $?.success?
+      Thor::Shell::Basic.new.say_status 'warning','Could not find macfsevents. Will try to install it using pip', :red
+      sudo = false
+      if find_executable0('python') == '/usr/bin/python'
+        Thor::Shell::Basic.new.say_status 'ok','You seem to use the system python, we will need sudo below'
+        sudo = true
+        cmd2 = 'sudo easy_install pip && sudo pip install macfsevents'
+      else
+        Thor::Shell::Basic.new.say_status 'ok','You seem to have a custom python, using non-sudo commands'
+        sudo = false
+        cmd2 = 'easy_install pip && pip install macfsevents'
+      end
+      if sudo
+        question = 'I will ask you for you root password to install macfsevent by running (This will ask for sudo, since we use the system python)'
+      else
+        question = 'I will now install macfsevents for you by running'
+      end
+
+      Thor::Shell::Basic.new.say_status 'info', "#{question}: `#{cmd2}\n\n"
+      if Thor::Shell::Basic.new.yes?('Shall i continue? (y/N)')
         system cmd2
         if $?.exitstatus > 0
           raise('Failed to install macfsevents, please file an issue with the output of the error')
         end
       else
-        raise("Please install it, see https://github.com/hnsl/unox, or simply run :\n #{cmd1} && #{cmd2}")
+        raise('Please install macfsevents manually, see https://github.com/EugenMayer/docker-sync/wiki/1.-Installation')
       end
     end
   end
