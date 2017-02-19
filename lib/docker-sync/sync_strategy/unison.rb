@@ -23,7 +23,7 @@ module Docker_Sync
         if @options.key?('image')
           @docker_image = @options['image']
         else
-          @docker_image = 'eugenmayer/unison:unox'
+          @docker_image = 'eugenmayer/unison'
         end
         begin
           Preconditions::unison_available
@@ -137,7 +137,7 @@ module Docker_Sync
       def sync_prefer
         # thats our default, if nothing is set
         unless @options.key?('sync_prefer') || @options['sync_prefer'] == 'default'
-          return "-prefer #{@options['src']} --copyonconflict"
+          return "-prefer '#{@options['src']}' -copyonconflict"
         end
 
         case @options['sync_prefer']
@@ -152,14 +152,15 @@ module Docker_Sync
         container_name = get_container_name
         volume_name = get_volume_name
         env = {}
+        say_status 'ok', 'sync_user is no longer supported, since it ise no needed, use sync_userid only please', :yellow if @options.key?('sync_user')
+
         ignore_strings = expand_ignore_strings
         env['UNISON_EXCLUDES'] = ignore_strings.join(' ')
-        env['UNISON_OWNER'] = @options['sync_user'] if @options.key?('sync_user')
         env['MAX_INOTIFY_WATCHES'] = @options['max_inotify_watches'] if @options.key?('max_inotify_watches')
         if @options['sync_userid'] == 'from_host'
-          env['UNISON_OWNER_UID'] = Process.uid
+          env['OWNER_UID'] = Process.uid
         else
-          env['UNISON_OWNER_UID'] = @options['sync_userid'] if @options.key?('sync_userid')
+          env['OWNER_UID'] = @options['sync_userid'] if @options.key?('sync_userid')
         end
 
         additional_docker_env = env.map{ |key,value| "-e #{key}=\"#{value}\"" }.join(' ')
@@ -172,7 +173,7 @@ module Docker_Sync
             run_privileged = '--privileged' if @options.key?('max_inotify_watches') #TODO: replace by the minimum capabilities required
             cmd = "docker run -p '#{@options['sync_host_ip']}::#{UNISON_CONTAINER_PORT}' \
                               -v #{volume_name}:#{@options['dest']} \
-                              -e UNISON_DIR=#{@options['dest']} \
+                              -e VOLUME=#{@options['dest']} \
                               -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} \
                               #{additional_docker_env} \
                               #{run_privileged} \
@@ -207,7 +208,7 @@ module Docker_Sync
 
       def get_host_port(container_name, container_port)
         File.exist?('/usr/bin/sed') ? sed = '/usr/bin/sed' : sed = `which sed`.chomp # use macOS native sed in /usr/bin/sed first, fallback to sed in $PATH if it's not there
-        cmd = 'docker inspect --format=" {{ .NetworkSettings.Ports }} " ' + container_name + " | #{sed} " + '-E "s/.*map\[' + container_port + '[^ ]+ ([0-9]*)[^0-9].*/\1/"'
+        cmd = 'docker inspect --format=\'{{(index (index .NetworkSettings.Ports "5000/tcp") 0).HostPort}}\' ' + container_name
         say_status 'command', cmd, :white if @options['verbose']
         stdout, stderr, exit_status = Open3.capture3(cmd)
         if not exit_status.success?

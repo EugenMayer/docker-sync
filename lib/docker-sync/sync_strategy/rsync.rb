@@ -116,26 +116,17 @@ module Docker_Sync
 
       def get_user_mapping
         user_mapping = ''
-        if @options.key?('sync_user')
-          user_mapping = "-e OWNER=#{@options['sync_user']}"
-          if @options.key?('sync_userid')
-            user_mapping = "#{user_mapping} -e OWNERID=#{@options['sync_userid']}"
-          end
-        elsif @options.key?('sync_userid')
-          raise("#{get_container_name}: You have set a sync_userid but no sync_user - you need to set both")
+        if @options.key?('sync_userid')
+          user_mapping = "#{user_mapping} -e OWNER_UID=#{@options['sync_userid']}"
         end
         return user_mapping
       end
 
       def get_group_mapping
         group_mapping = ''
-        if @options.key?('sync_group')
-          group_mapping = "-e GROUP=#{@options['sync_group']}"
-          if @options.key?('sync_groupid')
-            group_mapping = "#{group_mapping} -e GROUPID=#{@options['sync_groupid']}"
-          end
-        elsif @options.key?('sync_groupid')
-          raise("#{get_container_name}: You have set a sync_groupid but no sync_group - you need to set both")
+        if @options.key?('sync_groupid')
+          raise 'for now, rsync does no longer support groupid, but for nearly all cases sync_userid should be enaugh'
+          #group_mapping = "#{group_mapping} -e GROUP_ID=#{@options['sync_groupid']}"
         end
         return group_mapping
       end

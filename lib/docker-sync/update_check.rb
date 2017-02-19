@@ -63,7 +63,7 @@ class UpdateChecker
   def check_unison_image
     say_status 'ok','Checking if a newer unison image is available'
 
-    if system("docker pull eugenmayer/unison:unox | grep 'Downloaded newer image for'")
+    if system("docker pull eugenmayer/unison | grep 'Downloaded newer image for'")
       say_status 'ok', 'Downloaded newer image for unison', :green
       @newer_image_found = true
     else
