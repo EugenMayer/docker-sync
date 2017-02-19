@@ -109,7 +109,7 @@ module Docker_Sync
         end
         say_status 'ok', "#{container_name}: starting initial sync of #{@options['src']}", :white if @options['verbose']
         # this sleep is needed since the container could be not started
-        sleep 1
+        sleep 3
         sync
         say_status 'success', 'Rsync server started', :green
       end
