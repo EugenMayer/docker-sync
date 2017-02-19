@@ -171,14 +171,7 @@ module Docker_Sync
           if exists == ''
             say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
             run_privileged = '--privileged' if @options.key?('max_inotify_watches') #TODO: replace by the minimum capabilities required
-            cmd = "docker run -p '#{@options['sync_host_ip']}::#{UNISON_CONTAINER_PORT}' \
-                              -v #{volume_name}:#{@options['dest']} \
-                              -e VOLUME=#{@options['dest']} \
-                              -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} \
-                              #{additional_docker_env} \
-                              #{run_privileged} \
-                              --name #{container_name} \
-                              -d #{@docker_image}"
+            cmd = "docker run -p '#{@options['sync_host_ip']}::#{UNISON_CONTAINER_PORT}' -v #{volume_name}:#{@options['dest']} -e VOLUME=#{@options['dest']} -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} #{additional_docker_env} #{run_privileged} --name #{container_name} -d #{@docker_image}"
           else
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
             cmd = "docker start #{container_name} && docker exec #{container_name} supervisorctl restart unison"
