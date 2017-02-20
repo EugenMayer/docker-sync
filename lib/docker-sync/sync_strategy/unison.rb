@@ -26,9 +26,7 @@ module Docker_Sync
           @docker_image = 'eugenmayer/unison'
         end
         begin
-          Preconditions::unison_available
-          Preconditions::unox_available
-          Preconditions::macfsevents_available
+          Preconditions::check_all_unison_preconditions
         rescue Exception => e
           say_status 'error', "#{@sync_name} has been configured to sync with unison, but no unison available", :red
           say_status 'error', e.message, :red
