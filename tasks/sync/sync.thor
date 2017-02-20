@@ -104,20 +104,6 @@ class Sync < Thor
     say_status 'success', 'Finished cleanup. Removed stopped, removed sync container and removed their volumes', :green
   end
 
-  desc 'log', 'Prints last 100 lines of daemon log. Only for use with docker-sync started in background.'
-  method_option :lines, :aliases => '--lines', :default => 100, :type => :numeric, :desc => 'Specify number of lines to tail'
-  method_option :follow, :aliases => '-f', :default => false, :type => :boolean, :desc => 'Specify if the logs should be streamed'
-  method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
-  method_option :logd, :aliases => '--logd', :default => true, :type => :boolean, :desc => 'To log OUPUT to file on Daemon or not'
-  method_option :app_name, :aliases => '--name', :default => 'daemon', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
-  def log
-    say_status 'warning', 'log is deprecated, please use `logs`', :yellow
-
-    opt = options.dup
-    sync = Sync.new([], opt)
-    sync.logs
-  end
-
   desc 'logs', 'Prints last 100 lines of daemon log. Only for use with docker-sync started in background.'
   method_option :lines, :aliases => '--lines', :default => 100, :type => :numeric, :desc => 'Specify number of lines to tail'
   method_option :follow, :aliases => '-f', :default => false, :type => :boolean, :desc => 'Specify if the logs should be streamed'

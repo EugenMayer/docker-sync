@@ -39,12 +39,12 @@ class Daemon < Thor
     sync.clean
   end
 
-  desc 'log', 'Prints last 100 lines of daemon log. Only for use with docker-sync started in background.'
+  desc 'logs', 'Prints last 100 lines of daemon log. Only for use with docker-sync started in background.'
   method_option :lines, :aliases => '--lines', :default => 100, :type => :numeric, :desc => 'Specify number of lines to tail'
   method_option :follow, :aliases => '-f', :default => false, :type => :boolean, :desc => 'Specify if the logs should be streamed'
-  def log
+  def logs
     opt = options.dup
     sync = Sync.new([], opt)
-    sync.log
+    sync.logs
   end
 end
