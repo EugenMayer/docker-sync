@@ -107,7 +107,24 @@ class Sync < Thor
   desc 'log', 'Prints last 100 lines of daemon log. Only for use with docker-sync started in background.'
   method_option :lines, :aliases => '--lines', :default => 100, :type => :numeric, :desc => 'Specify number of lines to tail'
   method_option :follow, :aliases => '-f', :default => false, :type => :boolean, :desc => 'Specify if the logs should be streamed'
+  method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
+  method_option :logd, :aliases => '--logd', :default => true, :type => :boolean, :desc => 'To log OUPUT to file on Daemon or not'
+  method_option :app_name, :aliases => '--name', :default => 'daemon', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
   def log
+    say_status 'warning', 'log is deprecated, please use `logs`', :yellow
+
+    opt = options.dup
+    sync = Sync.new([], opt)
+    sync.logs
+  end
+
+  desc 'logs', 'Prints last 100 lines of daemon log. Only for use with docker-sync started in background.'
+  method_option :lines, :aliases => '--lines', :default => 100, :type => :numeric, :desc => 'Specify number of lines to tail'
+  method_option :follow, :aliases => '-f', :default => false, :type => :boolean, :desc => 'Specify if the logs should be streamed'
+  method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
+  method_option :logd, :aliases => '--logd', :default => true, :type => :boolean, :desc => 'To log OUPUT to file on Daemon or not'
+  method_option :app_name, :aliases => '--name', :default => 'daemon', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
+  def logs
     if options[:version]
       puts UpgradeChecker.get_current_version
       exit(0)
@@ -197,7 +214,6 @@ class Sync < Thor
 
     def daemon_running?
       pid_file = Daemons::PidFile.find_files(options['dir'], options['app_name']).first || ''
-
       File.file?(pid_file) && Daemons::Pid.running?(File.read(pid_file).to_i)
     end
   end
