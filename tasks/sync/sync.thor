@@ -93,7 +93,7 @@ class Sync < Thor
     files = Dir[File.join(dir, '*.pid')]
     files.each do |pid_file|
       pid = File.read(pid_file).to_i
-      Process.kill(:INT, -(Process.getpgid(pid)))
+      Process.kill(:INT, -(Process.getpgid(pid))) if Daemons::Pid.running?(pid)
       say_status 'shutdown', 'Background dsync has been stopped'
     end
     # Remove the .docker-sync directory
