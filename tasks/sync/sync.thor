@@ -152,7 +152,7 @@ class Sync < Thor
 
       # Check to see if we're already running:
       if daemon_running?
-        say_status 'error', "docker-sync already started for this configuration", :red
+        say_status 'warning', 'docker-sync already started for this configuration', :yellow
         exit 1
       end
 
