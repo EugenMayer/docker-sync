@@ -21,16 +21,22 @@ module Docker_sync
       @sync_processes = []
       @config_syncs = []
       @config_global = []
+      @config_string = options[:config_string]
       @config_path = options[:config_path]
       load_configuration
     end
 
-    def load_configuration
+    def load_configuration_file
       unless File.exist?(@config_path)
         raise "Config could not be loaded from #{@config_path} - it does not exist"
       end
-
-      config = ConfigTemplate::interpolate_config_file(@config_path)
+      return File.read(@config_path)
+    end
+    
+    def load_configuration
+      
+      # try to interpolate supplied inline config string, alternatively load the configuration file
+      config = ConfigTemplate::interpolate_config_string(@config_string || load_configuration_file())
 
       validate_config(config)
       @config_global = config['options'] || {}
