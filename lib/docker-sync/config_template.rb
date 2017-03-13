@@ -2,7 +2,7 @@ require "yaml"
 require 'dotenv'
 
 module ConfigTemplate
-  def self.interpolate_config_string(config)
+  def self.interpolate_config_string(config_string)
       env_hash = {}
       ENV.each {|k,v| env_hash[k.to_sym] = v }
       config_string.gsub!('${', '%{')
