@@ -6,6 +6,7 @@ require 'docker-sync/execution'
 require 'yaml'
 require 'dotenv'
 require 'docker-sync/config_template'
+require 'docker-sync/config'
 
 module Docker_sync
   class SyncManager
@@ -16,7 +17,7 @@ module Docker_sync
     @config_path
 
     def initialize(options)
-      Dotenv.load
+      DockerSyncConfig.load_dotenv
 
       @sync_processes = []
       @config_syncs = []
