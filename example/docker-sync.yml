@@ -25,7 +25,6 @@ syncs:
     # common options
     # see rsync documentation for all these common options
     src: './data4/'
-    dest: '/data'
     # be aware, this only gives you a notification on the initial sync, not the syncs after changes. this is a difference
     # to the rsync implementation
     notify_terminal: true
@@ -67,23 +66,10 @@ syncs:
     # good thing incase you are developing and want to know exactly when your changes took effect.
     notify_terminal: true
     # which folder to watch / sync from - you can use tilde, it will get expanded.
-
-    # if you want to sync a full directory, set it up like this:
-    # This will create /docker/path/to/my/code/ on the container
-    #
-    # src: '/local/path/to/my/code'
-    # dest: '/docker/path/to/my/'
-
-    # if you want to sync a single file, set it up like this
-    # This will create /docker/path/to/file.ini on the container
-    #
-    # src: '/local/path/to/file.ini'
-    # dest: '/docker/path/to'
-
-    # TODO: include other examples of how to set these up to get the desired paths
-
+    # the contents of this directory will be synchronized to the Docker volume with the name of this sync entry ('rsync-sync' here)
     src: './data1/'
-    # which destination on the sync-container. Since you will use volumes_from to mount this, this should match your code-deployment location in the real container
+    # destination on the sync-container. This is optional and defaults to '/sync'.
+    # since you will in most cases mount the volume using the volume name ('rsync-sync' in this example) this value has little relevance
     dest: '/var/www'
     # when a port of a container is exposed, on which IP does it get exposed. Localhost for docker for mac, something else for docker-machine
     sync_host_ip: '127.0.0.1'

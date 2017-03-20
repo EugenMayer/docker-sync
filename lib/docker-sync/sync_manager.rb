@@ -35,7 +35,6 @@ module Docker_sync
     end
     
     def load_configuration
-      
       # try to interpolate supplied inline config string, alternatively load the configuration file
       config = ConfigTemplate::interpolate_config_string(@config_string || load_configuration_file())
 
@@ -73,6 +72,11 @@ module Docker_sync
           end
         end
 
+        # set default value for 'dest'
+        if !@config_syncs[name].key?('dest')
+          @config_syncs[name]['dest'] = '/sync'
+        end
+
         # for each strategy check if a custom image has been defined and inject that into the sync-endpoints
         # which do fit for this strategy
         %w(rsync unison).each do |strategy|
@@ -96,7 +100,7 @@ module Docker_sync
     end
 
     def validate_sync_config(name, sync_config)
-      config_mandatory = %w[src dest]
+      config_mandatory = %w[src]
       config_mandatory.push('sync_host_port') if sync_config['sync_strategy'] == 'rsync' #TODO: Implement autodisovery for other strategies
       config_mandatory.each do |key|
         raise ("#{name} does not have #{key} configuration value set - this is mandatory") unless sync_config.key?(key)
