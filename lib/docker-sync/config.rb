@@ -8,7 +8,12 @@ require 'docker-sync/config_template'
 module DockerSyncConfig
 
   def initialize(options)
-    Dotenv.load
+    load_dotenv
+  end
+
+  def self.load_dotenv
+    env_file = ENV.fetch('DOCKER_SYNC_ENV_FILE', '.env')
+    Dotenv.load(env_file)
   end
 
   def self.global_config_location
