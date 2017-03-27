@@ -132,13 +132,13 @@ module Docker_Sync
       end
 
       def stop_container
-        `docker stop #{get_container_name}`
+        `docker ps | grep #{get_container_name} && docker stop #{get_container_name}`
       end
 
       def reset_container
         stop_container
-        `docker rm #{get_container_name}`
-        `docker volume rm #{get_volume_name}`
+        `docker ps -a | grep #{get_container_name} && docker rm #{get_container_name}`
+        `docker volume ls -q | grep #{get_volume_name} && docker volume rm #{get_volume_name}`
       end
 
       def clean
