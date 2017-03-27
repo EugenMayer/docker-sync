@@ -55,7 +55,7 @@ module Preconditions
       if Thor::Shell::Basic.new.yes?('Shall I install unison-fsmonitor for you? (y/N)')
         system cmd1
       else
-        raise("Please install it, see https://github.com/hnsl/unox, or simply run :\n #{cmd1} && #{cmd2}")
+        raise("Please install it, see https://github.com/hnsl/unox, or simply run :\n #{cmd1}")
       end
     end
 
@@ -65,7 +65,6 @@ module Preconditions
     `python -c 'import fsevents'`
     unless $?.success?
       Thor::Shell::Basic.new.say_status 'warning','Could not find macfsevents. Will try to install it using pip', :red
-      sudo = false
       if find_executable0('python') == '/usr/bin/python'
         Thor::Shell::Basic.new.say_status 'ok','You seem to use the system python, we will need sudo below'
         sudo = true

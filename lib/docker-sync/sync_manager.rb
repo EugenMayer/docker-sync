@@ -6,6 +6,7 @@ require 'docker-sync/execution'
 require 'yaml'
 require 'dotenv'
 require 'docker-sync/config_template'
+require 'docker-sync/config'
 
 module Docker_sync
   class SyncManager
@@ -16,21 +17,26 @@ module Docker_sync
     @config_path
 
     def initialize(options)
-      Dotenv.load
+      DockerSyncConfig.load_dotenv
 
       @sync_processes = []
       @config_syncs = []
       @config_global = []
+      @config_string = options[:config_string]
       @config_path = options[:config_path]
       load_configuration
     end
 
-    def load_configuration
+    def load_configuration_file
       unless File.exist?(@config_path)
         raise "Config could not be loaded from #{@config_path} - it does not exist"
       end
-
-      config = ConfigTemplate::interpolate_config_file(@config_path)
+      return File.read(@config_path)
+    end
+    
+    def load_configuration
+      # try to interpolate supplied inline config string, alternatively load the configuration file
+      config = ConfigTemplate::interpolate_config_string(@config_string || load_configuration_file())
 
       validate_config(config)
       @config_global = config['options'] || {}
@@ -66,6 +72,11 @@ module Docker_sync
           end
         end
 
+        # set default value for 'dest'
+        if !@config_syncs[name].key?('dest')
+          @config_syncs[name]['dest'] = '/sync'
+        end
+
         # for each strategy check if a custom image has been defined and inject that into the sync-endpoints
         # which do fit for this strategy
         %w(rsync unison).each do |strategy|
@@ -89,7 +100,7 @@ module Docker_sync
     end
 
     def validate_sync_config(name, sync_config)
-      config_mandatory = %w[src dest]
+      config_mandatory = %w[src]
       config_mandatory.push('sync_host_port') if sync_config['sync_strategy'] == 'rsync' #TODO: Implement autodisovery for other strategies
       config_mandatory.each do |key|
         raise ("#{name} does not have #{key} configuration value set - this is mandatory") unless sync_config.key?(key)

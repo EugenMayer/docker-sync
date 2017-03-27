@@ -12,16 +12,20 @@ class Sync < Thor
   class_option :sync_name, :aliases => '-n',:type => :string, :desc => 'If given, only this sync configuration will be references/started/synced'
   class_option :version, :aliases => '-v',:type => :boolean, :default => false, :desc => 'prints out the version of docker-sync and exits'
 
+  desc '--version, -v', 'Prints out the version of docker-sync and exits'
+  def print_version
+    puts UpgradeChecker.get_current_version
+    exit(0)
+  end
+  map %w[--version -v] => :print_version
+
   desc 'start', 'Start all sync configurations in this project'
   method_option :daemon, :aliases => '-d', :default => false, :type => :boolean, :desc => 'Run in the background'
   method_option :app_name, :aliases => '--name', :default => 'daemon', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
   method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
   method_option :logd, :aliases => '--logd', :default => true, :type => :boolean, :desc => 'To log OUPUT to file on Daemon or not'
   def start
-    if options[:version]
-      puts UpgradeChecker.get_current_version
-      exit(0)
-    end
+    print_version if options[:version]
     # do run update check in the start command only
     UpdateChecker.new().run
     UpgradeChecker.new().run
@@ -46,10 +50,7 @@ class Sync < Thor
   method_option :app_name, :aliases => '--name', :default => 'daemon', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
   method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
   def stop
-    if options[:version]
-      puts UpgradeChecker.get_current_version
-      exit(0)
-    end
+    print_version if options[:version]
 
     config_path = config_preconditions
     sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
@@ -68,10 +69,7 @@ class Sync < Thor
 
   desc 'sync', 'just sync - do not start a watcher though'
   def sync
-    if options[:version]
-      puts UpgradeChecker.get_current_version
-      exit(0)
-    end
+    print_version if options[:version]
 
     config_path = config_preconditions # Preconditions and Define config_path from shared method
 
@@ -81,10 +79,7 @@ class Sync < Thor
 
   desc 'clean', 'Stop and clean up all sync endpoints'
   def clean
-    if options[:version]
-      puts UpgradeChecker.get_current_version
-      exit(0)
-    end
+    print_version if options[:version]
 
     config_path = config_preconditions # Preconditions and Define config_path from shared method
 
@@ -93,7 +88,7 @@ class Sync < Thor
     files = Dir[File.join(dir, '*.pid')]
     files.each do |pid_file|
       pid = File.read(pid_file).to_i
-      Process.kill(:INT, -(Process.getpgid(pid)))
+      Process.kill(:INT, -(Process.getpgid(pid))) if Daemons::Pid.running?(pid)
       say_status 'shutdown', 'Background dsync has been stopped'
     end
     # Remove the .docker-sync directory
@@ -104,14 +99,14 @@ class Sync < Thor
     say_status 'success', 'Finished cleanup. Removed stopped, removed sync container and removed their volumes', :green
   end
 
-  desc 'log', 'Prints last 100 lines of daemon log. Only for use with docker-sync started in background.'
+  desc 'logs', 'Prints last 100 lines of daemon log. Only for use with docker-sync started in background.'
   method_option :lines, :aliases => '--lines', :default => 100, :type => :numeric, :desc => 'Specify number of lines to tail'
   method_option :follow, :aliases => '-f', :default => false, :type => :boolean, :desc => 'Specify if the logs should be streamed'
-  def log
-    if options[:version]
-      puts UpgradeChecker.get_current_version
-      exit(0)
-    end
+  method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
+  method_option :logd, :aliases => '--logd', :default => true, :type => :boolean, :desc => 'To log OUPUT to file on Daemon or not'
+  method_option :app_name, :aliases => '--name', :default => 'daemon', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
+  def logs
+    print_version if options[:version]
 
     print_daemon_logs
   end
@@ -119,10 +114,7 @@ class Sync < Thor
   desc 'list', 'List all sync-points of the project configuration path'
   method_option :verbose, :default => false, :type => :boolean, :desc => 'Verbose output'
   def list
-    if options[:version]
-      puts UpgradeChecker.get_current_version
-      exit(0)
-    end
+    print_version if options[:version]
 
     config_path = config_preconditions # Preconditions and Define config_path from shared method
 
@@ -160,7 +152,7 @@ class Sync < Thor
 
       # Check to see if we're already running:
       if daemon_running?
-        say_status 'error', "docker-sync already started for this configuration", :red
+        say_status 'warning', 'docker-sync already started for this configuration', :yellow
         exit 1
       end
 
@@ -197,7 +189,6 @@ class Sync < Thor
 
     def daemon_running?
       pid_file = Daemons::PidFile.find_files(options['dir'], options['app_name']).first || ''
-
       File.file?(pid_file) && Daemons::Pid.running?(File.read(pid_file).to_i)
     end
   end
