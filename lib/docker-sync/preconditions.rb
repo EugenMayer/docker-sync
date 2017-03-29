@@ -1,12 +1,11 @@
 require 'mkmf'
+require 'rbconfig'
 
 module Preconditions
   def self.check_all_preconditions
     docker_available
     docker_running
-    unison_available
-    unox_available
-    macfsevents_available
+    check_all_unison_preconditions
   end
 
   def self.docker_available
@@ -19,6 +18,19 @@ module Preconditions
     `docker ps`
     if $?.exitstatus > 0
       raise('No docker daemon seems to be running. Did you start your docker-for-mac / docker-machine?')
+    end
+  end
+
+  def self.check_all_unison_preconditions
+    if RbConfig::CONFIG['host_os'] =~ /darwin|mac os/
+      unison_available
+      unox_available
+      macfsevents_available
+    else
+      Thor::Shell::Basic.new.say_status 'warning',
+        "You're running docker-sync under non-osx environment! "\
+        "Please make sure that you've installed unison, and unison-fsmonitor",
+        :red
     end
   end
 
