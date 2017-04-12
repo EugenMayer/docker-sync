@@ -6,7 +6,7 @@ module Preconditions
     docker_running
     unison_available
     unox_available
-    macfsevents_available
+    watchdog_available
   end
 
   def self.docker_available
@@ -61,37 +61,37 @@ module Preconditions
 
   end
 
-  def self.macfsevents_available
-    `python -c 'import fsevents'`
+  def self.watchdog_available
+    `python -c 'from watchdog.observers import Observer'`
     unless $?.success?
-      Thor::Shell::Basic.new.say_status 'warning','Could not find macfsevents. Will try to install it using pip', :red
+      Thor::Shell::Basic.new.say_status 'warning','Could not find watchdog. Will try to install it using pip', :red
       if find_executable0('python') == '/usr/bin/python'
         Thor::Shell::Basic.new.say_status 'ok','You seem to use the system python, we will need sudo below'
         sudo = true
-        cmd2 = 'sudo easy_install pip && sudo pip install macfsevents'
+        cmd2 = 'sudo easy_install pip && sudo pip install watchdog'
       else
         Thor::Shell::Basic.new.say_status 'ok','You seem to have a custom python, using non-sudo commands'
         sudo = false
-        cmd2 = 'easy_install pip && pip install macfsevents'
+        cmd2 = 'easy_install pip && pip install watchdog'
       end
       if sudo
         question = 'I will ask you for you root password to install macfsevent by running (This will ask for sudo, since we use the system python)'
       else
-        question = 'I will now install macfsevents for you by running'
+        question = 'I will now install watchdog for you by running'
       end
 
       Thor::Shell::Basic.new.say_status 'info', "#{question}: `#{cmd2}\n\n"
       if Thor::Shell::Basic.new.yes?('Shall i continue? (y/N)')
         system cmd2
         if $?.exitstatus > 0
-          raise('Failed to install macfsevents, please file an issue with the output of the error')
+          raise('Failed to install watchdog, please file an issue with the output of the error')
         end
         `python -c 'import fsevents'`
         unless $?.success?
-          raise('Somehow could not successfully install macfsevents even though i treed. Please report this issue')
+          raise('Somehow could not successfully install watchdog even though i treed. Please report this issue')
         end
       else
-        raise('Please install macfsevents manually, see https://github.com/EugenMayer/docker-sync/wiki/1.-Installation')
+        raise('Please install watchdog manually, see https://github.com/EugenMayer/docker-sync/wiki/1.-Installation')
       end
     end
 

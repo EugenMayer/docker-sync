@@ -28,7 +28,7 @@ module Docker_Sync
         begin
           Preconditions::unison_available
           Preconditions::unox_available
-          Preconditions::macfsevents_available
+          Preconditions::watchdog_available
         rescue Exception => e
           say_status 'error', "#{@sync_name} has been configured to sync with unison, but no unison available", :red
           say_status 'error', e.message, :red
