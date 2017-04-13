@@ -61,9 +61,8 @@ class Sync < Thor
       say_status 'shutdown', 'Background dsync has been stopped'
     rescue Errno::ESRCH, Errno::ENOENT => e
       say_status 'error', e.message, :red # Rescue incase PIDFILE does not exist or there is no process with such PID
-      say_status(
-        'error', 'Check if your PIDFILE and process with such PID exists', :red
-      )
+      say_status 'error', 'Check if your PIDFILE and process with such PID exists', :red
+      exit(69) # EX_UNAVAILABLE (see `man sysexits` or `/usr/include/sysexits.h`)
     end
   end
 
