@@ -195,8 +195,8 @@ class Sync < Thor
     end
 
     def wait_for_process_termination(pid, retries = 30)
-      sleep 1
       Process.getpgid(pid)
+      sleep 1
       wait_for_process_termination(pid, retries - 1) if retries > 0
     rescue Errno::ESRCH
       # `pid` is dead, let's get outta this recursion
