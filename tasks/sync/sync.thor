@@ -8,8 +8,6 @@ require 'fileutils'
 
 class Sync < Thor
 
-  TERMINATION_MAX_WAIT = 30
-
   class_option :config, :aliases => '-c',:default => nil, :type => :string, :desc => 'Path of the docker_sync config'
   class_option :sync_name, :aliases => '-n',:type => :string, :desc => 'If given, only this sync configuration will be references/started/synced'
   class_option :version, :aliases => '-v',:type => :boolean, :default => false, :desc => 'prints out the version of docker-sync and exits'
@@ -60,7 +58,9 @@ class Sync < Thor
     begin
       pid = File.read("#{options['dir']}/#{options['app_name']}.pid") # Read PID from PIDFILE created by Daemons
       Process.kill(:INT, -(Process.getpgid(pid.to_i))) # Send INT signal to group PID, which means INT will be sent to all sub-processes and Threads spawned by docker-sync
+      say_status 'shutdown', 'Waiting for background docker-sync to terminate'
       wait_for_process_termination(pid.to_i)
+      say_status 'shutdown', 'Background docker-sync has been stopped'
     rescue Errno::ESRCH, Errno::ENOENT => e
       say_status 'error', e.message, :red # Rescue incase PIDFILE does not exist or there is no process with such PID
       say_status(
@@ -194,13 +194,12 @@ class Sync < Thor
       File.file?(pid_file) && Daemons::Pid.running?(File.read(pid_file).to_i)
     end
 
-    def wait_for_process_termination(pid, retries = TERMINATION_MAX_WAIT)
-      say_status 'shutdown', 'Waiting for background docker-sync to terminate' if retries == TERMINATION_MAX_WAIT
+    def wait_for_process_termination(pid, retries = 30)
       sleep 1
       Process.getpgid(pid)
-      wait_for_process_termination(pid, retries - 1) unless retries <= 0
+      wait_for_process_termination(pid, retries - 1) if retries > 0
     rescue Errno::ESRCH
-      say_status 'shutdown', 'Background docker-sync has been stopped'
+      # `pid` is dead, let's get outta this recursion
     end
   end
 end
