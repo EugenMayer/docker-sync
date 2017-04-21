@@ -1,0 +1,13 @@
+# https://github.com/EugenMayer/docker-sync-boilerplate/blob/master/unison/docker-sync.yml
+
+version: "2"
+
+options:
+  verbose: true
+syncs:
+  #IMPORTANT: ensure this name is unique and does not match your other application container name
+  appcode-unison-sync: # tip: add -sync and you keep consistent names als a convention
+    src: './app'
+    dest: '/var/www'
+    sync_excludes: ['ignored_folder', '.ignored_dot_folder']
+    sync_strategy: 'unison'

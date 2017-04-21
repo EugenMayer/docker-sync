@@ -6,7 +6,6 @@ require 'docker-sync/execution'
 require 'yaml'
 require 'dotenv'
 require 'docker-sync/config_template'
-require 'docker-sync/config'
 
 module Docker_sync
   class SyncManager
@@ -17,8 +16,6 @@ module Docker_sync
     @config_path
 
     def initialize(options)
-      DockerSyncConfig.load_dotenv
-
       @sync_processes = []
       @config_syncs = []
       @config_global = []
@@ -33,7 +30,7 @@ module Docker_sync
       end
       return File.read(@config_path)
     end
-    
+
     def load_configuration
       # try to interpolate supplied inline config string, alternatively load the configuration file
       config = ConfigTemplate::interpolate_config_string(@config_string || load_configuration_file())

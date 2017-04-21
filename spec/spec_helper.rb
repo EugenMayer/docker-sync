@@ -103,3 +103,7 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
 end
+
+Dir[File.join(__dir__, 'helpers', '**', '*.rb')].each do |helper|
+  require helper
+end
