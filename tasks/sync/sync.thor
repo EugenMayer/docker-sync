@@ -129,14 +129,9 @@ class Sync < Thor
   no_tasks do
     def config_preconditions # Moved shared preconditions block into separate method to have less/cleaner code
       begin
-        Preconditions::check_all_preconditions
-      rescue Exception => e
-        say_status 'error', e.message, :red
-        exit 1
-      end
-
-      begin
-        DockerSync::ProjectConfig.new(config_path: options[:config])
+        DockerSync::ProjectConfig.new(config_path: options[:config]).tap do |config|
+          Preconditions::check_all_preconditions(config)
+        end
       rescue Exception => e
         say_status 'error', e.message, :red
         exit 1

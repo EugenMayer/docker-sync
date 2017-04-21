@@ -221,4 +221,10 @@ describe DockerSync::ProjectConfig do
       end
     end
   end
+
+  describe '#unison_required?' do
+    it do use_fixture 'simplest' do is_expected.to be_unison_required end end
+    it do use_fixture 'rsync' do is_expected.not_to be_unison_required end end
+    it do use_fixture 'unison' do is_expected.to be_unison_required end end
+  end
 end

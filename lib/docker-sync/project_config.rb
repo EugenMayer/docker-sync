@@ -33,6 +33,12 @@ module DockerSync
       normalize_config!
     end
 
+    def unison_required?
+      config['syncs'].any? { |name, sync_config|
+        sync_config['sync_strategy'] == 'unison' || sync_config['watch_strategy'] == 'unison'
+      }
+    end
+
     private
 
       def validate_config!

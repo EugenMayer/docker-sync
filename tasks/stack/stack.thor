@@ -27,17 +27,11 @@ class Stack < Thor
     upgrades.run
 
     begin
-      Preconditions::check_all_preconditions
-    rescue Exception => e
-      say_status 'error', e.message, :red
-      exit 1
-    end
-
-    begin
       config = DockerSync::ProjectConfig.new(config_path: options[:config])
+      Preconditions::check_all_preconditions(config)
     rescue Exception => e
       say_status 'error', e.message, :red
-      return
+      exit(1)
     end
 
     say_status 'note:', 'You can also run docker-sync in the background with docker-sync --daemon'
@@ -74,17 +68,11 @@ class Stack < Thor
     end
 
     begin
-      Preconditions::check_all_preconditions
-    rescue Exception => e
-      say_status 'error', e.message, :red
-      exit 1
-    end
-
-    begin
       config = DockerSync::ProjectConfig.new(config_path: options[:config])
+      Preconditions::check_all_preconditions(config)
     rescue Exception => e
       say_status 'error', e.message, :red
-      return
+      exit(1)
     end
 
     @sync_manager = Docker_sync::SyncManager.new(config: config)
