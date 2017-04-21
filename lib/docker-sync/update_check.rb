@@ -8,7 +8,7 @@ class UpdateChecker
   @newer_image_found
 
   def initialize
-    @config = DockerSyncConfig::global_config
+    @config = DockerSync::GlobalConfig.load
     @newer_image_found = false
   end
 
@@ -22,7 +22,7 @@ class UpdateChecker
     end
 
     # do not check the image if its the first run - since this it will be downloaded anyway
-    unless DockerSyncConfig::is_first_run
+    unless @config.first_run?
       check_rsync_image
       check_unison_image
 
@@ -86,10 +86,7 @@ class UpdateChecker
 
   def check_and_warn(update_enforced = true)
     # update the timestamp
-    now = DateTime.now
-    @config['update_last_check'] = now.iso8601(9)
-
-    DockerSyncConfig::global_config_save(@config)
+    @config.update! 'update_last_check' => DateTime.now.iso8601(9)
 
     check = docker_sync_update_check
     if check.update_available

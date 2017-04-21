@@ -16,35 +16,6 @@ module DockerSyncConfig
     Dotenv.load(env_file)
   end
 
-  def self.global_config_location
-    return File.expand_path('~/.docker-sync-global.yml')
-  end
-
-  def self.is_first_run
-    global_config_path = global_config_location
-    return !File.exist?(global_config_path)
-  end
-
-  def self.global_config
-    global_config_path = global_config_location
-    date = DateTime.new(2001, 1, 1) #paste
-    # noinspection RubyStringKeysInHashInspection
-    defaults = {'update_check'=>true, 'update_last_check' => date.iso8601(9), 'update_enforce' => true}
-    if File.exist?(global_config_path)
-      config = ConfigTemplate::interpolate_config_file(global_config_path)
-      config = defaults.merge(config)
-      return config
-    else
-      return defaults
-    end
-  end
-
-  def self.global_config_save(config)
-    global_config_path = global_config_location
-    File.open(global_config_path, 'w') {|f| f.write config.to_yaml }
-  end
-
-
   def self.project_required_config_version
     return '2'
   end

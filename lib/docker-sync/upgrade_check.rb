@@ -6,7 +6,7 @@ class UpgradeChecker
   include Thor::Shell
   @config
   def initialize
-    @config = DockerSyncConfig::global_config
+    @config = DockerSync::GlobalConfig.load
   end
 
   def run
@@ -17,7 +17,7 @@ class UpgradeChecker
   end
 
   def last_upgraded_version
-    @config['upgrade_status'] || ''
+    @config['upgrade_status']
   end
 
   def should_run
@@ -61,7 +61,6 @@ class UpgradeChecker
 
 
     # update the upgrade_status
-    @config['upgrade_status'] = "#{UpgradeChecker.get_current_version}"
-    DockerSyncConfig::global_config_save(@config)
+    @config.update! 'upgrade_status' => "#{UpgradeChecker.get_current_version}"
   end
 end
