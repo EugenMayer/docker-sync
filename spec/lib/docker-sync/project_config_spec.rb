@@ -10,7 +10,9 @@ describe DockerSync::ProjectConfig do
             'syncs' => {
               'simplest-sync' => {
                 'src' => './app',
-                'dest' => '/var/www'
+                'dest' => '/var/www',
+                'sync_strategy' => 'unison',
+                'watch_strategy' => 'unison'
               }
             }
           })
@@ -32,7 +34,8 @@ describe DockerSync::ProjectConfig do
                 'dest' => '/var/www',
                 'sync_host_ip' => 'localhost',
                 'sync_host_port' => 10872,
-                'sync_strategy' => 'rsync'
+                'sync_strategy' => 'rsync',
+                'watch_strategy' => 'fswatch'
               }
             }
           })
@@ -51,7 +54,24 @@ describe DockerSync::ProjectConfig do
                 'src' => './app',
                 'dest' => '/var/www',
                 'sync_excludes' => ['ignored_folder', '.ignored_dot_folder'],
-                'sync_strategy' => 'unison'
+                'sync_strategy' => 'unison',
+                'watch_strategy' => 'unison'
+              }
+            }
+          })
+        end
+      end
+
+      it 'loads dummy config' do
+        use_fixture 'dummy' do
+          expect(subject.to_h).to eql({
+            'version' => '2',
+            'syncs' => {
+              'appcode-dummy-sync' => {
+                'src' => './app',
+                'dest' => '/var/www',
+                'sync_strategy' => 'unison',
+                'watch_strategy' => 'dummy'
               }
             }
           })
@@ -67,7 +87,9 @@ describe DockerSync::ProjectConfig do
             'syncs' => {
               'simplest-sync' => {
                 'src' => './app',
-                'dest' => '/var/www'
+                'dest' => '/var/www',
+                'sync_strategy' => 'unison',
+                'watch_strategy' => 'unison'
               }
             }
           })
@@ -87,7 +109,9 @@ describe DockerSync::ProjectConfig do
             'syncs' => {
               'simplest-sync' => {
                 'src' => './app',
-                'dest' => '/var/www'
+                'dest' => '/var/www',
+                'sync_strategy' => 'unison',
+                'watch_strategy' => 'unison'
               }
             }
           })
@@ -126,7 +150,9 @@ describe DockerSync::ProjectConfig do
           'syncs' => {
             'config-string-sync' => {
               'src' => './foo',
-              'dest' => '/foo/bar'
+              'dest' => '/foo/bar',
+              'sync_strategy' => 'unison',
+              'watch_strategy' => 'unison'
             }
           }
         })
@@ -145,7 +171,9 @@ describe DockerSync::ProjectConfig do
               'docker-boilerplate-unison-sync' => {
                 'src' => './app',
                 'dest' => '/var/www',
-                'sync_excludes' => ['ignored_folder', '.ignored_dot_folder' ]
+                'sync_excludes' => ['ignored_folder', '.ignored_dot_folder' ],
+                'sync_strategy' => 'unison',
+                'watch_strategy' => 'unison'
               }
             }
           })

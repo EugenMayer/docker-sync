@@ -30,6 +30,7 @@ module DockerSync
       end
 
       validate_config!
+      normalize_config!
     end
 
     private
@@ -60,6 +61,40 @@ module DockerSync
 
       def error_missing_given_config
         "Config could not be loaded from #{config_path} - it does not exist"
+      end
+
+      def normalize_config!
+        config['syncs'].each do |name, sync_config|
+          config['syncs'][name] = normalize_sync_config(sync_config)
+        end
+      end
+
+      def normalize_sync_config(sync_config)
+        {
+          'sync_strategy' => sync_strategy_for(sync_config),
+          'watch_strategy' => watch_strategy_for(sync_config)
+        }.merge(sync_config)
+      end
+
+      def sync_strategy_for(sync_config)
+        case sync_config['sync_strategy']
+        when 'rsync' then 'rsync'
+        else 'unison'
+        end
+      end
+
+      def watch_strategy_for(sync_config)
+        if sync_config.key?('watch_strategy')
+          case sync_config['watch_strategy']
+          when 'fswatch' then 'fswatch'
+          when 'disable','dummy' then 'dummy'
+          else 'unison'
+          end
+        elsif sync_config['sync_strategy'] == 'rsync'
+          'fswatch'
+        else
+          'unison'
+        end
       end
 
   end
