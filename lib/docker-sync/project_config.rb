@@ -14,6 +14,8 @@ module DockerSync
       'Your docker-sync.yml file does not match the required version '\
       "(#{REQUIRED_CONFIG_VERSION}).".freeze
 
+    ERROR_MISSING_SYNCS = 'no syncs defined'.freeze
+
     attr_reader :config, :config_path
     private :config
 
@@ -36,6 +38,24 @@ module DockerSync
         raise error_missing_given_config if config.nil?
         raise ERROR_MISSING_CONFIG_VERSION unless config.key?('version')
         raise ERROR_MISMATCH_CONFIG_VERSION unless config['version'].to_s == REQUIRED_CONFIG_VERSION
+        raise ERROR_MISSING_SYNCS unless config.key?('syncs')
+
+        validate_syncs_config!
+      end
+
+      def validate_syncs_config!
+        config['syncs'].each do |name, sync_config|
+          validate_sync_config(name, sync_config)
+        end
+      end
+
+      def validate_sync_config(name, sync_config)
+        config_mandatory = %w[src]
+        #TODO: Implement autodisovery for other strategies
+        config_mandatory.push('sync_host_port') if sync_config['sync_strategy'] == 'rsync'
+        config_mandatory.each do |key|
+          raise ("#{name} does not have #{key} configuration value set - this is mandatory") unless sync_config.key?(key)
+        end
       end
 
       def error_missing_given_config

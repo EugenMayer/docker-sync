@@ -165,6 +165,32 @@ describe DockerSync::ProjectConfig do
           expect { subject }.to raise_error(DockerSync::ProjectConfig::ERROR_MISMATCH_CONFIG_VERSION)
         end
       end
+
+      it 'raise ERROR_MISSING_SYNCS if no syncs defined' do
+        use_fixture 'missing_syncs' do
+          expect { subject }.to raise_error(DockerSync::ProjectConfig::ERROR_MISSING_SYNCS)
+        end
+      end
+
+      it 'raise if sync config is missing src' do
+        use_fixture 'missing_syncs_src' do
+          expect {
+            subject
+          }.to raise_error(
+            'missing-syncs-src-sync does not have src configuration value set - this is mandatory'
+          )
+        end
+      end
+
+      it 'raise if sync config is missing sync_host_port when sync_strategy is rsync' do
+        use_fixture 'missing_syncs_sync_host_port' do
+          expect {
+            subject
+          }.to raise_error(
+            'missing-syncs-sync_host_port-sync does not have sync_host_port configuration value set - this is mandatory'
+          )
+        end
+      end
     end
   end
 end

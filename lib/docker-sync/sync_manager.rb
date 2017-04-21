@@ -3,9 +3,6 @@ require 'thor/shell'
 require 'docker-sync/sync_process'
 # noinspection RubyResolve
 require 'docker-sync/execution'
-require 'yaml'
-require 'dotenv'
-require 'docker-sync/config_template'
 
 module Docker_sync
   class SyncManager
@@ -17,28 +14,8 @@ module Docker_sync
 
     def initialize(options)
       @sync_processes = []
-      @config_syncs = []
-      @config_global = []
-      @config_string = options[:config_string]
-      @config_path = options[:config_path]
-      load_configuration
-    end
 
-    def load_configuration_file
-      unless File.exist?(@config_path)
-        raise "Config could not be loaded from #{@config_path} - it does not exist"
-      end
-      return File.read(@config_path)
-    end
-
-    def load_configuration
-      # try to interpolate supplied inline config string, alternatively load the configuration file
-      config = ConfigTemplate::interpolate_config_string(@config_string || load_configuration_file())
-
-      validate_config(config)
-      @config_global = config['options'] || {}
-      @config_syncs = config['syncs']
-      upgrade_syncs_config
+      load_configuration(options)
     end
 
     def global_options
@@ -81,26 +58,6 @@ module Docker_sync
             @config_syncs[name]['image'] = config["#{strategy}_image"]
           end
         end
-      end
-    end
-
-    def validate_config(config)
-      unless config.key?('syncs')
-        raise ('no syncs defined')
-      end
-
-      config['syncs'].each do |name, sync_config|
-        validate_sync_config(name, sync_config)
-      end
-
-      return true
-    end
-
-    def validate_sync_config(name, sync_config)
-      config_mandatory = %w[src]
-      config_mandatory.push('sync_host_port') if sync_config['sync_strategy'] == 'rsync' #TODO: Implement autodisovery for other strategies
-      config_mandatory.each do |key|
-        raise ("#{name} does not have #{key} configuration value set - this is mandatory") unless sync_config.key?(key)
       end
     end
 
@@ -196,5 +153,20 @@ module Docker_sync
         sync_process.watch
       }
     end
+
+    private
+
+      def load_configuration(options)
+        config = options[:config] ||
+          DockerSync::ProjectConfig.new(
+            config_path: options[:config_path],
+            config_string: options[:config_string]
+          )
+
+        @config_global = config['options'] || {}
+        @config_syncs = config['syncs']
+        upgrade_syncs_config
+      end
+
   end
 end
