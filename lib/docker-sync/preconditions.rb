@@ -1,13 +1,16 @@
 require 'mkmf'
 
 module Preconditions
-  def self.check_all_preconditions
+  def self.check_all_preconditions(config)
     docker_available
     docker_running
-    unison_available
-    unox_available
-    macfsevents_available
-    watchdog_available
+
+    if config.unison_required?
+      unison_available
+      unox_available
+      macfsevents_available
+      watchdog_available
+    end
   end
 
   def self.docker_available

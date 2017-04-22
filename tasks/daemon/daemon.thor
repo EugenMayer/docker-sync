@@ -1,5 +1,5 @@
+require 'docker-sync'
 require 'docker-sync/sync_manager'
-require 'docker-sync/config'
 require 'docker-sync/preconditions'
 require 'docker-sync/update_check'
 require 'docker-sync/upgrade_check'

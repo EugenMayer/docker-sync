@@ -1,0 +1,9 @@
+# https://github.com/EugenMayer/docker-sync-boilerplate/blob/master/simplest/docker-sync.yml
+
+version: "2"
+
+syncs:
+  #IMPORTANT: ensure this name is unique and does not match your other application container name
+  simplest-sync: #tip: add -sync and you keep consistent names als a convention
+    src: './app'
+    dest: '/var/www'
