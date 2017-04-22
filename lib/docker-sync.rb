@@ -1,4 +1,4 @@
-require 'docker-sync/config_locator'
-require 'docker-sync/global_config'
-require 'docker-sync/project_config'
+require 'docker-sync/config/config_locator'
+require 'docker-sync/config/global_config'
+require 'docker-sync/config/project_config'
 require 'docker-sync/preconditions'

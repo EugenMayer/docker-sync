@@ -1,5 +1,6 @@
 require 'gem_update_checker'
 require 'thor/actions'
+require 'docker-sync/config/global_config'
 
 class UpgradeChecker
   include Thor::Shell

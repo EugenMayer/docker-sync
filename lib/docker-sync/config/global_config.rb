@@ -1,6 +1,8 @@
 require 'singleton'
-require 'docker-sync/config_locator'
-require 'docker-sync/config_serializer'
+require 'forwardable'
+
+require 'docker-sync/config/config_locator'
+require 'docker-sync/config/config_serializer'
 
 module DockerSync
   class GlobalConfig

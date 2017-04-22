@@ -1,3 +1,5 @@
+require 'docker-sync/config/project_config'
+
 describe DockerSync::ProjectConfig do
   subject { described_class.new }
 

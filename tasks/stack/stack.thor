@@ -5,6 +5,7 @@ require 'docker-sync/update_check'
 require 'docker-sync/upgrade_check'
 require 'docker/compose'
 require 'docker-sync/compose'
+require 'docker-sync/config/project_config'
 
 class Stack < Thor
   class_option :config, :aliases => '-c', :default => nil, :type => :string, :desc => 'Path of the docker_sync config'

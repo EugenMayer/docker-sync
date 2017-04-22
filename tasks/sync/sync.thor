@@ -5,6 +5,7 @@ require 'docker-sync/update_check'
 require 'docker-sync/upgrade_check'
 require 'daemons'
 require 'fileutils'
+require 'docker-sync/config/project_config'
 
 class Sync < Thor
 
