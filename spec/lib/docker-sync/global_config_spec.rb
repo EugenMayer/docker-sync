@@ -2,10 +2,10 @@ require 'securerandom'
 require 'tmpdir'
 
 describe DockerSync::GlobalConfig do
-  let(:global_config_path) { Pathname.new(Dir.tmpdir).join("#{SecureRandom.hex}.yml") }
+  let(:faked_global_config_path) { Pathname.new(Dir.tmpdir).join("#{SecureRandom.hex}.yml") }
 
   before do
-    stub_const('DockerSync::GlobalConfig::CONFIG_PATH', global_config_path)
+    DockerSync::ConfigLocator.global_config_path = faked_global_config_path
   end
 
   subject {
@@ -14,14 +14,14 @@ describe DockerSync::GlobalConfig do
   }
 
   describe '#load' do
-    it 'initialize with default value if global config file is missing' do
+    it 'initialize with default values if global config file is missing' do
       delete_global_config
 
       expect(subject.to_h).to eql(DockerSync::GlobalConfig::DEFAULTS)
     end
 
     it 'load existing configuration if global config file is found' do
-      config = { "foo" => "bar" }
+      config = {'foo' => 'bar'}
       stub_global_config(config)
 
       expect(subject.to_h).to eql(config)
@@ -42,23 +42,40 @@ describe DockerSync::GlobalConfig do
     end
   end
 
-  describe '#update!' do
+  describe '#update existing!' do
     it 'allows updating global config' do
-      config = { "foo" => "bar" }
+      config = {'foo' => 'bar'}
       stub_global_config(config)
 
-      subject.update! "baz" => 'bazmaru'
+      subject.update! 'baz' => 'bazmaru'
 
-      updated_config = DockerSync::ConfigLoader.load_config(global_config_path)
-      expect(updated_config).to eql("foo" => "bar", "baz" => "bazmaru")
+      updated_config = DockerSync::GlobalConfig.load
+      expect(updated_config.to_h).to eql('foo' => 'bar', 'baz' => 'bazmaru')
     end
   end
 
+
+  describe '#update from default' do
+    # we cannot put this into the upper update group since otherwise the modified config will be loaded
+    # due to the singleton we have in DockerSync::GlobalConfig
+    it 'allows updating from default configuration' do
+      delete_global_config
+      config = DockerSync::GlobalConfig.load
+      config.update! 'new' => 'value'
+
+      updated_config = DockerSync::GlobalConfig.load
+      puts updated_config.to_h
+
+      expect(updated_config.to_h).to include('new' => 'value')
+    end
+  end
+
+
   def delete_global_config
-    File.delete(global_config_path) if File.exist?(global_config_path)
+    File.delete(DockerSync::ConfigLocator.current_global_config_path) if File.exist?(DockerSync::ConfigLocator.current_global_config_path)
   end
 
   def stub_global_config(config = {})
-    File.open(global_config_path, 'w') {|f| f.write config.to_yaml }
+    File.open(DockerSync::ConfigLocator.current_global_config_path, 'w') {|f| f.write config.to_yaml }
   end
 end

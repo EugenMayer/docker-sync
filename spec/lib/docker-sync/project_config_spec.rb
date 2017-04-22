@@ -131,15 +131,16 @@ describe DockerSync::ProjectConfig do
 
     describe 'explicit config_string' do
       let(:config_string) {
-        <<~YAML
-        version: "2"
+        # not using squiggly heredoc since we want to support ruby < 2.3
+        <<-YAML
+version: "2"
 
-        syncs:
-          #IMPORTANT: ensure this name is unique and does not match your other application container name
-          config-string-sync: #tip: add -sync and you keep consistent names als a convention
-            src: './foo'
-            dest: '/foo/bar'
-        YAML
+syncs:
+  #IMPORTANT: ensure this name is unique and does not match your other application container name
+  config-string-sync: #tip: add -sync and you keep consistent names als a convention
+    src: './foo'
+    dest: '/foo/bar'
+  YAML
       }
 
       subject { described_class.new(config_string: config_string) }

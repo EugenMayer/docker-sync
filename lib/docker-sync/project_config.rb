@@ -1,4 +1,6 @@
 require 'singleton'
+require 'docker-sync/config_locator'
+require 'docker-sync/config_serializer'
 
 module DockerSync
   class ProjectConfig
@@ -22,15 +24,22 @@ module DockerSync
     def_delegators :@config, :[], :to_h
 
     def initialize(config_path: nil, config_string: nil)
-      if config_string
-        @config = DockerSync::ConfigLoader.interpolate_config_string(config_string)
+      if config_string.nil?
+        config_path = DockerSync::ConfigLocator.lookup_project_config_path if config_path.nil?
+        load_project_config(config_path)
       else
-        @config_path = config_path || DockerSync::ConfigLoader.lookup_project_config
-        @config = DockerSync::ConfigLoader.load_config(@config_path)
+        @config = DockerSync::ConfigSerializer.default_deserializer_string(config_string)
+        @config_path = nil
       end
 
       validate_config!
       normalize_config!
+    end
+
+    def load_project_config(config_path = nil)
+      @config_path = config_path
+      return unless File.exist?(@config_path)
+      @config = DockerSync::ConfigSerializer.default_deserializer_file(@config_path)
     end
 
     def unison_required?

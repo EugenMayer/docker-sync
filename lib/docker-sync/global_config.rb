@@ -1,11 +1,12 @@
 require 'singleton'
+require 'docker-sync/config_locator'
+require 'docker-sync/config_serializer'
 
 module DockerSync
   class GlobalConfig
     extend Forwardable
     include Singleton
 
-    CONFIG_PATH = File.expand_path('~/.docker-sync-global.yml')
     # noinspection RubyStringKeysInHashInspection
     DEFAULTS = {
       'update_check' => true,
@@ -22,7 +23,14 @@ module DockerSync
     def self.load; instance end
 
     def initialize
-      @config = DockerSync::ConfigLoader.load_config(CONFIG_PATH)
+      load_global_config
+    end
+
+    def load_global_config
+      @config_path = DockerSync::ConfigLocator.current_global_config_path
+      if File.exist?(@config_path)
+        @config = DockerSync::ConfigSerializer.default_deserializer_file(@config_path)
+      end
 
       unless @config
         @config = DEFAULTS.dup
@@ -34,10 +42,12 @@ module DockerSync
       @first_run
     end
 
+    # @param [Object] updates
+    # Updates and saves the configuration back to the file
     def update!(updates)
-      config.merge!(updates)
+      @config.merge!(updates)
 
-      File.open(CONFIG_PATH, 'w') {|f| f.write config.to_yaml }
+      File.open(@config_path, 'w') {|f| f.write @config.to_yaml }
     end
   end
 end
