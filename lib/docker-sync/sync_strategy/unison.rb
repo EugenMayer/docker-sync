@@ -217,7 +217,7 @@ module Docker_Sync
       end
 
       def stop_container
-        `docker ps | grep #{get_container_name} && docker stop #{get_container_name}`
+        `docker ps | grep #{get_container_name} && docker stop #{get_container_name} && docker wait #{get_container_name}`
       end
 
       def reset_container

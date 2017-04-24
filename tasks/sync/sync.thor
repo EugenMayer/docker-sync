@@ -6,6 +6,7 @@ require 'docker-sync/upgrade_check'
 require 'daemons'
 require 'fileutils'
 require 'docker-sync/config/project_config'
+require 'timeout'
 
 class Sync < Thor
 
@@ -59,7 +60,7 @@ class Sync < Thor
     begin
       pid = File.read("#{options['dir']}/#{options['app_name']}.pid") # Read PID from PIDFILE created by Daemons
       Process.kill(:INT, -(Process.getpgid(pid.to_i))) # Send INT signal to group PID, which means INT will be sent to all sub-processes and Threads spawned by docker-sync
-      say_status 'shutdown', 'Background dsync has been stopped'
+      wait_for_process_termination(pid.to_i)
     rescue Errno::ESRCH, Errno::ENOENT => e
       say_status 'error', e.message, :red # Rescue incase PIDFILE does not exist or there is no process with such PID
       say_status 'error', 'Check if your PIDFILE and process with such PID exists', :red
@@ -183,6 +184,30 @@ class Sync < Thor
     def daemon_running?
       pid_file = Daemons::PidFile.find_files(options['dir'], options['app_name']).first || ''
       File.file?(pid_file) && Daemons::Pid.running?(File.read(pid_file).to_i)
+    end
+
+    def wait_for_process_termination(pid)
+      print 'Waiting for background docker-sync to terminate'
+      Timeout::timeout(30) do
+        loop do
+          if process_dead?(pid)
+            puts
+            say_status 'shutdown', 'Background docker-sync has been stopped'
+            return
+          else
+            sleep 1
+            print '.'
+          end
+        end
+      end
+    rescue Timeout::Error
+      puts
+      say_status 'error', 'Background docker-sync daemon failed to stop within 30 seconds', :red
+      exit 70 # EX_SOFTWARE (according to `man sysexits`)
+    end
+
+    def process_dead?(pid)
+      !system("ps -p #{pid} > /dev/null")
     end
   end
 end
