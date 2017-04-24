@@ -1,6 +1,6 @@
 require 'docker-sync'
 require 'docker-sync/sync_manager'
-require 'docker-sync/preconditions'
+require 'docker-sync/preconditions/strategy'
 require 'docker-sync/update_check'
 require 'docker-sync/upgrade_check'
 require 'daemons'
@@ -29,8 +29,8 @@ class Sync < Thor
   def start
     print_version if options[:version]
     # do run update check in the start command only
-    UpdateChecker.new().run
-    UpgradeChecker.new().run
+    UpdateChecker.new.run
+    UpgradeChecker.new.run
 
     config = config_preconditions
     @sync_manager = Docker_sync::SyncManager.new(config: config)
@@ -132,7 +132,7 @@ class Sync < Thor
     def config_preconditions # Moved shared preconditions block into separate method to have less/cleaner code
       begin
         DockerSync::ProjectConfig.new(config_path: options[:config]).tap do |config|
-          Preconditions::check_all_preconditions(config)
+          DockerSync::Preconditions::Strategy.instance.check_all_preconditions(config)
         end
       rescue Exception => e
         say_status 'error', e.message, :red

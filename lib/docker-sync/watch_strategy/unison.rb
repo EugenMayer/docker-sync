@@ -1,6 +1,5 @@
 require 'thor/shell'
 require 'docker-sync/execution'
-require 'docker-sync/preconditions'
 require 'docker-sync/sync_strategy/unison'
 
 module Docker_Sync

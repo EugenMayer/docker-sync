@@ -1,5 +1,5 @@
 require 'thor/shell'
-require 'docker-sync/preconditions'
+require 'docker-sync/preconditions/strategy'
 require 'terminal-notifier'
 
 module Docker_Sync
@@ -22,9 +22,9 @@ module Docker_Sync
         end
 
         begin
-          Preconditions::rsync_available
+          DockerSync::Preconditions::Strategy.instance.rsync_available
         rescue Exception => e
-          say_status 'error', "#{@sync_name} has been configured to sync with rsync, but no rsync binary available", :red
+          say_status 'error', "#{@sync_name} has been configured to sync with rsync, but no rsync or fswatch binary available", :red
           say_status 'error', e.message, :red
           exit 1
         end

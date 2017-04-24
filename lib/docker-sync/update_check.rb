@@ -23,21 +23,27 @@ class UpdateChecker
 
     # do not check the image if its the first run - since this it will be downloaded anyway
     unless @config.first_run?
-      check_rsync_image
-      check_unison_image
-
-      # stop if there was an update
-      if @newer_image_found
-        say_status 'warning', 'One or more images have been updated. Please use "docker-sync clean" before you start docker-sync again', :red
-        exit 0
+      unless has_internet?
+        check_unison_image
+        check_rsync_image
+        # stop if there was an update
+        if @newer_image_found
+          say_status 'warning', 'One or more images have been updated. Please use "docker-sync clean" before you start docker-sync again', :red
+          exit 0
+        end
       end
-
     end
 
     check_and_warn(@config['update_enforce'])
   end
 
+  def has_internet?
+    `ping -c1 -t 1 8.8.8.8 &2>1 /dev/null`
+    return $?.success?
+  end
+
   def should_run
+    return false unless has_internet?
     now = DateTime.now
     last_check = DateTime.iso8601(@config['update_last_check'])
     check_after_days = 2

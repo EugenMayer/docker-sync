@@ -48,6 +48,13 @@ module DockerSync
       }
     end
 
+    def rsync_required?
+      config['syncs'].any? { |name, sync_config|
+        sync_config['sync_strategy'] == 'rsync'
+      }
+    end
+
+
     private
 
       def validate_config!

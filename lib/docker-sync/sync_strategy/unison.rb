@@ -1,5 +1,5 @@
 require 'thor/shell'
-require 'docker-sync/preconditions'
+require 'docker-sync/preconditions/strategy'
 require 'docker-sync/execution'
 require 'open3'
 require 'socket'
@@ -26,9 +26,7 @@ module Docker_Sync
           @docker_image = 'eugenmayer/unison'
         end
         begin
-          Preconditions::unison_available
-          Preconditions::unox_available
-          Preconditions::macfsevents_available
+          DockerSync::Preconditions::Strategy.instance.unison_available
         rescue Exception => e
           say_status 'error', "#{@sync_name} has been configured to sync with unison, but no unison available", :red
           say_status 'error', e.message, :red
