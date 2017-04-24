@@ -1,10 +1,11 @@
+require 'docker-sync'
 require 'docker-sync/sync_manager'
-require 'docker-sync/config'
 require 'docker-sync/preconditions'
 require 'docker-sync/update_check'
 require 'docker-sync/upgrade_check'
 require 'daemons'
 require 'fileutils'
+require 'docker-sync/config/project_config'
 require 'timeout'
 
 class Sync < Thor
@@ -31,8 +32,8 @@ class Sync < Thor
     UpdateChecker.new().run
     UpgradeChecker.new().run
 
-    config_path = config_preconditions # Preconditions and Define config_path from shared method
-    @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
+    config = config_preconditions
+    @sync_manager = Docker_sync::SyncManager.new(config: config)
 
     start_dir = Dir.pwd # Set start_dir variable to be equal to pre-daemonized folder, since daemonizing will change dir to '/'
     if options['daemon']
@@ -53,8 +54,8 @@ class Sync < Thor
   def stop
     print_version if options[:version]
 
-    config_path = config_preconditions
-    sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
+    config = config_preconditions
+    sync_manager = Docker_sync::SyncManager.new(config: config)
 
     begin
       pid = File.read("#{options['dir']}/#{options['app_name']}.pid") # Read PID from PIDFILE created by Daemons
@@ -62,9 +63,8 @@ class Sync < Thor
       wait_for_process_termination(pid.to_i)
     rescue Errno::ESRCH, Errno::ENOENT => e
       say_status 'error', e.message, :red # Rescue incase PIDFILE does not exist or there is no process with such PID
-      say_status(
-        'error', 'Check if your PIDFILE and process with such PID exists', :red
-      )
+      say_status 'error', 'Check if your PIDFILE and process with such PID exists', :red
+      exit(69) # EX_UNAVAILABLE (see `man sysexits` or `/usr/include/sysexits.h`)
     end
   end
 
@@ -72,9 +72,9 @@ class Sync < Thor
   def sync
     print_version if options[:version]
 
-    config_path = config_preconditions # Preconditions and Define config_path from shared method
+    config = config_preconditions
 
-    @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
+    @sync_manager = Docker_sync::SyncManager.new(config: config)
     @sync_manager.sync(options[:sync_name])
   end
 
@@ -82,7 +82,7 @@ class Sync < Thor
   def clean
     print_version if options[:version]
 
-    config_path = config_preconditions # Preconditions and Define config_path from shared method
+    config = config_preconditions
 
     # Look for any background syncs and stop them if we see them
     dir = './.docker-sync'
@@ -95,7 +95,7 @@ class Sync < Thor
     # Remove the .docker-sync directory
     FileUtils.rm_r dir if File.directory?(dir)
 
-    @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
+    @sync_manager = Docker_sync::SyncManager.new(config: config)
     @sync_manager.clean(options[:sync_name])
     say_status 'success', 'Finished cleanup. Removed stopped, removed sync container and removed their volumes', :green
   end
@@ -117,10 +117,10 @@ class Sync < Thor
   def list
     print_version if options[:version]
 
-    config_path = config_preconditions # Preconditions and Define config_path from shared method
+    config = config_preconditions
 
     say_status 'ok',"Found configuration at #{config_path}"
-    @sync_manager = Docker_sync::SyncManager.new(:config_path => config_path)
+    @sync_manager = Docker_sync::SyncManager.new(config: config)
     @sync_manager.get_sync_points.each do |name, config|
       say_status name, "On address #{config['sync_host_ip']}:#{config['sync_host_port']}",:white unless options['verbose']
       puts "\n---------------[#{name}] #{config['sync_host_ip']}:#{config['sync_host_port']} ---------------\n" if options['verbose']
@@ -131,16 +131,9 @@ class Sync < Thor
   no_tasks do
     def config_preconditions # Moved shared preconditions block into separate method to have less/cleaner code
       begin
-        Preconditions::check_all_preconditions
-      rescue Exception => e
-        say_status 'error', e.message, :red
-        exit 1
-      end
-
-      return options[:config] if options[:config]
-
-      begin
-        DockerSyncConfig::project_config_path
+        DockerSync::ProjectConfig.new(config_path: options[:config]).tap do |config|
+          Preconditions::check_all_preconditions(config)
+        end
       rescue Exception => e
         say_status 'error', e.message, :red
         exit 1
