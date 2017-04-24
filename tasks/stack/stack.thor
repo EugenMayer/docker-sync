@@ -1,6 +1,6 @@
 require 'docker-sync'
 require 'docker-sync/sync_manager'
-require 'docker-sync/preconditions'
+require 'docker-sync/preconditions/strategy'
 require 'docker-sync/update_check'
 require 'docker-sync/upgrade_check'
 require 'docker/compose'
@@ -29,7 +29,7 @@ class Stack < Thor
 
     begin
       config = DockerSync::ProjectConfig.new(config_path: options[:config])
-      Preconditions::check_all_preconditions(config)
+      DockerSync::Preconditions::Strategy.instance.check_all_preconditions(config)
     rescue Exception => e
       say_status 'error', e.message, :red
       exit(1)
@@ -70,7 +70,7 @@ class Stack < Thor
 
     begin
       config = DockerSync::ProjectConfig.new(config_path: options[:config])
-      Preconditions::check_all_preconditions(config)
+      DockerSync::Preconditions::Strategy.instance.check_all_preconditions(config)
     rescue Exception => e
       say_status 'error', e.message, :red
       exit(1)

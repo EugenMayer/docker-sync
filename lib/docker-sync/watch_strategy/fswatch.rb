@@ -1,6 +1,6 @@
 require 'thor/shell'
 require 'docker-sync/execution'
-require 'docker-sync/preconditions'
+require 'docker-sync/preconditions/strategy'
 require 'pathname'
 
 module Docker_Sync
@@ -19,7 +19,7 @@ module Docker_Sync
         @events_to_watch = %w(AttributeModified Created Link MovedFrom MovedTo Renamed Removed Updated)
 
         begin
-          Preconditions::fswatch_available
+          DockerSync::Preconditions::Strategy.instance.fswatch_available
         rescue Exception => e
           say_status 'error', e.message, :red
           exit 1

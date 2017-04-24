@@ -23,7 +23,12 @@ class UpgradeChecker
   def should_run
     # get the update_status which is the version of the update hook which has been run already
     upgrade_status = last_upgraded_version
-    if upgrade_status == '' || Gem::Version.new(upgrade_status) < Gem::Version.new(UpgradeChecker.get_current_version) # thats how we compare the version
+    if upgrade_status == ''
+      @config.update! 'upgrade_status' => "#{UpgradeChecker.get_current_version}"
+      return
+    end
+
+    if Gem::Version.new(upgrade_status) < Gem::Version.new(UpgradeChecker.get_current_version) # thats how we compare the version
       return true
     end
 
@@ -55,6 +60,20 @@ class UpgradeChecker
     if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.2.0')
       Thor::Shell::Basic.new.say_status 'warning', "A lot changed with 0.2.x! Unison is the default sync, unison-onesided has been REMOVED. If you have been using rsync, have been using unison excludes or you are not sure, please read the upgrade guide or your setup will go lala! : \n\n_Please_ read :): https://github.com/EugenMayer/docker-sync/wiki/1.2-Upgrade-Guide\n\n", :red
       unless Thor::Shell::Basic.new.yes?('Shall we continue - DID you read it? (y/N)')
+        exit 1
+      end
+    end
+
+    if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.3.0')
+      Thor::Shell::Basic.new.say_status 'warning', "The installation progress of docker-sync 0.3.0 has changed, brew is now mandatory - you need to uninstall docker-sync/unox/unison ! : \n\n_Please_ read :): https://github.com/EugenMayer/docker-sync/wiki/1.3-Upgrade-Guide\n\n", :red
+
+      cmd1 = 'rm -f /usr/loca/bin/unison-fsmonitor && gem uninstall docker-sync && brew tap eugenmayer/dockersync && brew install eugenmayer/dockersync/dockersync"'
+      Thor::Shell::Basic.new.say_status 'ok', "The installation progress of docker-sync 0.3.0 has changed, brew is now mandatory - you need to uninstall docker-sync/unox/unison ! : \n\n_Please_ read :): https://github.com/EugenMayer/docker-sync/wiki/1.3-Upgrade-Guide\n\n", :rwhite
+
+      if Thor::Shell::Basic.new.yes?('I will install reinstall docker-sync for you using the above command (y/N)')
+        system cmd1
+      else
+        raise('Please reinstall docker-sync yourself')
         exit 1
       end
     end

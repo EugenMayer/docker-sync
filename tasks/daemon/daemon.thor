@@ -1,6 +1,6 @@
 require 'docker-sync'
 require 'docker-sync/sync_manager'
-require 'docker-sync/preconditions'
+require 'docker-sync/preconditions/strategy'
 require 'docker-sync/update_check'
 require 'docker-sync/upgrade_check'
 require 'daemons'
