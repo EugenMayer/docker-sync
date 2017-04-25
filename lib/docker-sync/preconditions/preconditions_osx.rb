@@ -42,7 +42,7 @@ module DockerSync
       def unison_available
         if should_run_precondition?
           if (find_executable0 'unison').nil?
-            cmd1 = 'brew install unison"'
+            cmd1 = 'brew install unison'
 
             Thor::Shell::Basic.new.say_status 'warning', 'Could not find unison binary in $PATH. Trying to install now', :red
             if Thor::Shell::Basic.new.yes?('I will install unison using brew for you? (y/N)')
