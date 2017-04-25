@@ -1,6 +1,7 @@
 require 'singleton'
 require 'docker-sync/config/config_locator'
 require 'docker-sync/config/config_serializer'
+require 'forwardable'
 
 module DockerSync
   class ProjectConfig
