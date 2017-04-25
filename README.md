@@ -10,6 +10,7 @@ If you are eager to help and improve docker-sync
 Anything else under [http://docker-sync.io](http://docker-sync.io) or the [wiki](https://github.com/EugenMayer/docker-sync/wiki) 
 
 Main Contributors:
+ - [ignatiusreza](https://github.com/ignatiusreza)
  - [mickaelperrin](https://github.com/mickaelperrin)
  - [masterful](https://github.com/masterful)
 
