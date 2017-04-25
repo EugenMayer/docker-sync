@@ -102,7 +102,7 @@ module DockerSync
             if Thor::Shell::Basic.new.yes?('I will install unox through brew for you? (y/N)')
               system cmd1
             else
-              raise('Please install it yourself using: brew tap eugenmayer/dockersync && brew install eugenmayer/dockersync/unox')
+              raise("Please install it yourself using: #{cmd1}")
             end
           end
         end
