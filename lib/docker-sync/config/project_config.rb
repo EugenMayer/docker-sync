@@ -26,7 +26,7 @@ module DockerSync
 
     def initialize(config_path: nil, config_string: nil)
       if config_string.nil?
-        config_path = DockerSync::ConfigLocator.lookup_project_config_path if config_path.nil?
+        config_path = DockerSync::ConfigLocator.lookup_project_config_path
         load_project_config(config_path)
       else
         @config = DockerSync::ConfigSerializer.default_deserializer_string(config_string)
