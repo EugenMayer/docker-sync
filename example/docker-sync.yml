@@ -18,6 +18,8 @@ options:
   unison_image: 'eugenmayer/unison'
   # can be docker-sync, thor or auto and defines, how the sync will be invoked on the cli. Mostly depending if your are using docker-sync solo, scaffolded or in development ( thor )
   cli_mode: 'auto'
+  # optional, maximum number of attempts for unison waiting for the success exit status. The default is 5 attempts (1-second sleep for each attempt). Only used in unison.
+  max_attempt: 5
 syncs:
   unison-sync:
     # unison 2 way-sync, default since 0.2.0
