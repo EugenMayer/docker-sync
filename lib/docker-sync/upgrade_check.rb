@@ -65,7 +65,7 @@ class UpgradeChecker
     end
 
     if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.3.0')
-      Thor::Shell::Basic.new.say_status 'warning', "The installation progress of docker-sync 0.3.0 has changed, brew is now mandatory - you need to uninstall docker-sync/unox/unison ! : \n\n_Please_ read :): https://github.com/EugenMayer/docker-sync/wiki/1.3-Upgrade-Guide\n\n", :red
+      Thor::Shell::Basic.new.say_status 'warning', "The installation progress of docker-sync 0.3.0 has changed, brew is now mandatory - you need to uninstall unox ! : \n\n_Please_ read :): https://github.com/EugenMayer/docker-sync/wiki/1.3-Upgrade-Guide\n\n", :red
 
       cmd1 = 'rm -f /usr/local/bin/unison-fsmonitor && gem uninstall docker-sync && brew tap eugenmayer/dockersync && brew install eugenmayer/dockersync/unox'
       Thor::Shell::Basic.new.say_status 'ok', cmd1, :rwhite
