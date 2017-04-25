@@ -38,7 +38,7 @@ class UpdateChecker
   end
 
   def has_internet?
-    `ping -c1 -t 1 8.8.8.8 &2>1 /dev/null`
+    `ping -c1 -t 1 8.8.8.8 > /dev/null 2>&1`
     return $?.success?
   end
 
