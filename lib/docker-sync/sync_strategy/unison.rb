@@ -182,11 +182,12 @@ module Docker_Sync
         cmd = "unison -testserver #{@options['dest']} \"socket://#{@options['sync_host_ip']}:#{sync_host_port}\""
         say_status 'command', cmd, :white if @options['verbose']
         attempt = 0
+        max_attempt = @options['max_attempt'] || 5
         loop do
           stdout, stderr, exit_status = Open3.capture3(cmd)
           break if exit_status == 0
           attempt += 1
-          break if attempt > 5
+          break if attempt > max_attempt
           sleep 1
         end
         sync
