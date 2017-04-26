@@ -129,6 +129,18 @@ describe DockerSync::ProjectConfig do
           }.to raise_error("Config could not be loaded from #{config_path} - it does not exist")
         end
       end
+
+      context 'given config path is an empty string' do
+        let(:config_path) { '' }
+
+        it 'fall back into default project config' do
+          expect(DockerSync::ConfigLocator).to receive(:lookup_project_config_path).and_call_original
+
+          use_fixture('simplest') do
+            subject
+          end
+        end
+      end
     end
 
     describe 'explicit config_string' do

@@ -163,6 +163,7 @@ module Docker_sync
             config_string: options[:config_string]
           )
 
+        @config_path = config.config_path
         @config_global = config['options'] || {}
         @config_syncs = config['syncs']
         upgrade_syncs_config

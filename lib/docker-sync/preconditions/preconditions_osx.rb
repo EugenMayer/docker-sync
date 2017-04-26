@@ -59,7 +59,7 @@ module DockerSync
       def fswatch_available
         if should_run_precondition?
           if (find_executable0 'fswatch').nil?
-            cmd1 = 'brew install fswatch"'
+            cmd1 = 'brew install fswatch'
 
             Thor::Shell::Basic.new.say_status 'warning', 'No fswatch available. Install it by "brew install fswatch Trying to install now', :red
             if Thor::Shell::Basic.new.yes?('I will install fswatch using brew for you? (y/N)')
@@ -76,7 +76,7 @@ module DockerSync
 
       def should_run_precondition?(silent = false)
         unless has_brew?
-          Thor::Shell::Basic.new.say_status 'inf', 'Not running any precondition checks since you have no brew and that is unsupported. Is all up to you know.', :white unless silent
+          Thor::Shell::Basic.new.say_status 'info', 'Not running any precondition checks since you have no brew and that is unsupported. Is all up to you know.', :white unless silent
           return false
         end
         return true
