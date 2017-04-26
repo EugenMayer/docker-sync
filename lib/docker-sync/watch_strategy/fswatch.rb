@@ -82,6 +82,11 @@ module Docker_Sync
         # append the actual operation
         return "#{sync_command}sync"
       end
+
+      def watch_fork
+        return nil
+      end
+
       def watch_thread
         return @watch_thread
       end
