@@ -73,7 +73,7 @@ describe DockerSync::Preconditions::Strategy do
         Singleton.__init__(DockerSync::Preconditions::Strategy)
         allow(subject.strategy).to receive(:has_brew?) { false }
 
-        expect(subject.strategy.send(:should_run_precondition?)).to eq(false)
+        expect(subject.strategy.send(:should_run_precondition?, true)).to eq(false)
       end
     end
 
@@ -87,18 +87,16 @@ describe DockerSync::Preconditions::Strategy do
         Singleton.__init__(DockerSync::Preconditions::Strategy)
         allow(subject.strategy).to receive(:has_brew?) { true }
 
-        expect(subject.strategy.send(:should_run_precondition?)).to eq(true)
+        expect(subject.strategy.send(:should_run_precondition?, true)).to eq(true)
       end
     end
 
     context 'without docker installed, do raise an exception' do
       it do
-
         Singleton.__init__(DockerSync::Preconditions::Strategy)
 
         allow(subject.strategy).to receive(:docker_available).and_raise('docker not here')
         allow(subject.strategy).to receive(:should_run_precondition?) { true }
-        allow(subject.strategy).to receive(:has_brew?) { true }
 
         use_fixture 'simplest' do
           expect { subject.check_all_preconditions(load_config) }.to raise_error('docker not here')
