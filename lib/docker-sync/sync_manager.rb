@@ -30,12 +30,6 @@ module Docker_sync
       @config_syncs.each do |name, config|
         @config_syncs[name]['config_path'] = @config_path
 
-        # [nbr] convert the sync src from relative to absolute path
-        #	preserve '/' as it may be significant to the sync cmd
-              absolute_path = File.expand_path(@config_syncs[name]['src'])
-        absolute_path << "/" if @config_syncs[name]['src'].end_with?("/")
-        @config_syncs[name]['src'] = absolute_path
-
         @config_syncs[name]['cli_mode'] = @config_global['cli_mode'] || 'auto'
 
         # set the global verbose setting, if the sync-endpoint does not define a own one
