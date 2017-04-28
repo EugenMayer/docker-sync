@@ -90,16 +90,26 @@ module DockerSync
       end
 
       def normalize_config!
+        normalize_options_config!
+
         config['syncs'].each do |name, sync_config|
           config['syncs'][name] = normalize_sync_config(sync_config)
         end
+      end
+
+      def normalize_options_config!
+        config['options'] = {
+          'project_root' => 'pwd',
+        }.merge(config['options'] || {})
       end
 
       def normalize_sync_config(sync_config)
         {
           'sync_strategy' => sync_strategy_for(sync_config),
           'watch_strategy' => watch_strategy_for(sync_config)
-        }.merge(sync_config)
+        }.merge(sync_config).merge(
+          'src' => expand_path(sync_config['src']),
+        )
       end
 
       def sync_strategy_for(sync_config)
@@ -123,5 +133,26 @@ module DockerSync
         end
       end
 
+      def expand_path(path)
+        Dir.chdir(project_root) {
+          # [nbr] convert the sync src from relative to absolute path
+          # preserve '/' as it may be significant to the sync cmd
+          absolute_path = File.expand_path(path)
+          absolute_path << "/" if path.end_with?("/")
+          absolute_path
+        }
+      end
+
+      def project_root
+        if use_config_path_for_project_root?
+          File.dirname(@config_path)
+        else
+          Dir.pwd
+        end
+      end
+
+      def use_config_path_for_project_root?
+        config['options']['project_root'] == 'config_path' && !(@config_path.nil? || @config_path.empty?)
+      end
   end
 end

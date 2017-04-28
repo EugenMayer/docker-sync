@@ -20,6 +20,8 @@ options:
   cli_mode: 'auto'
   # optional, maximum number of attempts for unison waiting for the success exit status. The default is 5 attempts (1-second sleep for each attempt). Only used in unison.
   max_attempt: 5
+  # optional, default: pwd, root directory to be used when transforming sync src into absolute path, accepted values: pwd (current working directory), config_path (the directory where docker-sync.yml is found)
+  project_root: 'pwd'
 syncs:
   unison-sync:
     # unison 2 way-sync, default since 0.2.0
