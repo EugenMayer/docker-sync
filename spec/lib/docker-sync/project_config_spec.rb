@@ -9,9 +9,12 @@ describe DockerSync::ProjectConfig do
         use_fixture 'simplest' do
           expect(subject.to_h).to eql({
             'version' => '2',
+            'options' => {
+              'project_root' => 'pwd',
+            },
             'syncs' => {
               'simplest-sync' => {
-                'src' => './app',
+                'src' => "#{fixture_path 'simplest'}/app",
                 'dest' => '/var/www',
                 'sync_strategy' => 'unison',
                 'watch_strategy' => 'unison'
@@ -28,11 +31,12 @@ describe DockerSync::ProjectConfig do
           expect(subject.to_h).to eql({
             'version' => '2',
             'options' => {
+              'project_root' => 'pwd',
               'verbose' => true,
             },
             'syncs' => {
               'appcode-rsync-sync' => {
-                'src' => './app',
+                'src' => "#{fixture_path 'rsync'}/app",
                 'dest' => '/var/www',
                 'sync_host_ip' => 'localhost',
                 'sync_host_port' => 10872,
@@ -49,11 +53,12 @@ describe DockerSync::ProjectConfig do
           expect(subject.to_h).to eql({
             'version' => '2',
             'options' => {
+              'project_root' => 'pwd',
               'verbose' => true,
             },
             'syncs' => {
               'appcode-unison-sync' => {
-                'src' => './app',
+                'src' => "#{fixture_path 'unison'}/app",
                 'dest' => '/var/www',
                 'sync_excludes' => ['ignored_folder', '.ignored_dot_folder'],
                 'sync_strategy' => 'unison',
@@ -68,9 +73,12 @@ describe DockerSync::ProjectConfig do
         use_fixture 'dummy' do
           expect(subject.to_h).to eql({
             'version' => '2',
+            'options' => {
+              'project_root' => 'pwd',
+            },
             'syncs' => {
               'appcode-dummy-sync' => {
-                'src' => './app',
+                'src' => "#{fixture_path 'dummy'}/app",
                 'dest' => '/var/www',
                 'sync_strategy' => 'unison',
                 'watch_strategy' => 'dummy'
@@ -86,9 +94,52 @@ describe DockerSync::ProjectConfig do
         use_fixture 'simplest/app' do
           expect(subject.to_h).to eql({
             'version' => '2',
+            'options' => {
+              'project_root' => 'pwd',
+            },
             'syncs' => {
               'simplest-sync' => {
-                'src' => './app',
+                'src' => "#{fixture_path 'simplest'}/app/app",
+                'dest' => '/var/www',
+                'sync_strategy' => 'unison',
+                'watch_strategy' => 'unison'
+              }
+            }
+          })
+        end
+      end
+    end
+
+    describe 'project_root (used for expanding src to absolute_path)' do
+      it 'default to pwd' do
+        use_fixture 'simplest/app' do
+          expect(subject.to_h).to eql({
+            'version' => '2',
+            'options' => {
+              'project_root' => 'pwd',
+            },
+            'syncs' => {
+              'simplest-sync' => {
+                'src' => "#{fixture_path 'simplest'}/app/app",
+                'dest' => '/var/www',
+                'sync_strategy' => 'unison',
+                'watch_strategy' => 'unison'
+              }
+            }
+          })
+        end
+      end
+
+      it 'can be overwritten to use config_path' do
+        use_fixture 'project_root/app' do
+          expect(subject.to_h).to eql({
+            'version' => '2',
+            'options' => {
+              'project_root' => 'config_path',
+            },
+            'syncs' => {
+              'project_root-sync' => {
+                'src' => "#{fixture_path 'project_root'}/app",
                 'dest' => '/var/www',
                 'sync_strategy' => 'unison',
                 'watch_strategy' => 'unison'
@@ -108,9 +159,12 @@ describe DockerSync::ProjectConfig do
         it 'load the config regardless of current working directory' do
           expect(subject.to_h).to eql({
             'version' => '2',
+            'options' => {
+              'project_root' => 'pwd',
+            },
             'syncs' => {
               'simplest-sync' => {
-                'src' => './app',
+                'src' => "#{Dir.pwd}/app",
                 'dest' => '/var/www',
                 'sync_strategy' => 'unison',
                 'watch_strategy' => 'unison'
@@ -127,6 +181,18 @@ describe DockerSync::ProjectConfig do
           expect {
             subject
           }.to raise_error("Config could not be loaded from #{config_path} - it does not exist")
+        end
+      end
+
+      context 'given config path is an empty string' do
+        let(:config_path) { '' }
+
+        it 'fall back into default project config' do
+          expect(DockerSync::ConfigLocator).to receive(:lookup_project_config_path).and_call_original
+
+          use_fixture('simplest') do
+            subject
+          end
         end
       end
     end
@@ -150,9 +216,12 @@ syncs:
       it 'load the config string' do
         expect(subject.to_h).to eql({
           'version' => '2',
+          'options' => {
+            'project_root' => 'pwd',
+          },
           'syncs' => {
             'config-string-sync' => {
-              'src' => './foo',
+              'src' => "#{Dir.pwd}/foo",
               'dest' => '/foo/bar',
               'sync_strategy' => 'unison',
               'watch_strategy' => 'unison'
@@ -168,11 +237,12 @@ syncs:
           expect(subject.to_h).to eql({
             'version' => '2',
             'options' => {
+              'project_root' => 'pwd',
               'verbose' => true
             },
             'syncs' => {
               'docker-boilerplate-unison-sync' => {
-                'src' => './app',
+                'src' => "#{fixture_path 'dynamic-configuration-dotenv'}/app",
                 'dest' => '/var/www',
                 'sync_excludes' => ['ignored_folder', '.ignored_dot_folder' ],
                 'sync_strategy' => 'unison',

@@ -45,6 +45,7 @@ module DockerSync
             cmd1 = 'brew install unison'
 
             Thor::Shell::Basic.new.say_status 'warning', 'Could not find unison binary in $PATH. Trying to install now', :red
+            Thor::Shell::Basic.new.say_status 'command', cmd1, :white
             if Thor::Shell::Basic.new.yes?('I will install unison using brew for you? (y/N)')
               system cmd1
             else
@@ -59,7 +60,7 @@ module DockerSync
       def fswatch_available
         if should_run_precondition?
           if (find_executable0 'fswatch').nil?
-            cmd1 = 'brew install fswatch"'
+            cmd1 = 'brew install fswatch'
 
             Thor::Shell::Basic.new.say_status 'warning', 'No fswatch available. Install it by "brew install fswatch Trying to install now', :red
             if Thor::Shell::Basic.new.yes?('I will install fswatch using brew for you? (y/N)')
@@ -76,7 +77,7 @@ module DockerSync
 
       def should_run_precondition?(silent = false)
         unless has_brew?
-          Thor::Shell::Basic.new.say_status 'inf', 'Not running any precondition checks since you have no brew and that is unsupported. Is all up to you know.', :white unless silent
+          Thor::Shell::Basic.new.say_status 'info', 'Not running any precondition checks since you have no brew and that is unsupported. Is all up to you know.', :white unless silent
           return false
         end
         return true
@@ -91,14 +92,23 @@ module DockerSync
         if should_run_precondition?
           `brew list unox`
           if $?.exitstatus > 0
-            unless (find_executable0 'unison-fsmonitor').nil?
-              # unox installed, but not using brew, we do not allow that anymore
-              Thor::Shell::Basic.new.say_status 'error', 'You install unison-fsmonitor (unox) not using brew. Please uninstall it and run docker-sync again, so we can install it for you', :red
-              exit 1
-            end
-            cmd1 = 'brew tap eugenmayer/dockersync && brew install eugenmayer/dockersync/unox'
+            # unox installed, but not using brew, we do not allow that anymore
+            if File.exist?('/usr/local/bin/unison-fsmonitor')
+              Thor::Shell::Basic.new.say_status 'error', 'You installed unison-fsmonitor (unox) not using brew-method - the old legacy way. We need to fix that.', :red
 
+              uninstall_cmd='sudo rm /usr/local/bin/unison-fsmonitor'
+              Thor::Shell::Basic.new.say_status 'command', uninstall_cmd, :white
+              if Thor::Shell::Basic.new.yes?('Should i uninstall the legacy /usr/local/bin/unison-fsmonitor for you ? (y/N)')
+                system uninstall_cmd
+              else
+                Thor::Shell::Basic.new.say_status 'error', 'Uninstall /usr/local/bin/unison-fsmonitor manually please', :white
+                exit 1
+              end
+            end
+
+            cmd1 = 'brew tap eugenmayer/dockersync && brew install eugenmayer/dockersync/unox'
             Thor::Shell::Basic.new.say_status 'warning', 'Could not find unison-fsmonitor (unox) binary in $PATH. Trying to install now', :red
+            Thor::Shell::Basic.new.say_status 'command', cmd1, :white
             if Thor::Shell::Basic.new.yes?('I will install unox through brew for you? (y/N)')
               system cmd1
             else

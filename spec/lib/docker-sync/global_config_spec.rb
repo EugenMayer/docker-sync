@@ -65,8 +65,6 @@ describe DockerSync::GlobalConfig do
       config.update! 'new' => 'value'
 
       updated_config = DockerSync::GlobalConfig.load
-      puts updated_config.to_h
-
       expect(updated_config.to_h).to include('new' => 'value')
     end
   end

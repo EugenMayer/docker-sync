@@ -9,11 +9,13 @@ module Docker_Sync
 
       @options
       @sync_name
+      @watch_fork
       @watch_thread
 
       def initialize(sync_name, options)
         @options = options
         @sync_name = sync_name
+        @watch_fork = nil
         @watch_thread = nil
       end
 
@@ -31,6 +33,10 @@ module Docker_Sync
       end
 
       def watch_options
+      end
+
+      def watch_fork
+        return @watch_fork
       end
 
       def watch_thread
