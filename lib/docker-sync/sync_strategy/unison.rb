@@ -187,7 +187,7 @@ module Docker_Sync
           stdout, stderr, exit_status = Open3.capture3(cmd)
           break if exit_status == 0
           attempt += 1
-          break if attempt > max_attempt
+          raise 'Failed to start unison container in time, try to increase max_attempt in your configuration. See https://github.com/EugenMayer/docker-sync/wiki/2.-Configuration for more informations' if attempt > max_attempt
           sleep 1
         end
         sync
