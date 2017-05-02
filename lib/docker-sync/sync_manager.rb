@@ -40,8 +40,10 @@ module Docker_sync
           end
         end
 
-        # set default value for 'dest'
-        if !@config_syncs[name].key?('dest')
+        if @config_syncs[name].key?('dest')
+          puts 'Please do no longer use "dest" in your docker-sync.yml configuration - also see https://github.com/EugenMayer/docker-sync/wiki/1.2-Upgrade-Guide#dest-has-been-removed!'
+          exit 1
+        else
           @config_syncs[name]['dest'] = '/sync'
         end
 

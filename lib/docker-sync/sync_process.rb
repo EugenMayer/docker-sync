@@ -20,19 +20,13 @@ module Docker_Sync
     def initialize(sync_name, options)
       @sync_name = sync_name
 
-      if options.key?('dest')
-        puts 'Please do no longer use "dest" in your docker-sync.yml configuration - also see https://github.com/EugenMayer/docker-sync/wiki/1.2-Upgrade-Guide#dest-has-been-removed!'
-        exit 1
-      end
-
       defaults = {
           'verbose' => false,
           'sync_host_ip' => get_host_ip_default
       }
-
       # even if sync_host_ip is set, if it is set to auto, enforce the default
-      if @options['sync_host_ip'] == 'auto' || @options['sync_host_ip'] == ''
-        @options['sync_host_ip'] = defaults['sync_host_ip']
+      if options.key?('sync_host_ip') && options['sync_host_ip'] == 'auto' || options['sync_host_ip'] == ''
+        options['sync_host_ip'] = defaults['sync_host_ip']
       end
 
       @options = defaults.merge(options)
