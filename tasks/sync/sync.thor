@@ -119,7 +119,7 @@ class Sync < Thor
 
     config = config_preconditions
 
-    say_status 'ok',"Found configuration at #{config_path}"
+    say_status 'ok',"Found configuration at #{config.config_path}"
     @sync_manager = Docker_sync::SyncManager.new(config: config)
     @sync_manager.get_sync_points.each do |name, config|
       say_status name, "On address #{config['sync_host_ip']}:#{config['sync_host_port']}",:white unless options['verbose']
