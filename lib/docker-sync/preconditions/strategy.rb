@@ -51,6 +51,14 @@ module DockerSync
       def unison_available
         strategy.unison_available
       end
+
+      def is_driver_docker_for_mac?
+        strategy.is_driver_docker_for_mac?
+      end
+
+      def is_driver_docker_toolbox?
+        strategy.is_driver_docker_toolbox?
+      end
     end
   end
 end

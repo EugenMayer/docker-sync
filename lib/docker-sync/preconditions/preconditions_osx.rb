@@ -73,6 +73,17 @@ module DockerSync
 
       end
 
+      def is_driver_docker_for_mac?
+        `docker info | grep 'Docker Root Dir: /var/lib/docker' && docker info | grep 'Operating System: Alpine Linux'`
+        $?.success?
+      end
+
+      def is_driver_docker_toolbox?
+        return false unless find_executable0('docker-machine')
+        `docker info | grep 'Operating System: Boot2Docker'`
+        $?.success?
+      end
+
       private
 
       def should_run_precondition?(silent = false)
@@ -91,7 +102,7 @@ module DockerSync
       def unox_available
         if should_run_precondition?
           `brew list unox`
-          if $?.exitstatus > 0
+          unless $?.success?
             # unox installed, but not using brew, we do not allow that anymore
             if File.exist?('/usr/local/bin/unison-fsmonitor')
               Thor::Shell::Basic.new.say_status 'error', 'You installed unison-fsmonitor (unox) not using brew-method - the old legacy way. We need to fix that.', :red
