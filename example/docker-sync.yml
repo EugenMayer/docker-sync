@@ -32,7 +32,8 @@ syncs:
     # be aware, this only gives you a notification on the initial sync, not the syncs after changes. this is a difference
     # to the rsync implementation
     notify_terminal: true
-    sync_host_ip: '127.0.0.1'
+    # default is 'auto', which means, your docker-machine/docker host ip will be detected automatically. If you set this to a concrete IP, this ip will be enforced
+    sync_host_ip: 'auto'    # when a port of a container is exposed, on which IP does it get exposed. Localhost for docker for mac, something else for docker-machine
     sync_userid: '33'
     # specific options
     # If you need to sync a lot of files, you can reach out the system limit
@@ -76,7 +77,8 @@ syncs:
     # since you will in most cases mount the volume using the volume name ('rsync-sync' in this example) this value has little relevance
     dest: '/var/www'
     # when a port of a container is exposed, on which IP does it get exposed. Localhost for docker for mac, something else for docker-machine
-    sync_host_ip: '127.0.0.1'
+    # default is 'auto', which means, your docker-machine/docker host ip will be detected automatically. If you set this to a concrete IP, this ip will be enforced
+    sync_host_ip: 'auto'
     # should be a unique port this sync instance uses on the host to offer the rsync service on
     sync_host_port: 20871
     # optionl, a list of excludes for rsync - see rsync docs for details
