@@ -21,9 +21,9 @@ describe DockerSync::Preconditions::Strategy do
         allow(subject.strategy).to receive(:unison_available) { true }
         expect(subject).to receive(:unison_available)
 
-        use_fixture 'simplest' do
+        use_fixture 'unison' do
           config = load_config
-          Docker_Sync::SyncStrategy::Unison.new('simplest-sync',config['syncs']['simplest-sync'])
+          Docker_Sync::SyncStrategy::Unison.new('appcode-unison-sync',config['syncs']['appcode-unison-sync'])
         end
       end
     end
@@ -41,7 +41,7 @@ describe DockerSync::Preconditions::Strategy do
         expect(subject.strategy).to receive(:unison_available)
         #expect(described_class.instance.strategy).to receive(:unox_available)
 
-        use_fixture 'simplest' do
+        use_fixture 'unison' do
           subject.check_all_preconditions(load_config)
         end
       end

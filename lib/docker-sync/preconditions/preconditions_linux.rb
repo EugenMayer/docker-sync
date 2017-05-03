@@ -32,11 +32,20 @@ module DockerSync
       def unison_available
       end
 
+      def is_driver_docker_for_mac?
+        return false
+      end
+
+      def is_driver_docker_toolbox?
+        return false
+      end
       private
 
       def should_run_precondition?(silent: false)
         true
       end
+
+
     end
   end
 end

@@ -2,6 +2,7 @@ require 'thor/shell'
 # noinspection RubyResolve
 require 'docker-sync/sync_strategy/rsync'
 require 'docker-sync/sync_strategy/unison'
+require 'docker-sync/sync_strategy/native'
 # noinspection RubyResolve
 require 'docker-sync/watch_strategy/fswatch'
 require 'docker-sync/watch_strategy/dummy'
@@ -18,11 +19,17 @@ module Docker_Sync
 
     # noinspection RubyStringKeysInHashInspection
     def initialize(sync_name, options)
+      @sync_name = sync_name
+
       defaults = {
           'verbose' => false,
-          'sync_host_ip' => get_host_ip
+          'sync_host_ip' => get_host_ip_default
       }
-      @sync_name = sync_name
+      # even if sync_host_ip is set, if it is set to auto, enforce the default
+      if options.key?('sync_host_ip') && options['sync_host_ip'] == 'auto' || options['sync_host_ip'] == ''
+        options['sync_host_ip'] = defaults['sync_host_ip']
+      end
+
       @options = defaults.merge(options)
       @sync_strategy = nil
       @watch_strategy = nil
@@ -36,6 +43,8 @@ module Docker_Sync
         @sync_strategy = Docker_Sync::SyncStrategy::Rsync.new(@sync_name, @options)
       when 'unison'
         @sync_strategy = Docker_Sync::SyncStrategy::Unison.new(@sync_name, @options)
+      when 'native'
+        @sync_strategy = Docker_Sync::SyncStrategy::Native.new(@sync_name, @options)
       else
         raise "Unknown sync_strategy #{@options['sync_strategy']}"
       end
@@ -54,8 +63,17 @@ module Docker_Sync
       end
     end
 
-    def get_host_ip
-      return '127.0.0.1'
+    def get_host_ip_default
+      return '127.0.0.1' if DockerSync::Preconditions::Strategy.instance.is_driver_docker_for_mac?
+
+      if DockerSync::Preconditions::Strategy.instance.is_driver_docker_toolbox?
+        cmd = 'docker-machine ip'
+        stdout, stderr, exit_status = Open3.capture3(cmd)
+        unless exit_status.success?
+          raise "Error getting sync_host_ip automatically, exit code #{$?.exitstatus} ... #{stderr}"
+        end
+        return stdout.gsub("\n",'')
+      end
     end
 
     def run

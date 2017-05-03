@@ -117,7 +117,7 @@ module Docker_Sync
       def sync_options
         args = []
         args = expand_ignore_strings + args
-        args.push(@options['src'])
+        args.push("'#{@options['src']}'")
         args.push('-auto')
         args.push('-batch')
         args.push(sync_prefer)

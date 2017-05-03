@@ -45,6 +45,15 @@ module DockerSync
         install_binary('fswatch')
       end
 
+      def is_driver_docker_for_mac?
+        system('docker info | grep "Docker Root Dir: /var/lib/docker" && docker info | grep "Operating System: Alpine Linux"')
+      end
+
+      def is_driver_docker_toolbox?
+        return false unless find_executable0('docker-machine')
+        system('docker info | grep "Operating System: Boot2Docker"')
+      end
+
       private
 
       def should_run_precondition?(silent = false)
