@@ -19,139 +19,60 @@ module DockerSync
       end
 
       def docker_available
-        if (find_executable0 'docker').nil?
-          raise('Could not find docker binary in path. Please install it, e.g. using "brew install docker" or install docker-for-mac')
-        end
+        raise('Could not find docker binary in path. Please install it, e.g. using "brew install docker" or install docker-for-mac') unless find_executable0('docker')
       end
 
       def docker_running
-        `docker ps`
-        if $?.exitstatus > 0
-          raise('No docker daemon seems to be running. Did you start your docker-for-mac / docker-machine?')
-        end
+        raise('No docker daemon seems to be running. Did you start your docker-for-mac / docker-machine?') unless system('docker ps')
       end
 
       def rsync_available
-        if should_run_precondition?
-          if (find_executable0 'rsync').nil?
-            raise('Could not find rsync binary in path. Please install it, e.g. using "brew install rsync"')
-          end
-        end
+        return unless should_run_precondition?
+        return unless find_executable0('rsync')
+        install_binary('rsync')
       end
 
       def unison_available
-        if should_run_precondition?
-          if (find_executable0 'unison').nil?
-            cmd1 = 'brew install unison'
-
-            Thor::Shell::Basic.new.say_status 'warning', 'Could not find unison binary in $PATH. Trying to install now', :red
-            Thor::Shell::Basic.new.say_status 'command', cmd1, :white
-            if Thor::Shell::Basic.new.yes?('I will install unison using brew for you? (y/N)')
-              system cmd1
-            else
-              raise('Please install it yourself using: brew install unison')
-            end
-          end
-
-          unox_available
-        end
+        return unless should_run_precondition?
+        return unless find_executable0('unison')
+        install_binary('unison')
+        unox_available
       end
 
       def fswatch_available
-        if should_run_precondition?
-          if (find_executable0 'fswatch').nil?
-            cmd1 = 'brew install fswatch'
-
-            Thor::Shell::Basic.new.say_status 'warning', 'No fswatch available. Install it by "brew install fswatch Trying to install now', :red
-            if Thor::Shell::Basic.new.yes?('I will install fswatch using brew for you? (y/N)')
-              system cmd1
-            else
-              raise('Please install it yourself using: brew install fswatch')
-            end
-          end
-        end
-
+        return unless should_run_precondition?
+        return unless find_executable0('fswatch')
+        install_binary('fswatch')
       end
 
       private
 
       def should_run_precondition?(silent = false)
-        unless has_brew?
-          Thor::Shell::Basic.new.say_status 'info', 'Not running any precondition checks since you have no brew and that is unsupported. Is all up to you know.', :white unless silent
-          return false
-        end
-        return true
+        return true if find_executable0('brew')
+        Thor::Shell::Basic.new.say_status 'info', 'Not running any precondition checks since you have no brew and that is unsupported. It\'s all up to you now.', :white unless silent
+        false
       end
-
-      def has_brew?
-        return find_executable0 'brew'
-      end
-
 
       def unox_available
-        if should_run_precondition?
-          `brew list unox`
-          if $?.exitstatus > 0
-            # unox installed, but not using brew, we do not allow that anymore
-            if File.exist?('/usr/local/bin/unison-fsmonitor')
-              Thor::Shell::Basic.new.say_status 'error', 'You installed unison-fsmonitor (unox) not using brew-method - the old legacy way. We need to fix that.', :red
-
-              uninstall_cmd='sudo rm /usr/local/bin/unison-fsmonitor'
-              Thor::Shell::Basic.new.say_status 'command', uninstall_cmd, :white
-              if Thor::Shell::Basic.new.yes?('Should i uninstall the legacy /usr/local/bin/unison-fsmonitor for you ? (y/N)')
-                system uninstall_cmd
-              else
-                Thor::Shell::Basic.new.say_status 'error', 'Uninstall /usr/local/bin/unison-fsmonitor manually please', :white
-                exit 1
-              end
-            end
-
-            cmd1 = 'brew tap eugenmayer/dockersync && brew install eugenmayer/dockersync/unox'
-            Thor::Shell::Basic.new.say_status 'warning', 'Could not find unison-fsmonitor (unox) binary in $PATH. Trying to install now', :red
-            Thor::Shell::Basic.new.say_status 'command', cmd1, :white
-            if Thor::Shell::Basic.new.yes?('I will install unox through brew for you? (y/N)')
-              system cmd1
-            else
-              raise("Please install it yourself using: #{cmd1}")
-            end
-          end
-        end
+        return unless should_run_precondition?
+        return unless system('brew list unox')
+        cleanup_legacy_unox if File.exist?('/usr/local/bin/unison-fsmonitor')
+        install_binary('unison-fsmonitor', 'brew tap eugenmayer/dockersync && brew install eugenmayer/dockersync/unox')
       end
 
-      def install_pip(package, test = nil)
-        test ? `python -c 'import #{test}'` : `python -c 'import #{package}'`
+      def cleanup_legacy_unox
+        uninstall_cmd = 'sudo rm /usr/local/bin/unison-fsmonitor'
+        Thor::Shell::Basic.new.say_status 'error', 'You installed unison-fsmonitor (unox) the old legacy way (i.e. not using brew). We need to fix that.', :red
+        Thor::Shell::Basic.new.say_status 'command', uninstall_cmd, :white
+        raise('Please delete /usr/local/bin/unison-fsmonitor manually.') unless Thor::Shell::Basic.new.yes?('Should I uninstall the legacy unison-fsmonitor (unox) for you ? (y/N)')
+        system uninstall_cmd
+      end
 
-        unless $?.success?
-          Thor::Shell::Basic.new.say_status 'warning', "Could not find #{package}. Will try to install it using pip", :red
-          if find_executable0('python') == '/usr/bin/python'
-            Thor::Shell::Basic.new.say_status 'ok', 'You seem to use the system python, we will need sudo below'
-            sudo = true
-            cmd2 = "sudo easy_install pip && sudo pip install #{package}"
-          else
-            Thor::Shell::Basic.new.say_status 'ok', 'You seem to have a custom python, using non-sudo commands'
-            sudo = false
-            cmd2 = "easy_install pip && pip install #{package}"
-          end
-          if sudo
-            question = "I will ask you for you root password to install #{package} by running (This will ask for sudo, since we use the system python)"
-          else
-            question = "I will now install #{package} for you by running"
-          end
-
-          Thor::Shell::Basic.new.say_status 'info', "#{question}: `#{cmd2}\n\n"
-          if Thor::Shell::Basic.new.yes?('Shall I continue? (y/N)')
-            system cmd2
-            if $?.exitstatus > 0
-              raise("Failed to install #{package}, please file an issue with the output of the error")
-            end
-            test ? `python -c 'import #{test}'` : `python -c 'import #{package}'`
-            unless $?.success?
-              raise("Somehow I could not successfully install #{package} even though I tried. Please report this issue.")
-            end
-          else
-            raise("Please install #{package} manually, see https://github.com/EugenMayer/docker-sync/wiki/1.-Installation")
-          end
-        end
+      def install_binary(binary, install_cmd = "brew install #{binary}")
+        Thor::Shell::Basic.new.say_status 'warning', "Could not find `#{binary}` in $PATH. Trying to install it now", :red
+        Thor::Shell::Basic.new.say_status 'command', install_cmd, :white
+        raise("Failed to install #{binary}. Please try it yourself using: #{install_cmd}") unless Thor::Shell::Basic.new.yes?('I will install unox through brew for you? (y/N)')
+        system install_cmd
       end
     end
   end

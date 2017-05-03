@@ -12,19 +12,13 @@ module DockerSync
       attr_accessor :strategy
 
       def initialize
-        if DockerSync::Preconditions::Strategy.is_osx
+        if OS.mac?
           @strategy = DockerSync::Preconditions::Osx.new
-        elsif DockerSync::Preconditions::Strategy.is_linux
+        elsif OS.linux?
           @strategy = DockerSync::Preconditions::Linux.new
+        else
+          raise 'Unsupported operating system. Docker-Sync works only on MacOS and Linux.'
         end
-      end
-
-      def self.is_osx
-        return OS.mac?
-      end
-
-      def self.is_linux
-        return OS.linux?
       end
 
       def check_all_preconditions(config)
@@ -43,7 +37,6 @@ module DockerSync
         strategy.rsync_available
       end
 
-
       def fswatch_available
         strategy.fswatch_available
       end
@@ -54,4 +47,3 @@ module DockerSync
     end
   end
 end
-
