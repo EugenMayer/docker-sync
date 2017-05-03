@@ -113,23 +113,39 @@ module DockerSync
       end
 
       def sync_strategy_for(sync_config)
-        case sync_config['sync_strategy']
-        when 'rsync' then 'rsync'
-        else 'unison'
+        sync_strategy = sync_config['sync_strategy']
+
+        if ['rsync', 'unison', 'native'].include?(sync_strategy)
+          sync_strategy
+        else
+          default_sync_strategy
         end
       end
 
       def watch_strategy_for(sync_config)
-        if sync_config.key?('watch_strategy')
-          case sync_config['watch_strategy']
-          when 'fswatch' then 'fswatch'
-          when 'disable','dummy' then 'dummy'
-          else 'unison'
-          end
-        elsif sync_config['sync_strategy'] == 'rsync'
-          'fswatch'
+        watch_strategy = sync_config['watch_strategy']
+        watch_strategy = 'dummy' if watch_strategy == 'disable'
+
+        if ['fswatch', 'unison', 'dummy'].include?(watch_strategy)
+          watch_strategy
         else
-          'unison'
+          default_watch_strategy(sync_config)
+        end
+      end
+
+      def default_sync_strategy
+        case true
+        when OS.linux? then 'native'
+        else 'unison'
+        end
+      end
+
+      def default_watch_strategy(sync_config)
+        case sync_strategy_for(sync_config)
+        when 'rsync' then 'fswatch'
+        when 'unison' then 'unison'
+        when 'native' then 'dummy'
+        else raise "you shouldn't be here"
         end
       end
 

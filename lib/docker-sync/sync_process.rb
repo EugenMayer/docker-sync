@@ -2,6 +2,7 @@ require 'thor/shell'
 # noinspection RubyResolve
 require 'docker-sync/sync_strategy/rsync'
 require 'docker-sync/sync_strategy/unison'
+require 'docker-sync/sync_strategy/native'
 # noinspection RubyResolve
 require 'docker-sync/watch_strategy/fswatch'
 require 'docker-sync/watch_strategy/dummy'
@@ -42,6 +43,8 @@ module Docker_Sync
         @sync_strategy = Docker_Sync::SyncStrategy::Rsync.new(@sync_name, @options)
       when 'unison'
         @sync_strategy = Docker_Sync::SyncStrategy::Unison.new(@sync_name, @options)
+      when 'native'
+        @sync_strategy = Docker_Sync::SyncStrategy::Native.new(@sync_name, @options)
       else
         raise "Unknown sync_strategy #{@options['sync_strategy']}"
       end

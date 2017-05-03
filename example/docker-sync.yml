@@ -23,8 +23,18 @@ options:
   # optional, default: pwd, root directory to be used when transforming sync src into absolute path, accepted values: pwd (current working directory), config_path (the directory where docker-sync.yml is found)
   project_root: 'pwd'
 syncs:
+  default-sync:
+    # os aware sync strategy, default to unison under osx, and native docker volume under linux
+    sync_strategy: 'default'
+    # which folder to watch / sync from - you can use tilde, it will get expanded.
+    # the contents of this directory will be synchronized to the Docker volume with the name of this sync entry ('default-sync' here)
+    src: './default-data/'
+
+    # other unison options can also be specified here, which will be used when run under osx,
+    # and ignored when run under linux
+
   unison-sync:
-    # unison 2 way-sync, default since 0.2.0
+    # unison 2 way-sync
     sync_strategy: 'unison'
     # common options
     # see rsync documentation for all these common options
@@ -73,9 +83,6 @@ syncs:
     # which folder to watch / sync from - you can use tilde, it will get expanded.
     # the contents of this directory will be synchronized to the Docker volume with the name of this sync entry ('rsync-sync' here)
     src: './data1/'
-    # destination on the sync-container. This is optional and defaults to '/sync'.
-    # since you will in most cases mount the volume using the volume name ('rsync-sync' in this example) this value has little relevance
-    dest: '/var/www'
     # when a port of a container is exposed, on which IP does it get exposed. Localhost for docker for mac, something else for docker-machine
     # default is 'auto', which means, your docker-machine/docker host ip will be detected automatically. If you set this to a concrete IP, this ip will be enforced
     sync_host_ip: 'auto'
