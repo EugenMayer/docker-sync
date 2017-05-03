@@ -49,7 +49,7 @@ module Docker_sync
 
         # for each strategy check if a custom image has been defined and inject that into the sync-endpoints
         # which do fit for this strategy
-        %w(rsync unison).each do |strategy|
+        %w(rsync unison native_osx native).each do |strategy|
           if config.key?("#{strategy}_image") && @config_syncs[name]['sync_strategy'] == strategy
             @config_syncs[name]['image'] = config["#{strategy}_image"]
           end

@@ -115,7 +115,7 @@ module DockerSync
       def sync_strategy_for(sync_config)
         sync_strategy = sync_config['sync_strategy']
 
-        if ['rsync', 'unison', 'native'].include?(sync_strategy)
+        if %w(rsync unison native native_osx).include?(sync_strategy)
           sync_strategy
         else
           default_sync_strategy
@@ -145,6 +145,7 @@ module DockerSync
         when 'rsync' then 'fswatch'
         when 'unison' then 'unison'
         when 'native' then 'dummy'
+        when 'native_osx' then 'dummy'
         else raise "you shouldn't be here"
         end
       end
@@ -154,7 +155,7 @@ module DockerSync
           # [nbr] convert the sync src from relative to absolute path
           # preserve '/' as it may be significant to the sync cmd
           absolute_path = File.expand_path(path)
-          absolute_path << "/" if path.end_with?("/")
+          absolute_path << '/' if path.end_with?('/')
           absolute_path
         }
       end
