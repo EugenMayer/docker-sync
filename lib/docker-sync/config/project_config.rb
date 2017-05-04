@@ -126,7 +126,7 @@ module DockerSync
         watch_strategy = sync_config['watch_strategy']
         watch_strategy = 'dummy' if watch_strategy == 'disable'
 
-        if ['fswatch', 'unison', 'dummy'].include?(watch_strategy)
+        if %w(fswatch unison dummy).include?(watch_strategy)
           watch_strategy
         else
           default_watch_strategy(sync_config)
@@ -136,7 +136,7 @@ module DockerSync
       def default_sync_strategy
         case true
         when OS.linux? then 'native'
-        else 'unison'
+        else 'native_osx'
         end
       end
 

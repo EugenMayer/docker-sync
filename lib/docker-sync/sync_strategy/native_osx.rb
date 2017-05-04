@@ -35,28 +35,13 @@ module Docker_Sync
         end
       end
 
-      def run
-        start_container
-        sync
-      end
-
-      def watch
-        # nop
-      end
-
-      def sync
-        # nop
-      end
-
-
       def start_container
-        say_status 'ok', 'Starting unison', :white
+        say_status 'ok', 'Starting native_osx', :white
         container_name = get_container_name
-        #create_volume
         host_sync_src = @options['src']
         volume_app_sync_name = @sync_name
         env = {}
-        say_status 'ok', 'sync_user is no longer supported, since it ise no needed, use sync_userid only please', :yellow if @options.key?('sync_user')
+        raise 'sync_user is no longer supported, since it ise no needed, use sync_userid only please', :yellow if @options.key?('sync_user')
 
         ignore_strings = expand_ignore_strings
         env['UNISON_EXCLUDES'] = ignore_strings.join(' ')
@@ -90,28 +75,22 @@ module Docker_Sync
         `#{cmd}` || raise('Start failed')
         say_status 'ok', "starting initial sync of #{container_name}", :white if @options['verbose']
         # wait until container is started, then sync:
-        say_status 'success', 'Unison container started', :green
+        say_status 'success', 'Sync container started', :green
       end
 
-
-
-      def get_container_name
-        return "#{@sync_name}"
+      def run
+        start_container
+        sync
       end
 
-      def get_volume_name
-        return @sync_name
+      def watch
+        # nop
       end
 
-      def stop_container
-        `docker ps | grep #{get_container_name} && docker stop #{get_container_name} && docker wait #{get_container_name}`
+      def sync
+        # nop
       end
 
-      def reset_container
-        stop_container
-        `docker ps -a | grep #{get_container_name} && docker rm #{get_container_name}`
-        `docker volume ls -q | grep #{get_volume_name} && docker volume rm #{get_volume_name}`
-      end
 
       def clean
         reset_container
@@ -128,6 +107,26 @@ module Docker_Sync
       end
 
       private
+
+      def reset_container
+        stop_container
+        `docker ps -a | grep #{get_container_name} && docker rm #{get_container_name}`
+        `docker volume ls -q | grep #{get_volume_name} && docker volume rm #{get_volume_name}`
+      end
+
+
+      def get_container_name
+        return "#{@sync_name}"
+      end
+
+      def get_volume_name
+        return @sync_name
+      end
+
+      def stop_container
+        `docker ps | grep #{get_container_name} && docker stop #{get_container_name} && docker wait #{get_container_name}`
+      end
+
 
       # cares about conflict resolution
       def sync_prefer

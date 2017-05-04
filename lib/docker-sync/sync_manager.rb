@@ -130,6 +130,7 @@ module Docker_sync
     end
 
     def stop
+      init_sync_processes
       @sync_processes.each { |sync_process|
         sync_process.stop
         unless sync_process.watch_thread.nil?
