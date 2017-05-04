@@ -12,13 +12,21 @@ module DockerSync
       attr_accessor :strategy
 
       def initialize
-        if OS.mac?
+        if DockerSync::Preconditions::Strategy.is_osx
           @strategy = DockerSync::Preconditions::Osx.new
-        elsif OS.linux?
+        elsif DockerSync::Preconditions::Strategy.is_linux
           @strategy = DockerSync::Preconditions::Linux.new
         else
           raise 'Unsupported operating system. Docker-Sync works only on MacOS and Linux.'
         end
+      end
+
+      def self.is_osx
+        return OS.mac?
+      end
+
+      def self.is_linux
+        return OS.linux?
       end
 
       def check_all_preconditions(config)
