@@ -57,9 +57,13 @@ module DockerSync
       private
 
       def should_run_precondition?(silent = false)
-        return true if find_executable0('brew')
+        return true if has_brew?
         Thor::Shell::Basic.new.say_status 'info', 'Not running any precondition checks since you have no brew and that is unsupported. It\'s all up to you now.', :white unless silent
         false
+      end
+
+      def has_brew?
+        find_executable0('brew')
       end
 
       def unox_available
