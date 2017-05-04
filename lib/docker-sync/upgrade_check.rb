@@ -70,7 +70,7 @@ class UpgradeChecker
       cmd1 = 'sudo rm -f /usr/local/bin/unison-fsmonitor && brew tap eugenmayer/dockersync && brew install eugenmayer/dockersync/unox'
       Thor::Shell::Basic.new.say_status 'ok', cmd1, :rwhite
 
-      if Thor::Shell::Basic.new.yes?('I will reinstall docker-sync for you using the above command (y/N)')
+      if Thor::Shell::Basic.new.yes?('I will reinstall unox for you using the above command (y/N)')
         system cmd1
       else
         raise('Please reinstall docker-sync yourself')
@@ -78,6 +78,13 @@ class UpgradeChecker
       end
     end
 
+    if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.4.0')
+      Thor::Shell::Basic.new.say_status 'warning', "docker-sync has a new superior default sync strategy native_osx - consider switching to it no matter if you used unison or rsync. \nIt does no longer need Unison/Unox on OSX - no brew needed either. And its a lot thriftier ! \n\n_Please_ read :): https://github.com/EugenMayer/docker-sync/wiki/1.2-Upgrade-Guide\n\n", :red
+
+      unless Thor::Shell::Basic.new.yes?('Shall we continue - DID you read it - really :) ? (y/N)')
+        exit 1
+      end
+    end
 
     # update the upgrade_status
     @config.update! 'upgrade_status' => "#{UpgradeChecker.get_current_version}"
