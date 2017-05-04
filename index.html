@@ -24,7 +24,7 @@
 
     <div class="container">
       <section id="main_content">
-        <p>Developing with Docker under OSX is a huge pain, since sharing code into Docker containers make the code-execution about 50 times slower (depends on the solution). Testing and working with a lot of the <a href="https://github.com/EugenMayer/docker_sync/wiki/Alternatives-to-docker-sync">alternatives</a> made me pick the best of those, and combine this in one single tool: docker-sync</p>
+        <p>Developing with Docker under OSX is a huge pain, since sharing code into Docker containers make the code-execution about 50-60 times slower (depends on the solution). Testing and working with a lot of the <a href="https://github.com/EugenMayer/docker_sync/wiki/Alternatives-to-docker-sync">alternatives</a> made me pick the best of those, and combine this in one single tool: docker-sync</p>
 
 <p><a href="https://badge.fury.io/rb/docker-sync"><img src="https://badge.fury.io/rb/docker-sync.svg" alt="Gem Version"></a></p>
 
@@ -36,11 +36,12 @@
 <ul>
 <li>able to run on all of those docker-machines and also on <strong>Docker for mac</strong>
 </li>
-<li>using either <strong>rsync</strong> or <strong>unison</strong> to sync. The container performance is not influenced at all, see <a href="https://github.com/EugenMayer/docker_sync/wiki/4.-Performance">performance</a>
+<li>using either <strong>native_osx</strong> or <strong>unison/rsync</strong> to sync. The container performance is not influenced at all, see <a href="https://github.com/EugenMayer/docker_sync/wiki/4.-Performance">performance</a>
 </li>
-<li>efficient in its way to watch for file changes - even for 12k+ files it will not eat up your CPU</li>
+<li>Now a lot mor efficient in its way to watch for file changes - even for 50k+ files it will not eat up your CPU</li>
 <li>supporting either one-way sync ( rsync ) or two way sync ( unison ), see <a href="https://github.com/EugenMayer/docker-sync/wiki/8.-Strategies">strategies</a></li>
-<li>supporting real 2-way sync, also when app-container has changes</li>
+<li>has no longer dependencies on OSX when using native_osx</li>
+<li>now supports background more to get out of your way</li>
 <li><strong>supporting user-remapping</strong> on sync to avoid permission problems on the container</li>
 <li><strong>supporting  docker-compose</strong> to start sync and stack with one single command</li>
 <li>using overlays to keep your production docker-compose.yml untouched and portable</li>
