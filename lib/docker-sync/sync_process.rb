@@ -71,7 +71,7 @@ module Docker_Sync
       return '127.0.0.1' if DockerSync::Preconditions::Strategy.instance.is_driver_docker_for_mac?
 
       if DockerSync::Preconditions::Strategy.instance.is_driver_docker_toolbox?
-        cmd = 'docker-machine ip'
+        cmd = 'docker-machine ip $(docker-machine active)'
         stdout, stderr, exit_status = Open3.capture3(cmd)
         unless exit_status.success?
           raise "Error getting sync_host_ip automatically, exit code #{$?.exitstatus} ... #{stderr}"
