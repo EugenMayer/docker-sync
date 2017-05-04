@@ -28,7 +28,7 @@ module Docker_Sync
       }
 
       # even if sync_host_ip is set, if it is set to auto, enforce the default
-      if options.key?('sync_host_ip') && options['sync_host_ip'] == 'auto' || options['sync_host_ip'] == ''
+      if !options.key?('sync_host_ip') || options['sync_host_ip'] == 'auto' || options['sync_host_ip'] == ''
         options['sync_host_ip'] = get_host_ip_default
       end
 
