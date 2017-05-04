@@ -48,27 +48,6 @@ module Docker_Sync
         # nop
       end
 
-      def expand_ignore_strings
-        expanded_ignore_strings = []
-
-        exclude_type = 'Name'
-        unless @options['sync_excludes_type'].nil?
-          exclude_type = @options['sync_excludes_type']
-        end
-
-        unless @options['sync_excludes'].nil?
-          expanded_ignore_strings = @options['sync_excludes'].map do |pattern|
-            if exclude_type == 'none'
-              # the ignore type like Name / Path are part of the pattern
-              ignore_string = "#{pattern}"
-            else
-              ignore_string = "#{exclude_type} #{pattern}"
-            end
-            "-ignore='#{ignore_string}'"
-          end
-        end
-        expanded_ignore_strings
-      end
 
       def start_container
         say_status 'ok', 'Starting unison', :white
@@ -81,6 +60,7 @@ module Docker_Sync
 
         ignore_strings = expand_ignore_strings
         env['UNISON_EXCLUDES'] = ignore_strings.join(' ')
+        env['UNISON_SYNC_PREFER'] = sync_prefer
         env['MAX_INOTIFY_WATCHES'] = @options['max_inotify_watches'] if @options.key?('max_inotify_watches')
         if @options['sync_userid'] == 'from_host'
           env['OWNER_UID'] = Process.uid
@@ -95,6 +75,7 @@ module Docker_Sync
           exists = `docker ps --filter "status=exited" --filter "name=#{container_name}" --format "{{.Names}}" | grep '^#{container_name}$'`
           if exists == ''
             say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
+            run_privileged = ''
             run_privileged = '--privileged' if @options.key?('max_inotify_watches') #TODO: replace by the minimum capabilities required
             cmd = "docker run -v #{volume_app_sync_name}:/app_sync -v #{host_sync_src}:/host_sync -e VOLUME=#{@options['dest']} -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} #{additional_docker_env} #{run_privileged} --name #{container_name} -d #{@docker_image}"
           else
@@ -111,6 +92,8 @@ module Docker_Sync
         # wait until container is started, then sync:
         say_status 'success', 'Unison container started', :green
       end
+
+
 
       def get_container_name
         return "#{@sync_name}"
@@ -142,6 +125,44 @@ module Docker_Sync
           say_status 'error', "Stopping failed of #{get_container_name}:", :red
           puts e.message
         end
+      end
+
+      private
+
+      # cares about conflict resolution
+      def sync_prefer
+        case @options.fetch('sync_prefer', 'default')
+          when 'default' then
+            '-prefer /host_sync' # thats our default, if nothing is set
+          when 'src' then
+            '-prefer /host_sync'
+          when 'dest' then
+            '-prefer /app_sync'
+          else
+            raise 'sync_pref can only be: src or dest, no path - path is no longer needed it abstracted'
+        end
+      end
+
+      def expand_ignore_strings
+        expanded_ignore_strings = []
+
+        exclude_type = 'Name'
+        unless @options['sync_excludes_type'].nil?
+          exclude_type = @options['sync_excludes_type']
+        end
+
+        unless @options['sync_excludes'].nil?
+          expanded_ignore_strings = @options['sync_excludes'].map do |pattern|
+            if exclude_type == 'none'
+              # the ignore type like Name / Path are part of the pattern
+              ignore_string = "#{pattern}"
+            else
+              ignore_string = "#{exclude_type} #{pattern}"
+            end
+            "-ignore='#{ignore_string}'"
+          end
+        end
+        expanded_ignore_strings
       end
     end
   end
