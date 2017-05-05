@@ -62,7 +62,7 @@ module Docker_Sync
             say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
             run_privileged = ''
             run_privileged = '--privileged' if @options.key?('max_inotify_watches') #TODO: replace by the minimum capabilities required
-            cmd = "docker run -v #{volume_app_sync_name}:/app_sync -v #{host_sync_src}:/host_sync -e VOLUME=#{@options['dest']} -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} #{additional_docker_env} #{run_privileged} --name #{container_name} -d #{@docker_image}"
+            cmd = "docker run -v #{volume_app_sync_name}:/app_sync -v #{host_sync_src}:/host_sync -e HOST_VOLUME=/host_sync -e APP_VOLUME=/app_sync -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} #{additional_docker_env} #{run_privileged} --name #{container_name} -d #{@docker_image}"
           else
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
             cmd = "docker start #{container_name} && docker exec #{container_name} supervisorctl restart unison"
