@@ -98,6 +98,12 @@ class UpgradeChecker
     if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.4.2')
       checker = UpdateChecker.new
       checker.check_unison_hostsync_image
+
+      Thor::Shell::Basic.new.say_status 'warning', "The native_osx strategy i only available for docker-for-mac now, this is due to https://github.com/EugenMayer/docker-sync/issues/346\n\nThat means, that unison is picked as a default automatically, if you use docker-machine", :red
+
+      unless Thor::Shell::Basic.new.yes?('Just wanted you to no that? (y/N)')
+        exit 1
+      end
     end
 
     # update the upgrade_status

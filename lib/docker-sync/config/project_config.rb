@@ -2,7 +2,7 @@ require 'singleton'
 require 'docker-sync/config/config_locator'
 require 'docker-sync/config/config_serializer'
 require 'forwardable'
-
+require 'docker-sync/preconditions/strategy'
 module DockerSync
   class ProjectConfig
     extend Forwardable
@@ -134,9 +134,14 @@ module DockerSync
       end
 
       def default_sync_strategy
-        case true
-        when OS.linux? then 'native'
-        else 'native_osx'
+        if OS.linux?
+          return 'native'
+        elsif OS.osx?
+          if DockerSync::Preconditions::Strategy.instance.is_driver_docker_for_mac?
+            return 'native_osx'
+          else
+            return 'unison'
+          end
         end
       end
 
