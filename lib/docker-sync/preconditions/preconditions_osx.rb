@@ -27,7 +27,7 @@ module DockerSync
       end
 
       def docker_running
-        raise(DOCKER_NOT_RUNNING_ERROR) unless system('docker ps')
+        raise(DOCKER_NOT_RUNNING_ERROR) unless system('docker ps &> /dev/null')
       end
 
       def rsync_available
@@ -50,12 +50,12 @@ module DockerSync
       end
 
       def is_driver_docker_for_mac?
-        system('docker info | grep "Docker Root Dir: /var/lib/docker" && docker info | grep "Operating System: Alpine Linux"')
+        system('docker info | grep -q "Docker Root Dir: /var/lib/docker" && docker info | grep -q "Operating System: Alpine Linux"')
       end
 
       def is_driver_docker_toolbox?
         return false unless find_executable0('docker-machine')
-        system('docker info | grep "Operating System: Boot2Docker"')
+        system('docker info | grep -q "Operating System: Boot2Docker"')
       end
 
       private
