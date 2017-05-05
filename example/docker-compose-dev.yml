@@ -5,10 +5,10 @@ services:
     environment:
       RAILS_ENV: 'development'
     volumes:
-      - rsync-sync:/var/www # will be mounted on /var/www
+      - rsync-sync:/var/www:nocopy # will be mounted on /var/www
   unison:
     volumes:
-      - unison-sync:/var/www # will be mounted on /app/code
+      - unison-sync:/var/www:nocopy # will be mounted on /app/code
 volumes:
   rsync-sync:
     external: true
