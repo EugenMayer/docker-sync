@@ -1,6 +1,7 @@
 require 'gem_update_checker'
 require 'thor/actions'
 require 'docker-sync/config/global_config'
+require 'docker-sync/update_check'
 
 class UpgradeChecker
   include Thor::Shell
@@ -92,6 +93,11 @@ class UpgradeChecker
       unless Thor::Shell::Basic.new.yes?('Did you fix your docker-compose-dev.yml? (y/N)')
         exit 1
       end
+    end
+
+    if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.4.2')
+      checker = UpdateChecker.new
+      checker.check_unison_hostsync_image
     end
 
     # update the upgrade_status
