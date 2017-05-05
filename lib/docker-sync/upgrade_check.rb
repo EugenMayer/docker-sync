@@ -86,6 +86,14 @@ class UpgradeChecker
       end
     end
 
+    if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.4.1')
+      Thor::Shell::Basic.new.say_status 'warning', "Please add :nocopy to every named-volume mount you defined in your docker-compose-dev.yml! \n\nWhy? : https://github.com/EugenMayer/docker-sync/wiki/2.-Configuration#why-nocopy-is-important\n\n", :red
+
+      unless Thor::Shell::Basic.new.yes?('Did you fix your docker-compose-dev.yml? (y/N)')
+        exit 1
+      end
+    end
+
     # update the upgrade_status
     @config.update! 'upgrade_status' => "#{UpgradeChecker.get_current_version}"
   end
