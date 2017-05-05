@@ -9,6 +9,7 @@ require 'docker-sync/sync_strategy/native_osx'
 require 'docker-sync/watch_strategy/fswatch'
 require 'docker-sync/watch_strategy/dummy'
 require 'docker-sync/watch_strategy/unison'
+require 'docker-sync/watch_strategy/remotelogs'
 
 module Docker_Sync
   class SyncProcess
@@ -62,6 +63,8 @@ module Docker_Sync
         @watch_strategy = Docker_Sync::WatchStrategy::Dummy.new(@sync_name, @options)
       when 'unison'
         @watch_strategy = Docker_Sync::WatchStrategy::Unison.new(@sync_name, @options)
+      when 'remotelogs'
+        @watch_strategy = Docker_Sync::WatchStrategy::Remote_logs.new(@sync_name, @options)
       else
         raise "Unknown watch_strategy #{@options['watch_strategy']}"
       end

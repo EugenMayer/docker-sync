@@ -150,7 +150,7 @@ module DockerSync
         when 'rsync' then 'fswatch'
         when 'unison' then 'unison'
         when 'native' then 'dummy'
-        when 'native_osx' then 'dummy'
+        when 'native_osx' then 'remotelogs'
         else raise "you shouldn't be here"
         end
       end
