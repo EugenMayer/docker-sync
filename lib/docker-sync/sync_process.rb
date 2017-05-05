@@ -3,6 +3,8 @@ require 'thor/shell'
 require 'docker-sync/sync_strategy/rsync'
 require 'docker-sync/sync_strategy/unison'
 require 'docker-sync/sync_strategy/native'
+require 'docker-sync/sync_strategy/native_osx'
+
 # noinspection RubyResolve
 require 'docker-sync/watch_strategy/fswatch'
 require 'docker-sync/watch_strategy/dummy'
@@ -23,11 +25,11 @@ module Docker_Sync
 
       defaults = {
           'verbose' => false,
-          'sync_host_ip' => get_host_ip_default
       }
+
       # even if sync_host_ip is set, if it is set to auto, enforce the default
-      if options.key?('sync_host_ip') && options['sync_host_ip'] == 'auto' || options['sync_host_ip'] == ''
-        options['sync_host_ip'] = defaults['sync_host_ip']
+      if !options.key?('sync_host_ip') || options['sync_host_ip'] == 'auto' || options['sync_host_ip'] == ''
+        options['sync_host_ip'] = get_host_ip_default
       end
 
       @options = defaults.merge(options)
@@ -45,6 +47,8 @@ module Docker_Sync
         @sync_strategy = Docker_Sync::SyncStrategy::Unison.new(@sync_name, @options)
       when 'native'
         @sync_strategy = Docker_Sync::SyncStrategy::Native.new(@sync_name, @options)
+      when 'native_osx'
+        @sync_strategy = Docker_Sync::SyncStrategy::NativeOsx.new(@sync_name, @options)
       else
         raise "Unknown sync_strategy #{@options['sync_strategy']}"
       end
@@ -67,7 +71,7 @@ module Docker_Sync
       return '127.0.0.1' if DockerSync::Preconditions::Strategy.instance.is_driver_docker_for_mac?
 
       if DockerSync::Preconditions::Strategy.instance.is_driver_docker_toolbox?
-        cmd = 'docker-machine ip'
+        cmd = 'docker-machine ip $(docker-machine active)'
         stdout, stderr, exit_status = Open3.capture3(cmd)
         unless exit_status.success?
           raise "Error getting sync_host_ip automatically, exit code #{$?.exitstatus} ... #{stderr}"

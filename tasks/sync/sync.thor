@@ -23,6 +23,7 @@ class Sync < Thor
 
   desc 'start', 'Start all sync configurations in this project'
   method_option :daemon, :aliases => '-d', :default => false, :type => :boolean, :desc => 'Run in the background'
+  method_option :foreground, :aliases => '-d', :default => false, :type => :boolean, :desc => 'Run in the background'
   method_option :app_name, :aliases => '--name', :default => 'daemon', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
   method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
   method_option :logd, :aliases => '--logd', :default => true, :type => :boolean, :desc => 'To log OUPUT to file on Daemon or not'
@@ -36,10 +37,15 @@ class Sync < Thor
     @sync_manager = Docker_sync::SyncManager.new(config: config)
 
     start_dir = Dir.pwd # Set start_dir variable to be equal to pre-daemonized folder, since daemonizing will change dir to '/'
-    if options['daemon']
-      daemonize
+
+    if  options['daemon']
+      puts 'WARNING: --daemon is deprecated and now the default. Just start without --daemom'
+    end
+
+    if options['foreground']
+      say_status 'note:', 'Starting in foreground mode', :white
     else
-      say_status 'note:', 'You can also run docker-sync in the background with --daemon', :white
+      daemonize
     end
 
     Dir.chdir(start_dir) do # We want run these in pre-daemonized folder/directory since provided config_path might not be full_path
@@ -56,16 +62,22 @@ class Sync < Thor
 
     config = config_preconditions
     sync_manager = Docker_sync::SyncManager.new(config: config)
-
-    begin
-      pid = File.read("#{options['dir']}/#{options['app_name']}.pid") # Read PID from PIDFILE created by Daemons
-      Process.kill(:INT, -(Process.getpgid(pid.to_i))) # Send INT signal to group PID, which means INT will be sent to all sub-processes and Threads spawned by docker-sync
-      wait_for_process_termination(pid.to_i)
-    rescue Errno::ESRCH, Errno::ENOENT => e
-      say_status 'error', e.message, :red # Rescue incase PIDFILE does not exist or there is no process with such PID
-      say_status 'error', 'Check if your PIDFILE and process with such PID exists', :red
-      exit(69) # EX_UNAVAILABLE (see `man sysexits` or `/usr/include/sysexits.h`)
+    sync_manager.stop
+    pid_file_path="#{options['dir']}/#{options['app_name']}.pid"
+    if File.exist?(pid_file_path)
+      begin
+        pid = File.read("#{options['dir']}/#{options['app_name']}.pid") # Read PID from PIDFILE created by Daemons
+        Process.kill(:INT, -(Process.getpgid(pid.to_i))) # Send INT signal to group PID, which means INT will be sent to all sub-processes and Threads spawned by docker-sync
+        wait_for_process_termination(pid.to_i)
+      rescue Errno::ESRCH, Errno::ENOENT => e
+        say_status 'error', e.message, :red # Rescue incase PIDFILE does not exist or there is no process with such PID
+        say_status 'error', 'Check if your PIDFILE and process with such PID exists', :red
+        exit(69) # EX_UNAVAILABLE (see `man sysexits` or `/usr/include/sysexits.h`)
+      end
+    else
+      # there was no watcher started / needed, e.g. dummy. Nothing to worry about
     end
+
   end
 
   desc 'sync', 'just sync - do not start a watcher though'
@@ -90,7 +102,7 @@ class Sync < Thor
     files.each do |pid_file|
       pid = File.read(pid_file).to_i
       Process.kill(:INT, -(Process.getpgid(pid))) if Daemons::Pid.running?(pid)
-      say_status 'shutdown', 'Background dsync has been stopped'
+      say_status 'shutdown', 'Background sync has been stopped'
     end
     # Remove the .docker-sync directory
     FileUtils.rm_r dir if File.directory?(dir)
