@@ -6,6 +6,8 @@ require 'os'
 
 module DockerSync
   module Preconditions
+    UNSUPPORTED_OS_ERROR = 'Unsupported operating system. Docker-Sync works only on MacOS and Linux.'
+
     class Strategy
       include Singleton
 
@@ -17,7 +19,7 @@ module DockerSync
         elsif DockerSync::Preconditions::Strategy.is_linux
           @strategy = DockerSync::Preconditions::Linux.new
         else
-          raise 'Unsupported operating system. Docker-Sync works only on MacOS and Linux.'
+          raise UNSUPPORTED_OS_ERROR
         end
       end
 

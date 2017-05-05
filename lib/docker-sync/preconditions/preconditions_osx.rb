@@ -2,6 +2,10 @@ require 'mkmf'
 module DockerSync
   module Preconditions
     class Osx
+      DOCKER_UNAVAILABLE_ERROR          = 'Could not find docker binary in path. Please install it, e.g. using "brew install docker" or install docker-for-mac'
+      DOCKER_NOT_RUNNING_ERROR          = 'No docker daemon seems to be running. Did you start your docker-for-mac / docker-machine?'
+      NOT_RUNNING_PRECONDITIONS_WARNING = 'Not running any precondition checks since you have no brew and that is unsupported. It\'s all up to you now.'
+
       def check_all_preconditions(config)
         return unless should_run_precondition?
 
@@ -19,11 +23,11 @@ module DockerSync
       end
 
       def docker_available
-        raise('Could not find docker binary in path. Please install it, e.g. using "brew install docker" or install docker-for-mac') unless find_executable0('docker')
+        raise(DOCKER_UNAVAILABLE_ERROR) unless find_executable0('docker')
       end
 
       def docker_running
-        raise('No docker daemon seems to be running. Did you start your docker-for-mac / docker-machine?') unless system('docker ps')
+        raise(DOCKER_NOT_RUNNING_ERROR) unless system('docker ps')
       end
 
       def rsync_available
@@ -58,7 +62,7 @@ module DockerSync
 
       def should_run_precondition?(silent = false)
         return true if has_brew?
-        Thor::Shell::Basic.new.say_status 'info', 'Not running any precondition checks since you have no brew and that is unsupported. It\'s all up to you now.', :white unless silent
+        Thor::Shell::Basic.new.say_status('info', NOT_RUNNING_PRECONDITIONS_WARNING, :white) unless silent
         false
       end
 
