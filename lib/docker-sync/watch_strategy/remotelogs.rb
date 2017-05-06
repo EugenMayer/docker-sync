@@ -17,7 +17,7 @@ module Docker_Sync
         @sync_name = sync_name
         @watch_fork = nil
         @watch_thread = nil
-        @unison = Docker_Sync::SyncStrategy::Unison.new(@sync_name, @options)
+        @unison = Docker_Sync::SyncStrategy::NativeOsx.new(@sync_name, @options)
       end
 
       def run
