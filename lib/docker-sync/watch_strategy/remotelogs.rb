@@ -22,7 +22,8 @@ module Docker_Sync
 
       def run
         say_status 'success', "Showing unison logs from your sync container: #{@unison.get_container_name}", :green
-        cmd = "docker exec #{@unison.get_container_name} tail -f /tmp/unison.log"
+        cmd = "docker exec #{@unison.get_container_name} tail -F /tmp/unison.log"
+        wait_for_unison_log
         @watch_thread = threadexec(cmd, 'Sync Log:')
       end
 
@@ -44,6 +45,26 @@ module Docker_Sync
 
       def watch_thread
         return @watch_thread
+      end
+
+      private
+
+      def wait_for_unison_log
+        say_status 'wait', "Waiting for unison to start", :white
+        Timeout::timeout(30) do
+          loop do
+            return if unison_log_available?
+            sleep 1
+          end
+        end
+      rescue Timeout::Error
+        puts
+        say_status 'error', 'Unison failed to start within 30 seconds.', :red
+        exit 70 # EX_SOFTWARE (according to `man sysexits`)
+      end
+
+      def unison_log_available?
+        system("docker exec #{@unison.get_container_name} test -f /tmp/unison.log")
       end
     end
   end
