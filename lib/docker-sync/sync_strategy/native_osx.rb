@@ -107,6 +107,10 @@ module Docker_Sync
         end
       end
 
+      def get_container_name
+        @sync_name.to_s
+      end
+
       private
 
       def reset_container
@@ -115,10 +119,6 @@ module Docker_Sync
         `docker volume ls -q | grep #{get_volume_name} && docker volume rm #{get_volume_name}`
       end
 
-
-      def get_container_name
-        return "#{@sync_name}"
-      end
 
       def get_volume_name
         return @sync_name
