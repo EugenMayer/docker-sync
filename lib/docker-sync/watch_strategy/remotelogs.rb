@@ -22,7 +22,7 @@ module Docker_Sync
 
       def run
         say_status 'success', "Showing unison logs from your sync container: #{@unison.get_container_name}", :green
-        cmd = "docker exec #{@unison.get_container_name} tail -f /tmp/unison.log"
+        cmd = "docker exec #{@unison.get_container_name} tail -F /tmp/unison.log"
         @watch_thread = threadexec(cmd, 'Sync Log:')
       end
 
