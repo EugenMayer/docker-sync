@@ -45,6 +45,7 @@ module Docker_Sync
 
         ignore_strings = expand_ignore_strings
         env['UNISON_EXCLUDES'] = ignore_strings.join(' ')
+        env['UNISON_ARGS'] = @options['sync_args']
         env['UNISON_SYNC_PREFER'] = sync_prefer
         env['MAX_INOTIFY_WATCHES'] = @options['max_inotify_watches'] if @options.key?('max_inotify_watches')
         if @options['sync_userid'] == 'from_host'
@@ -137,6 +138,8 @@ module Docker_Sync
             '-prefer /host_sync'
           when 'dest' then
             '-prefer /app_sync'
+          when 'newer' then
+            '-prefer newer'
           else
             raise 'sync_pref can only be: src or dest, no path - path is no longer needed it abstracted'
         end
