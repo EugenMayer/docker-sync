@@ -48,10 +48,16 @@
     <orderEntry type="library" scope="PROVIDED" name="backticks (v1.0.0, rbenv: 2.2.4) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="bundler (v1.14.6, rbenv: 2.2.4) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="daemons (v1.2.4, rbenv: 2.2.4) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="diff-lcs (v1.3, rbenv: 2.2.4) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="docker-compose (v1.1.5, rbenv: 2.2.4) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="dotenv (v2.2.1, rbenv: 2.2.4) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="gem_update_checker (v0.2.0, rbenv: 2.2.4) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="os (v1.0.0, rbenv: 2.2.4) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rspec (v3.5.0, rbenv: 2.2.4) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rspec-core (v3.5.4, rbenv: 2.2.4) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rspec-expectations (v3.5.0, rbenv: 2.2.4) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rspec-mocks (v3.5.0, rbenv: 2.2.4) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rspec-support (v3.5.0, rbenv: 2.2.4) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="terminal-notifier (v1.6.3, rbenv: 2.2.4) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="thor (v0.19.4, rbenv: 2.2.4) [gem]" level="application" />
   </component>
