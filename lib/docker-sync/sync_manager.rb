@@ -44,7 +44,7 @@ module Docker_sync
           puts 'Please do no longer use "dest" in your docker-sync.yml configuration - also see https://github.com/EugenMayer/docker-sync/wiki/1.2-Upgrade-Guide#dest-has-been-removed!'
           exit 1
         else
-          @config_syncs[name]['dest'] = '/sync'
+          @config_syncs[name]['dest'] = '/app_sync'
         end
 
         # for each strategy check if a custom image has been defined and inject that into the sync-endpoints
