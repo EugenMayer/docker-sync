@@ -30,6 +30,8 @@ syncs:
     # the contents of this directory will be synchronized to the Docker volume with the name of this sync entry ('default-sync' here)
     src: './default-data/'
 
+    # this is only available if you use docker-for-mac edge for now
+    host_disk_mount_mode: 'cached' # see https://github.com/moby/moby/pull/31047
     # other unison options can also be specified here, which will be used when run under osx,
     # and ignored when run under linux
 

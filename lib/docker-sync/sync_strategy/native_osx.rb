@@ -54,6 +54,9 @@ module Docker_Sync
           env['OWNER_UID'] = @options['sync_userid'] if @options.key?('sync_userid')
         end
 
+        host_disk_mount_mode = '' # see https://github.com/moby/moby/pull/31047
+        host_disk_mount_mode = ":#{@options['host_disk_mount_mode']}" if @options.key?('host_disk_mount_mode')
+
         additional_docker_env = env.map{ |key,value| "-e #{key}=\"#{value}\"" }.join(' ')
         running = `docker ps --filter 'status=running' --filter 'name=#{container_name}' --format "{{.Names}}" | grep '^#{container_name}$'`
         if running == ''
@@ -65,7 +68,7 @@ module Docker_Sync
             run_privileged = '--privileged' if @options.key?('max_inotify_watches') #TODO: replace by the minimum capabilities required
             say_status 'ok', 'Starting precopy', :white if @options['verbose']
             # we just run the precopy script and remove the container
-            cmd = "docker run --rm -v #{volume_app_sync_name}:/app_sync -v #{host_sync_src}:/host_sync -e HOST_VOLUME=/host_sync -e APP_VOLUME=/app_sync -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} #{additional_docker_env} #{run_privileged} --name #{container_name} #{@docker_image} /usr/local/bin/precopy_appsync"
+            cmd = "docker run --rm -v #{volume_app_sync_name}:/app_sync -v #{host_sync_src}:/host_sync#{host_disk_mount_mode} -e HOST_VOLUME=/host_sync -e APP_VOLUME=/app_sync -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} #{additional_docker_env} #{run_privileged} --name #{container_name} #{@docker_image} /usr/local/bin/precopy_appsync"
             `#{cmd}` || raise('Precopy failed')
             say_status 'ok', 'Starting container', :white if @options['verbose']
             # this will be run below and start unison, since we did not manipulate CMD
