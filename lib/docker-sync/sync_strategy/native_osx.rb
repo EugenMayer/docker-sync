@@ -27,8 +27,8 @@ module Docker_Sync
         end
 
         # TODO: remove this when we have a more stable image, but for now, we need this
-        UpdateChecker.new
-        UpdateChecker.check_unison_hostsync_image
+        uc = UpdateChecker.new
+        uc.check_unison_hostsync_image
 
         begin
           DockerSync::Preconditions::Strategy.instance.docker_available
