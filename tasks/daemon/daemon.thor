@@ -17,7 +17,7 @@ class Daemon < Thor
 
   desc 'start', 'Start docker-sync daemon'
   def start
-    say_status 'warning', 'Daemon mode is not the default, just use docker-sync start .. docker-sync-daemon is deprecated', :blue
+    say_status 'warning', 'Daemon mode is now the default, just use docker-sync start .. docker-sync-daemon is deprecated', :blue
 
     opt = options.dup
     opt.merge!(:daemon => true)
@@ -27,7 +27,7 @@ class Daemon < Thor
 
   desc 'stop', 'Stop docker-sync daemon'
   def stop
-    say_status 'warning', 'Daemon mode is not the default, just use docker-sync start .. docker-sync-daemon is deprecated', :blue
+    say_status 'warning', 'Daemon mode is now the default, just use docker-sync start .. docker-sync-daemon is deprecated', :blue
 
     opt = options.dup
     opt.merge!(:daemon => true)
@@ -37,7 +37,7 @@ class Daemon < Thor
 
   desc 'clean', 'Clean docker-sync daemon'
   def clean
-    say_status 'warning', 'Daemon mode is not the default, just use docker-sync start .. docker-sync-daemon is deprecated', :blue
+    say_status 'warning', 'Daemon mode is now the default, just use docker-sync start .. docker-sync-daemon is deprecated', :blue
 
     opt = options.dup
     opt.merge!(:daemon => true)

@@ -2,7 +2,7 @@ require 'singleton'
 require 'docker-sync/config/config_locator'
 require 'docker-sync/config/config_serializer'
 require 'forwardable'
-
+require 'docker-sync/preconditions/strategy'
 module DockerSync
   class ProjectConfig
     extend Forwardable
@@ -134,9 +134,14 @@ module DockerSync
       end
 
       def default_sync_strategy
-        case true
-        when OS.linux? then 'native'
-        else 'native_osx'
+        if OS.linux?
+          return 'native'
+        elsif OS.osx?
+          if DockerSync::Preconditions::Strategy.instance.is_driver_docker_for_mac?
+            return 'native_osx'
+          else
+            return 'unison'
+          end
         end
       end
 
@@ -145,7 +150,7 @@ module DockerSync
         when 'rsync' then 'fswatch'
         when 'unison' then 'unison'
         when 'native' then 'dummy'
-        when 'native_osx' then 'dummy'
+        when 'native_osx' then 'remotelogs'
         else raise "you shouldn't be here"
         end
       end

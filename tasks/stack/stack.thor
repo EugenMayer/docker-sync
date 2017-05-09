@@ -12,8 +12,14 @@ class Stack < Thor
   class_option :sync_name, :aliases => '-n', :type => :string, :desc => 'If given, only this sync configuration will be references/started/synced'
   class_option :version, :aliases => '-v',:type => :boolean, :default => false, :desc => 'prints out the version of docker-sync and exits'
 
-  desc 'start', 'Start sync services, watcher and then your docker-compose defined stack'
+  desc '--version, -v', 'Prints out the version of docker-sync and exits'
+  def print_version
+    puts UpgradeChecker.get_current_version
+    exit(0)
+  end
+  map %w[--version -v] => :print_version
 
+  desc 'start', 'Start sync services, watcher and then your docker-compose defined stack'
   def start
     if options[:version]
       puts UpgradeChecker.get_current_version

@@ -24,6 +24,7 @@ class UpdateChecker
     # do not check the image if its the first run - since this it will be downloaded anyway
     unless @config.first_run?
       unless has_internet?
+        check_unison_hostsync_image
         check_unison_image
         check_rsync_image
         # stop if there was an update
@@ -59,6 +60,18 @@ class UpdateChecker
 
     if system("docker pull eugenmayer/rsync | grep 'Downloaded newer image for'")
       say_status 'ok', 'Downloaded newer image for rsync', :green
+      @newer_image_found = true
+    else
+      say_status 'ok', 'No newer image found - current image is up to date.'
+    end
+
+  end
+
+  def check_unison_hostsync_image
+    say_status 'ok','Checking if a newer native_osx (unison:hostsync) image is available'
+
+    if system("docker pull eugenmayer/unison:hostsync | grep 'Downloaded newer image for'")
+      say_status 'ok', 'Downloaded newer image for native_osx', :green
       @newer_image_found = true
     else
       say_status 'ok', 'No newer image found - current image is up to date.'

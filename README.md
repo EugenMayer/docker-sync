@@ -11,6 +11,7 @@ Anything else under [http://docker-sync.io](http://docker-sync.io) or the [wiki]
 
 Main Contributors:
  - [ignatiusreza](https://github.com/ignatiusreza)
+ - [michaelbaudino](https://github.com/michaelbaudino)
  - [mickaelperrin](https://github.com/mickaelperrin)
  - [masterful](https://github.com/masterful)
 

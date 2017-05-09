@@ -39,7 +39,7 @@ class Sync < Thor
     start_dir = Dir.pwd # Set start_dir variable to be equal to pre-daemonized folder, since daemonizing will change dir to '/'
 
     if  options['daemon']
-      puts 'WARNING: --daemon is deprecated and now the default. Just start without --daemom'
+      puts 'WARNING: --daemon is deprecated and now the default. Just start without --daemon'
     end
 
     if options['foreground']

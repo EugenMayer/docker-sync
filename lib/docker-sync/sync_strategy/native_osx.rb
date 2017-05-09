@@ -45,6 +45,7 @@ module Docker_Sync
 
         ignore_strings = expand_ignore_strings
         env['UNISON_EXCLUDES'] = ignore_strings.join(' ')
+        env['UNISON_ARGS'] = @options['sync_args']
         env['UNISON_SYNC_PREFER'] = sync_prefer
         env['MAX_INOTIFY_WATCHES'] = @options['max_inotify_watches'] if @options.key?('max_inotify_watches')
         if @options['sync_userid'] == 'from_host'
@@ -52,6 +53,9 @@ module Docker_Sync
         else
           env['OWNER_UID'] = @options['sync_userid'] if @options.key?('sync_userid')
         end
+
+        host_disk_mount_mode = '' # see https://github.com/moby/moby/pull/31047
+        host_disk_mount_mode = ":#{@options['host_disk_mount_mode']}" if @options.key?('host_disk_mount_mode')
 
         additional_docker_env = env.map{ |key,value| "-e #{key}=\"#{value}\"" }.join(' ')
         running = `docker ps --filter 'status=running' --filter 'name=#{container_name}' --format "{{.Names}}" | grep '^#{container_name}$'`
@@ -62,7 +66,13 @@ module Docker_Sync
             say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
             run_privileged = ''
             run_privileged = '--privileged' if @options.key?('max_inotify_watches') #TODO: replace by the minimum capabilities required
-            cmd = "docker run -v #{volume_app_sync_name}:/app_sync -v #{host_sync_src}:/host_sync -e VOLUME=#{@options['dest']} -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} #{additional_docker_env} #{run_privileged} --name #{container_name} -d #{@docker_image}"
+            say_status 'ok', 'Starting precopy', :white if @options['verbose']
+            # we just run the precopy script and remove the container
+            cmd = "docker run --rm -v #{volume_app_sync_name}:/app_sync -v #{host_sync_src}:/host_sync#{host_disk_mount_mode} -e HOST_VOLUME=/host_sync -e APP_VOLUME=/app_sync -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} #{additional_docker_env} #{run_privileged} --name #{container_name} #{@docker_image} /usr/local/bin/precopy_appsync"
+            `#{cmd}` || raise('Precopy failed')
+            say_status 'ok', 'Starting container', :white if @options['verbose']
+            # this will be run below and start unison, since we did not manipulate CMD
+            cmd = "docker run -v #{volume_app_sync_name}:/app_sync -v #{host_sync_src}:/host_sync -e HOST_VOLUME=/host_sync -e APP_VOLUME=/app_sync -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} #{additional_docker_env} #{run_privileged} --name #{container_name} #{@docker_image}"
           else
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
             cmd = "docker start #{container_name} && docker exec #{container_name} supervisorctl restart unison"
@@ -106,6 +116,10 @@ module Docker_Sync
         end
       end
 
+      def get_container_name
+        @sync_name.to_s
+      end
+
       private
 
       def reset_container
@@ -114,10 +128,6 @@ module Docker_Sync
         `docker volume ls -q | grep #{get_volume_name} && docker volume rm #{get_volume_name}`
       end
 
-
-      def get_container_name
-        return "#{@sync_name}"
-      end
 
       def get_volume_name
         return @sync_name
@@ -137,6 +147,8 @@ module Docker_Sync
             '-prefer /host_sync'
           when 'dest' then
             '-prefer /app_sync'
+          when 'newer' then
+            '-prefer newer'
           else
             raise 'sync_pref can only be: src or dest, no path - path is no longer needed it abstracted'
         end

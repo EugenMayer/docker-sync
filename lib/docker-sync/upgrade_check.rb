@@ -1,6 +1,7 @@
 require 'gem_update_checker'
 require 'thor/actions'
 require 'docker-sync/config/global_config'
+require 'docker-sync/update_check'
 
 class UpgradeChecker
   include Thor::Shell
@@ -84,6 +85,35 @@ class UpgradeChecker
       unless Thor::Shell::Basic.new.yes?('Shall we continue - DID you read it - really :) ? (y/N)')
         exit 1
       end
+    end
+
+    if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.4.1')
+      Thor::Shell::Basic.new.say_status 'warning', "Please add :nocopy to every named-volume mount you defined in your docker-compose-dev.yml! \n\nWhy? : https://github.com/EugenMayer/docker-sync/wiki/2.-Configuration#why-nocopy-is-important\n\n", :red
+
+      unless Thor::Shell::Basic.new.yes?('Did you fix your docker-compose-dev.yml? (y/N)')
+        exit 1
+      end
+    end
+
+    if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.4.2')
+      checker = UpdateChecker.new
+      checker.check_unison_hostsync_image
+
+      Thor::Shell::Basic.new.say_status 'warning', "The native_osx is NOW ONLY for docker-for-mac, this is due to https://github.com/EugenMayer/docker-sync/issues/346\n\nThat means that unison is picked as a default automatically if you use docker-machine", :red
+
+      unless Thor::Shell::Basic.new.yes?('Just wanted you to know that! (y/N)')
+        exit 1
+      end
+    end
+
+    if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.4.3')
+      checker = UpdateChecker.new
+      checker.check_unison_hostsync_image
+    end
+
+    if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.4.4')
+      checker = UpdateChecker.new
+      checker.check_unison_hostsync_image
     end
 
     # update the upgrade_status
