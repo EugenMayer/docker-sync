@@ -32,20 +32,20 @@ module DockerSync
 
       def rsync_available
         return unless should_run_precondition?
-        return unless find_executable0('rsync')
+        return if find_executable0('rsync')
         install_binary('rsync')
       end
 
       def unison_available
         return unless should_run_precondition?
-        return unless find_executable0('unison')
+        return if find_executable0('unison')
         install_binary('unison')
         unox_available
       end
 
       def fswatch_available
         return unless should_run_precondition?
-        return unless find_executable0('fswatch')
+        return if find_executable0('fswatch')
         install_binary('fswatch')
       end
 
