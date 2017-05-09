@@ -26,6 +26,10 @@ module Docker_Sync
           @docker_image = 'eugenmayer/unison:hostsync'
         end
 
+        # TODO: remove this when we have a more stable image, but for now, we need this
+        UpdateChecker.new
+        UpdateChecker.check_unison_hostsync_image
+
         begin
           DockerSync::Preconditions::Strategy.instance.docker_available
         rescue Exception => e
