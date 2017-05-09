@@ -40,7 +40,7 @@ module Docker_Sync
       end
 
       def start_container
-        say_status 'ok', 'Starting native_osx', :white
+        say_status 'ok', "Starting native_osx for sync #{@sync_name}", :white
         container_name = get_container_name
         host_sync_src = @options['src']
         volume_app_sync_name = @sync_name
