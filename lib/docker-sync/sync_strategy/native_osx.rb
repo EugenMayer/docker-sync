@@ -24,7 +24,7 @@ module Docker_Sync
         if @options.key?('image')
           @docker_image = @options['image']
         else
-          @docker_image = 'eugenmayer/unison:hostsync'
+          @docker_image = 'eugenmayer/unison:hostsync_0.1'
         end
 
         # TODO: remove this when we have a more stable image, but for now, we need this

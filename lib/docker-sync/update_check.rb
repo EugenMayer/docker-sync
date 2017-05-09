@@ -68,9 +68,9 @@ class UpdateChecker
   end
 
   def check_unison_hostsync_image(silent = false)
-    say_status 'ok','Checking if a newer native_osx (unison:hostsync) image is available' unless silent
+    say_status 'ok','Checking if a newer native_osx (unison:hostsync_0.1) image is available' unless silent
 
-    if system("docker pull eugenmayer/unison:hostsync | grep 'Downloaded newer image for'")
+    if system("docker pull eugenmayer/unison:hostsync_0.1 | grep 'Downloaded newer image for'")
       say_status 'ok', 'Downloaded newer image for native_osx', :green unless silent
       @newer_image_found = true
     else
