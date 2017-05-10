@@ -101,7 +101,12 @@ module DockerSync
 
       def unox_available
         if should_run_precondition?
-          Bundler.with_clean_env { `brew list unox` }
+          if defined? Bundler
+            Bundler.with_clean_env { `brew list unox` } 
+          else
+            `brew list unox`
+          end
+          
           unless $?.success?
             # unox installed, but not using brew, we do not allow that anymore
             if File.exist?('/usr/local/bin/unison-fsmonitor')
