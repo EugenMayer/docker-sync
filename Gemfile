@@ -2,4 +2,8 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'rspec'
+group :test do
+  gem 'pry'
+  gem 'rspec'
+  gem 'rspec-bash'
+end
