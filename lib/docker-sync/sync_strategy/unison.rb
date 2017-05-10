@@ -142,7 +142,8 @@ module Docker_Sync
       end
 
       def start_container
-        say_status 'ok', 'Starting unison', :white
+        say_status 'ok', "Starting unison for sync #{@sync_name}", :white
+
         container_name = get_container_name
         volume_name = get_volume_name
         env = {}

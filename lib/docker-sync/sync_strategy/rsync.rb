@@ -84,7 +84,8 @@ module Docker_Sync
       # this container exposes a named volume and is on one side used as the rsync-endpoint for the
       # local rsync command, on the other side the volume is mounted into the app-container to share the code / content
       def start_container
-        say_status 'ok', 'Starting rsync', :white
+        say_status 'ok', "Starting rsync for sync #{@sync_name}", :white
+
         container_name = get_container_name
         volume_name = get_volume_name
         running = `docker ps --filter 'status=running' --filter 'name=#{container_name}' --format "{{.Names}}" | grep '^#{container_name}$'`

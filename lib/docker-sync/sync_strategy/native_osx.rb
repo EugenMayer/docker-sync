@@ -1,6 +1,7 @@
 require 'thor/shell'
 require 'docker-sync/preconditions/strategy'
 require 'docker-sync/execution'
+require 'docker-sync/update_check'
 require 'open3'
 require 'socket'
 require 'terminal-notifier'
@@ -23,8 +24,12 @@ module Docker_Sync
         if @options.key?('image')
           @docker_image = @options['image']
         else
-          @docker_image = 'eugenmayer/unison:hostsync'
+          @docker_image = 'eugenmayer/unison:hostsync_0.2'
         end
+
+        # TODO: remove this when we have a more stable image, but for now, we need this
+        uc = UpdateChecker.new
+        uc.check_unison_hostsync_image(true)
 
         begin
           DockerSync::Preconditions::Strategy.instance.docker_available
@@ -36,7 +41,7 @@ module Docker_Sync
       end
 
       def start_container
-        say_status 'ok', 'Starting native_osx', :white
+        say_status 'ok', "Starting native_osx for sync #{@sync_name}", :white
         container_name = get_container_name
         host_sync_src = @options['src']
         volume_app_sync_name = @sync_name
@@ -72,7 +77,7 @@ module Docker_Sync
             `#{cmd}` || raise('Precopy failed')
             say_status 'ok', 'Starting container', :white if @options['verbose']
             # this will be run below and start unison, since we did not manipulate CMD
-            cmd = "docker run -v #{volume_app_sync_name}:/app_sync -v #{host_sync_src}:/host_sync -e HOST_VOLUME=/host_sync -e APP_VOLUME=/app_sync -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} #{additional_docker_env} #{run_privileged} --name #{container_name} #{@docker_image}"
+            cmd = "docker run -d -v #{volume_app_sync_name}:/app_sync -v #{host_sync_src}:/host_sync -e HOST_VOLUME=/host_sync -e APP_VOLUME=/app_sync -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} #{additional_docker_env} #{run_privileged} --name #{container_name} #{@docker_image}"
           else
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
             cmd = "docker start #{container_name} && docker exec #{container_name} supervisorctl restart unison"
