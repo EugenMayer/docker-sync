@@ -6,6 +6,8 @@ require 'os'
 
 module DockerSync
   module Preconditions
+    UNSUPPORTED_OS_ERROR = 'Unsupported operating system. Docker-Sync works only on MacOS and Linux.'.freeze
+
     class Strategy
       include Singleton
 
@@ -16,6 +18,8 @@ module DockerSync
           @strategy = DockerSync::Preconditions::Osx.new
         elsif DockerSync::Preconditions::Strategy.is_linux
           @strategy = DockerSync::Preconditions::Linux.new
+        else
+          raise UNSUPPORTED_OS_ERROR
         end
       end
 
@@ -43,7 +47,6 @@ module DockerSync
         strategy.rsync_available
       end
 
-
       def fswatch_available
         strategy.fswatch_available
       end
@@ -62,4 +65,3 @@ module DockerSync
     end
   end
 end
-
