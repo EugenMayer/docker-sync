@@ -2,9 +2,9 @@ require 'mkmf'
 module DockerSync
   module Preconditions
     class Osx
-      DOCKER_UNAVAILABLE_ERROR          = 'Could not find docker binary in path. Please install it, e.g. using "brew install docker" or install docker-for-mac'
-      DOCKER_NOT_RUNNING_ERROR          = 'No docker daemon seems to be running. Did you start your docker-for-mac / docker-machine?'
-      NOT_RUNNING_PRECONDITIONS_WARNING = 'Not running any precondition checks since you have no brew and that is unsupported. It\'s all up to you now.'
+      DOCKER_UNAVAILABLE_ERROR          = 'Could not find docker binary in path. Please install it, e.g. using "brew install docker" or install docker-for-mac'.freeze
+      DOCKER_NOT_RUNNING_ERROR          = 'No docker daemon seems to be running. Did you start your docker-for-mac / docker-machine?'.freeze
+      NOT_RUNNING_PRECONDITIONS_WARNING = 'Not running any precondition checks since you have no brew and that is unsupported. It\'s all up to you now.'.freeze
 
       def check_all_preconditions(config)
         return unless should_run_precondition?

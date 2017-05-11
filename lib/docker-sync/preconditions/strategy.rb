@@ -6,7 +6,7 @@ require 'os'
 
 module DockerSync
   module Preconditions
-    UNSUPPORTED_OS_ERROR = 'Unsupported operating system. Docker-Sync works only on MacOS and Linux.'
+    UNSUPPORTED_OS_ERROR = 'Unsupported operating system. Docker-Sync works only on MacOS and Linux.'.freeze
 
     class Strategy
       include Singleton
