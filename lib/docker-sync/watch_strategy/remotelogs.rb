@@ -1,7 +1,7 @@
 require 'thor/shell'
 require 'docker-sync/execution'
 
-module Docker_Sync
+module DockerSync
   module WatchStrategy
     class Remote_logs
       include Thor::Shell
@@ -17,7 +17,7 @@ module Docker_Sync
         @sync_name = sync_name
         @watch_fork = nil
         @watch_thread = nil
-        @unison = Docker_Sync::SyncStrategy::NativeOsx.new(@sync_name, @options)
+        @unison = DockerSync::SyncStrategy::NativeOsx.new(@sync_name, @options)
       end
 
       def run

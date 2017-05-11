@@ -34,7 +34,7 @@ class Sync < Thor
     UpgradeChecker.new.run
 
     config = config_preconditions
-    @sync_manager = Docker_sync::SyncManager.new(config: config)
+    @sync_manager = DockerSync::SyncManager.new(config: config)
 
     start_dir = Dir.pwd # Set start_dir variable to be equal to pre-daemonized folder, since daemonizing will change dir to '/'
 
@@ -61,7 +61,7 @@ class Sync < Thor
     print_version if options[:version]
 
     config = config_preconditions
-    sync_manager = Docker_sync::SyncManager.new(config: config)
+    sync_manager = DockerSync::SyncManager.new(config: config)
     sync_manager.stop
     pid_file_path="#{options['dir']}/#{options['app_name']}.pid"
     if File.exist?(pid_file_path)
@@ -86,7 +86,7 @@ class Sync < Thor
 
     config = config_preconditions
 
-    @sync_manager = Docker_sync::SyncManager.new(config: config)
+    @sync_manager = DockerSync::SyncManager.new(config: config)
     @sync_manager.sync(options[:sync_name])
   end
 
@@ -107,7 +107,7 @@ class Sync < Thor
     # Remove the .docker-sync directory
     FileUtils.rm_r dir if File.directory?(dir)
 
-    @sync_manager = Docker_sync::SyncManager.new(config: config)
+    @sync_manager = DockerSync::SyncManager.new(config: config)
     @sync_manager.clean(options[:sync_name])
     say_status 'success', 'Finished cleanup. Removed stopped, removed sync container and removed their volumes', :green
   end
@@ -132,7 +132,7 @@ class Sync < Thor
     config = config_preconditions
 
     say_status 'ok',"Found configuration at #{config.config_path}"
-    @sync_manager = Docker_sync::SyncManager.new(config: config)
+    @sync_manager = DockerSync::SyncManager.new(config: config)
     @sync_manager.get_sync_points.each do |name, config|
       say_status name, "On address #{config['sync_host_ip']}:#{config['sync_host_port']}",:white unless options['verbose']
       puts "\n---------------[#{name}] #{config['sync_host_ip']}:#{config['sync_host_port']} ---------------\n" if options['verbose']

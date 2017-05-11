@@ -5,7 +5,7 @@ require 'open3'
 require 'socket'
 require 'terminal-notifier'
 
-module Docker_Sync
+module DockerSync
   module SyncStrategy
     class Unison
       include Thor::Shell

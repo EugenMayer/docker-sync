@@ -2,7 +2,7 @@ require 'thor/shell'
 require 'docker-sync/preconditions/strategy'
 require 'terminal-notifier'
 
-module Docker_Sync
+module DockerSync
   module SyncStrategy
     class Rsync
       include Thor::Shell

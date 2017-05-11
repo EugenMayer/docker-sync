@@ -43,7 +43,7 @@ class Stack < Thor
 
     say_status 'note:', 'You can also run docker-sync in the background with docker-sync --daemon'
 
-    @sync_manager = Docker_sync::SyncManager.new(config: config)
+    @sync_manager = DockerSync::SyncManager.new(config: config)
     @sync_manager.run(options[:sync_name])
     global_options = @sync_manager.global_options
     @compose_manager = ComposeManager.new(global_options)
@@ -82,7 +82,7 @@ class Stack < Thor
       exit(1)
     end
 
-    @sync_manager = Docker_sync::SyncManager.new(config: config)
+    @sync_manager = DockerSync::SyncManager.new(config: config)
     global_options = @sync_manager.global_options
     # shutdown compose first
     @compose_manager = ComposeManager.new(global_options)

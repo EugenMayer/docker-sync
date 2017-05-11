@@ -23,7 +23,7 @@ describe DockerSync::Preconditions::Strategy do
 
         use_fixture 'unison' do
           config = load_config
-          Docker_Sync::SyncStrategy::Unison.new('appcode-unison-sync',config['syncs']['appcode-unison-sync'])
+          DockerSync::SyncStrategy::Unison.new('appcode-unison-sync',config['syncs']['appcode-unison-sync'])
         end
       end
     end

@@ -6,7 +6,7 @@ require 'open3'
 require 'socket'
 require 'terminal-notifier'
 
-module Docker_Sync
+module DockerSync
   module SyncStrategy
     class NativeOsx
       include Thor::Shell

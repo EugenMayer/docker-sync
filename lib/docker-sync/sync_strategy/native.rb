@@ -1,7 +1,7 @@
 require 'thor/shell'
 require 'docker-sync/preconditions/strategy'
 
-module Docker_Sync
+module DockerSync
   module SyncStrategy
     class Native
       include Thor::Shell

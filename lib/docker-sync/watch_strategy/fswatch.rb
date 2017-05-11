@@ -3,7 +3,7 @@ require 'docker-sync/execution'
 require 'docker-sync/preconditions/strategy'
 require 'pathname'
 
-module Docker_Sync
+module DockerSync
   module WatchStrategy
     class Fswatch
       include Thor::Shell
