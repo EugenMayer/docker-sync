@@ -2,7 +2,6 @@ require 'docker-sync/preconditions/preconditions_osx'
 require 'docker-sync/preconditions/preconditions_linux'
 
 require 'singleton'
-require 'os'
 
 module DockerSync
   module Preconditions
@@ -12,19 +11,11 @@ module DockerSync
       attr_accessor :strategy
 
       def initialize
-        if DockerSync::Preconditions::Strategy.is_osx
+        if Environment.mac?
           @strategy = DockerSync::Preconditions::Osx.new
-        elsif DockerSync::Preconditions::Strategy.is_linux
+        elsif Environment.linux?
           @strategy = DockerSync::Preconditions::Linux.new
         end
-      end
-
-      def self.is_osx
-        return OS.mac?
-      end
-
-      def self.is_linux
-        return OS.linux?
       end
 
       def check_all_preconditions(config)
@@ -42,7 +33,6 @@ module DockerSync
       def rsync_available
         strategy.rsync_available
       end
-
 
       def fswatch_available
         strategy.fswatch_available
