@@ -2,7 +2,7 @@ require 'singleton'
 require 'docker-sync/config/config_locator'
 require 'docker-sync/config/config_serializer'
 require 'forwardable'
-require 'docker-sync/preconditions/strategy'
+
 module DockerSync
   class ProjectConfig
     extend Forwardable

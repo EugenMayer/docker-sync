@@ -1,5 +1,4 @@
 require 'thor/shell'
-require 'docker-sync/preconditions/strategy'
 
 module DockerSync
   module SyncStrategy

@@ -1,5 +1,4 @@
 require 'thor/shell'
-require 'docker-sync/preconditions/strategy'
 require 'docker-sync/execution'
 require 'open3'
 require 'socket'

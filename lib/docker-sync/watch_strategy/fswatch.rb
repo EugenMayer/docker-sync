@@ -1,6 +1,5 @@
 require 'thor/shell'
 require 'docker-sync/execution'
-require 'docker-sync/preconditions/strategy'
 require 'pathname'
 
 module DockerSync
