@@ -50,7 +50,13 @@ module DockerSync
 
         ignore_strings = expand_ignore_strings
         env['UNISON_EXCLUDES'] = ignore_strings.join(' ')
-        env['UNISON_ARGS'] = @options['sync_args']
+
+        if @options.key?['sync_args']
+          sync_args = @options['sync_args']
+          sync_args = @options['sync_args'].join(' ') if @options['sync_args'].kind_of?(Array)
+          env['UNISON_ARGS'] = sync_args
+        end
+
         env['UNISON_SYNC_PREFER'] = sync_prefer
         env['MAX_INOTIFY_WATCHES'] = @options['max_inotify_watches'] if @options.key?('max_inotify_watches')
         if @options['sync_userid'] == 'from_host'

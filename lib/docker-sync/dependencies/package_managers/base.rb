@@ -25,11 +25,19 @@ module DockerSync
           say_status 'warning', "Could not find #{package}. Trying to install it now.", :yellow
           ask_user_confirmation
           say_status 'command', install_cmd, :white
-          raise(FAILED_TO_INSTALL_PACKAGE) unless system(install_cmd)
+          raise(FAILED_TO_INSTALL_PACKAGE) unless perform_installation
         end
 
         def ask_user_confirmation
           raise(DID_NOT_INSTALL_PACKAGE) unless yes?("Install #{package} for you? [y/N]")
+        end
+
+        def perform_installation
+          if defined?(Bundler)
+            Bundler.with_clean_env { system(install_cmd) }
+          else
+            system(install_cmd)
+          end
         end
 
         def install_cmd
