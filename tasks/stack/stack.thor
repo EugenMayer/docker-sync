@@ -35,7 +35,7 @@ class Stack < Thor
 
     begin
       config = DockerSync::ProjectConfig.new(config_path: options[:config])
-      DockerSync::Preconditions::Strategy.instance.check_all_preconditions(config)
+      DockerSync::Dependencies.ensure_all!(config)
     rescue StandardError => e
       say_status 'error', e.message, :red
       exit(1)
@@ -76,7 +76,7 @@ class Stack < Thor
 
     begin
       config = DockerSync::ProjectConfig.new(config_path: options[:config])
-      DockerSync::Preconditions::Strategy.instance.check_all_preconditions(config)
+      DockerSync::Dependencies.ensure_all!(config)
     rescue StandardError => e
       say_status 'error', e.message, :red
       exit(1)
