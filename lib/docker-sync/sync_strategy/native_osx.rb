@@ -33,7 +33,7 @@ module DockerSync
 
         begin
           DockerSync::Preconditions::Strategy.instance.docker_available
-        rescue Exception => e
+        rescue StandardError => e
           say_status 'error', "#{@sync_name} has been configured to sync with native docker volume, but docker is not found", :red
           say_status 'error', e.message, :red
           exit 1
@@ -115,7 +115,7 @@ module DockerSync
         say_status 'ok', "Stopping sync container #{get_container_name}"
         begin
           stop_container
-        rescue Exception => e
+        rescue StandardError => e
           say_status 'error', "Stopping failed of #{get_container_name}:", :red
           puts e.message
         end

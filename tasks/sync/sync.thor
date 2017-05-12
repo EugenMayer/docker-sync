@@ -146,7 +146,7 @@ class Sync < Thor
         DockerSync::ProjectConfig.new(config_path: options[:config]).tap do |config|
           DockerSync::Preconditions::Strategy.instance.check_all_preconditions(config)
         end
-      rescue Exception => e
+      rescue StandardError => e
         say_status 'error', e.message, :red
         exit 1
       end

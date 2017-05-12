@@ -20,7 +20,7 @@ module DockerSync
 
         begin
           DockerSync::Preconditions::Strategy.instance.fswatch_available
-        rescue Exception => e
+        rescue StandardError => e
           say_status 'error', e.message, :red
           exit 1
         end

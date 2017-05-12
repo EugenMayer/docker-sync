@@ -36,7 +36,7 @@ class Stack < Thor
     begin
       config = DockerSync::ProjectConfig.new(config_path: options[:config])
       DockerSync::Preconditions::Strategy.instance.check_all_preconditions(config)
-    rescue Exception => e
+    rescue StandardError => e
       say_status 'error', e.message, :red
       exit(1)
     end
@@ -60,7 +60,7 @@ class Stack < Thor
 
         @sync_manager.stop
         @compose_manager.stop
-      rescue Exception => e
+      rescue StandardError => e
         puts "EXCEPTION: #{e.inspect}"
         puts "MESSAGE: #{e.message}"
     end
@@ -77,7 +77,7 @@ class Stack < Thor
     begin
       config = DockerSync::ProjectConfig.new(config_path: options[:config])
       DockerSync::Preconditions::Strategy.instance.check_all_preconditions(config)
-    rescue Exception => e
+    rescue StandardError => e
       say_status 'error', e.message, :red
       exit(1)
     end

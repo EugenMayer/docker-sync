@@ -118,7 +118,7 @@ module DockerSync
           sync_process.stop
         end
 
-      rescue Exception => e
+      rescue StandardError => e
         puts "EXCEPTION: #{e.inspect}"
         puts "MESSAGE: #{e.message}"
       end
