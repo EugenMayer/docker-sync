@@ -137,7 +137,7 @@ module DockerSync
         if OS.linux?
           return 'native'
         elsif OS.osx?
-          if DockerSync::Preconditions::Strategy.instance.is_driver_docker_for_mac?
+          if Dependencies::Docker::Driver.docker_for_mac?
             return 'native_osx'
           else
             return 'unison'

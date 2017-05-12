@@ -32,7 +32,7 @@ module DockerSync
         uc.check_unison_hostsync_image(true)
 
         begin
-          DockerSync::Preconditions::Strategy.instance.docker_available
+          Dependencies::Docker.ensure!
         rescue StandardError => e
           say_status 'error', "#{@sync_name} has been configured to sync with native docker volume, but docker is not found", :red
           say_status 'error', e.message, :red

@@ -22,7 +22,7 @@ module DockerSync
         end
 
         begin
-          DockerSync::Preconditions::Strategy.instance.rsync_available
+          Dependencies::Rsync.ensure!
         rescue StandardError => e
           say_status 'error', "#{@sync_name} has been configured to sync with rsync, but no rsync or fswatch binary available", :red
           say_status 'error', e.message, :red

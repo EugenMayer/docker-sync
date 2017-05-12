@@ -71,7 +71,7 @@ module DockerSync
     end
 
     def get_host_ip_default
-      return '127.0.0.1' if DockerSync::Preconditions::Strategy.instance.is_driver_docker_for_mac?
+      return '127.0.0.1' if Dependencies::Docker::Driver.docker_for_mac?
 
       if DockerSync::Preconditions::Strategy.instance.is_driver_docker_toolbox?
         cmd = 'docker-machine ip $(docker-machine active)'

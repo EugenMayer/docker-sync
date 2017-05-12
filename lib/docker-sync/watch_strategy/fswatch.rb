@@ -19,7 +19,7 @@ module DockerSync
         @events_to_watch = %w(AttributeModified Created Link MovedFrom MovedTo Renamed Removed Updated)
 
         begin
-          DockerSync::Preconditions::Strategy.instance.fswatch_available
+          Dependencies::Fswatch.ensure!
         rescue StandardError => e
           say_status 'error', e.message, :red
           exit 1
