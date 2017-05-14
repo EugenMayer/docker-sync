@@ -27,18 +27,19 @@
 
 <p><a href="https://badge.fury.io/rb/docker-sync"><img src="https://badge.fury.io/rb/docker-sync.svg" alt="Gem Version"></a></p>
 
-<pre><code>gem install docker-sync
-</code></pre>
-<a href"https://github.com/EugenMayer/docker-sync/wiki/1.-Installation">..detailed installation</a>
+<pre>
+<code>gem install docker-sync</code>
+</pre>
 
+<p style="font-size:80%"><a href"https://github.com/EugenMayer/docker-sync/wiki/1.-Installation">..detailed installation</a></p>
 <p>Docker-sync is:</p>
 
 <ul>
 	<li>able to run on all of those docker-machines and also on <strong>docker for mac</strong> and <a href="https://github.com/EugenMayer/docker-sync/wiki/docker-sync-on-Windows">'Windows Ubuntu Shell'+docker</a>
 </li>
-<li>it uses either <strong>native_osx></strong>,<strong>unison</strong>  or <strong>rsync</strong> as possible implementations. The container performance is not influenced at all, see <a href="https://github.com/EugenMayer/docker_sync/wiki/4.-Performance">performance</a>
+<li>uses either <strong>native_osx></strong>,<strong>unison</strong>  or <strong>rsync</strong> as possible implementations. The container performance is not influenced at all, see <a href="https://github.com/EugenMayer/docker_sync/wiki/4.-Performance">performance</a>
 </li>
-<li>Now a lot mor efficient in its way to watch for file changes - even for 50k+ files it will not eat up your CPU</li>
+<li>now a lot mor efficient in its way to watch for file changes - even for 50k+ files it will not eat up your CPU</li>
 <li>supports either native_osx with file system events, unison two way and rsync one-way, see <a href="https://github.com/EugenMayer/docker-sync/wiki/docker-sync-on-Windowso">strategies</a></li>
 <li>has no longer dependencies on OSX when using native_osx</li>
 <li>now supports background more to get out of your way</li>
