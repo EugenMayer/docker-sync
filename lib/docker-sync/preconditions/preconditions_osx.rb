@@ -133,42 +133,6 @@ module DockerSync
           end
         end
       end
-
-      def install_pip(package, test = nil)
-        test ? `python -c 'import #{test}'` : `python -c 'import #{package}'`
-
-        unless $?.success?
-          Thor::Shell::Basic.new.say_status 'warning', "Could not find #{package}. Will try to install it using pip", :red
-          if find_executable0('python') == '/usr/bin/python'
-            Thor::Shell::Basic.new.say_status 'ok', 'You seem to use the system python, we will need sudo below'
-            sudo = true
-            cmd2 = "sudo easy_install pip && sudo pip install #{package}"
-          else
-            Thor::Shell::Basic.new.say_status 'ok', 'You seem to have a custom python, using non-sudo commands'
-            sudo = false
-            cmd2 = "easy_install pip && pip install #{package}"
-          end
-          if sudo
-            question = "I will ask you for you root password to install #{package} by running (This will ask for sudo, since we use the system python)"
-          else
-            question = "I will now install #{package} for you by running"
-          end
-
-          Thor::Shell::Basic.new.say_status 'info', "#{question}: `#{cmd2}\n\n"
-          if Thor::Shell::Basic.new.yes?('Shall I continue? (y/N)')
-            system cmd2
-            if $?.exitstatus > 0
-              raise("Failed to install #{package}, please file an issue with the output of the error")
-            end
-            test ? `python -c 'import #{test}'` : `python -c 'import #{package}'`
-            unless $?.success?
-              raise("Somehow I could not successfully install #{package} even though I tried. Please report this issue.")
-            end
-          else
-            raise("Please install #{package} manually, see https://github.com/EugenMayer/docker-sync/wiki/1.-Installation")
-          end
-        end
-      end
     end
   end
 end
