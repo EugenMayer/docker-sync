@@ -116,6 +116,11 @@ class UpgradeChecker
       checker.check_unison_hostsync_image
     end
 
+    if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.4.5')
+      checker = UpdateChecker.new
+      checker.check_unison_hostsync_image
+    end
+
     # update the upgrade_status
     @config.update! 'upgrade_status' => "#{UpgradeChecker.get_current_version}"
   end

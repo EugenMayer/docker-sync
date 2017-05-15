@@ -11,7 +11,7 @@ require 'docker-sync/watch_strategy/dummy'
 require 'docker-sync/watch_strategy/unison'
 require 'docker-sync/watch_strategy/remotelogs'
 
-module Docker_Sync
+module DockerSync
   class SyncProcess
     include Thor::Shell
     @options
@@ -43,13 +43,13 @@ module Docker_Sync
     def set_sync_strategy
       case @options['sync_strategy']
       when 'rsync'
-        @sync_strategy = Docker_Sync::SyncStrategy::Rsync.new(@sync_name, @options)
+        @sync_strategy = DockerSync::SyncStrategy::Rsync.new(@sync_name, @options)
       when 'unison'
-        @sync_strategy = Docker_Sync::SyncStrategy::Unison.new(@sync_name, @options)
+        @sync_strategy = DockerSync::SyncStrategy::Unison.new(@sync_name, @options)
       when 'native'
-        @sync_strategy = Docker_Sync::SyncStrategy::Native.new(@sync_name, @options)
+        @sync_strategy = DockerSync::SyncStrategy::Native.new(@sync_name, @options)
       when 'native_osx'
-        @sync_strategy = Docker_Sync::SyncStrategy::NativeOsx.new(@sync_name, @options)
+        @sync_strategy = DockerSync::SyncStrategy::NativeOsx.new(@sync_name, @options)
       else
         raise "Unknown sync_strategy #{@options['sync_strategy']}"
       end
@@ -58,22 +58,22 @@ module Docker_Sync
     def set_watch_strategy
       case @options['watch_strategy']
       when 'fswatch'
-        @watch_strategy = Docker_Sync::WatchStrategy::Fswatch.new(@sync_name, @options)
+        @watch_strategy = DockerSync::WatchStrategy::Fswatch.new(@sync_name, @options)
       when 'dummy'
-        @watch_strategy = Docker_Sync::WatchStrategy::Dummy.new(@sync_name, @options)
+        @watch_strategy = DockerSync::WatchStrategy::Dummy.new(@sync_name, @options)
       when 'unison'
-        @watch_strategy = Docker_Sync::WatchStrategy::Unison.new(@sync_name, @options)
+        @watch_strategy = DockerSync::WatchStrategy::Unison.new(@sync_name, @options)
       when 'remotelogs'
-        @watch_strategy = Docker_Sync::WatchStrategy::Remote_logs.new(@sync_name, @options)
+        @watch_strategy = DockerSync::WatchStrategy::Remote_logs.new(@sync_name, @options)
       else
         raise "Unknown watch_strategy #{@options['watch_strategy']}"
       end
     end
 
     def get_host_ip_default
-      return '127.0.0.1' if DockerSync::Preconditions::Strategy.instance.is_driver_docker_for_mac?
+      return '127.0.0.1' if Dependencies::Docker::Driver.docker_for_mac?
 
-      if DockerSync::Preconditions::Strategy.instance.is_driver_docker_toolbox?
+      if Dependencies::Docker::Driver.docker_toolbox?
         cmd = 'docker-machine ip $(docker-machine active)'
         stdout, stderr, exit_status = Open3.capture3(cmd)
         unless exit_status.success?

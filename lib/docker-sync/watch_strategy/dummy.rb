@@ -1,7 +1,7 @@
 require 'thor/shell'
 require 'docker-sync/execution'
 
-module Docker_Sync
+module DockerSync
   module WatchStrategy
     class Dummy
       include Thor::Shell

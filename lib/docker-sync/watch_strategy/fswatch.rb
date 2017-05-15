@@ -1,9 +1,8 @@
 require 'thor/shell'
 require 'docker-sync/execution'
-require 'docker-sync/preconditions/strategy'
 require 'pathname'
 
-module Docker_Sync
+module DockerSync
   module WatchStrategy
     class Fswatch
       include Thor::Shell
@@ -19,8 +18,8 @@ module Docker_Sync
         @events_to_watch = %w(AttributeModified Created Link MovedFrom MovedTo Renamed Removed Updated)
 
         begin
-          DockerSync::Preconditions::Strategy.instance.fswatch_available
-        rescue Exception => e
+          Dependencies::Fswatch.ensure!
+        rescue StandardError => e
           say_status 'error', e.message, :red
           exit 1
         end

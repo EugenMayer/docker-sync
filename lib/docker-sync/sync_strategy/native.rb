@@ -1,7 +1,6 @@
 require 'thor/shell'
-require 'docker-sync/preconditions/strategy'
 
-module Docker_Sync
+module DockerSync
   module SyncStrategy
     class Native
       include Thor::Shell
@@ -14,8 +13,8 @@ module Docker_Sync
         @options = options
 
         begin
-          DockerSync::Preconditions::Strategy.instance.docker_available
-        rescue Exception => e
+          Dependencies::Docker.ensure!
+        rescue StandardError => e
           say_status 'error', "#{@sync_name} has been configured to sync with native docker volume, but docker is not found", :red
           say_status 'error', e.message, :red
           exit 1

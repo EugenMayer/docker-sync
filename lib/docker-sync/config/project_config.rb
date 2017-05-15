@@ -2,7 +2,7 @@ require 'singleton'
 require 'docker-sync/config/config_locator'
 require 'docker-sync/config/config_serializer'
 require 'forwardable'
-require 'docker-sync/preconditions/strategy'
+
 module DockerSync
   class ProjectConfig
     extend Forwardable
@@ -58,6 +58,11 @@ module DockerSync
       }
     end
 
+    def fswatch_required?
+      config['syncs'].any? { |name, sync_config|
+        sync_config['watch_strategy'] == 'fswatch'
+      }
+    end
 
     private
 
@@ -134,15 +139,9 @@ module DockerSync
       end
 
       def default_sync_strategy
-        if OS.linux?
-          return 'native'
-        elsif OS.osx?
-          if DockerSync::Preconditions::Strategy.instance.is_driver_docker_for_mac?
-            return 'native_osx'
-          else
-            return 'unison'
-          end
-        end
+        return 'native'     if Environment.linux?
+        return 'native_osx' if Environment.mac? && Dependencies::Docker::Driver.docker_for_mac?
+        return 'unison'     if Environment.mac?
       end
 
       def default_watch_strategy(sync_config)

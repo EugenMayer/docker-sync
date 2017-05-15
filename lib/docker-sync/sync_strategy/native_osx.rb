@@ -1,12 +1,11 @@
 require 'thor/shell'
-require 'docker-sync/preconditions/strategy'
 require 'docker-sync/execution'
 require 'docker-sync/update_check'
 require 'open3'
 require 'socket'
 require 'terminal-notifier'
 
-module Docker_Sync
+module DockerSync
   module SyncStrategy
     class NativeOsx
       include Thor::Shell
@@ -24,7 +23,7 @@ module Docker_Sync
         if @options.key?('image')
           @docker_image = @options['image']
         else
-          @docker_image = 'eugenmayer/unison:hostsync'
+          @docker_image = 'eugenmayer/unison:hostsync_0.2'
         end
 
         # TODO: remove this when we have a more stable image, but for now, we need this
@@ -32,8 +31,8 @@ module Docker_Sync
         uc.check_unison_hostsync_image(true)
 
         begin
-          DockerSync::Preconditions::Strategy.instance.docker_available
-        rescue Exception => e
+          Dependencies::Docker.ensure!
+        rescue StandardError => e
           say_status 'error', "#{@sync_name} has been configured to sync with native docker volume, but docker is not found", :red
           say_status 'error', e.message, :red
           exit 1
@@ -50,7 +49,14 @@ module Docker_Sync
 
         ignore_strings = expand_ignore_strings
         env['UNISON_EXCLUDES'] = ignore_strings.join(' ')
-        env['UNISON_ARGS'] = @options['sync_args']
+
+        env['UNISON_ARGS'] = ''
+        if @options.key?('sync_args')
+          sync_args = @options['sync_args']
+          sync_args = @options['sync_args'].join(' ') if @options['sync_args'].kind_of?(Array)
+          env['UNISON_ARGS'] = sync_args
+        end
+
         env['UNISON_SYNC_PREFER'] = sync_prefer
         env['MAX_INOTIFY_WATCHES'] = @options['max_inotify_watches'] if @options.key?('max_inotify_watches')
         if @options['sync_userid'] == 'from_host'
@@ -115,7 +121,7 @@ module Docker_Sync
         say_status 'ok', "Stopping sync container #{get_container_name}"
         begin
           stop_container
-        rescue Exception => e
+        rescue StandardError => e
           say_status 'error', "Stopping failed of #{get_container_name}:", :red
           puts e.message
         end
