@@ -2,7 +2,7 @@ require 'thor/shell'
 require 'docker-sync/execution'
 require 'docker-sync/sync_strategy/unison'
 
-module Docker_Sync
+module DockerSync
   module WatchStrategy
     class Unison
       include Execution
@@ -19,7 +19,7 @@ module Docker_Sync
         # unison sync and watch
         # basically unison watch is the command with the additionnal -repeat watch option
         # note: this doesn't run a sync
-        @unison = Docker_Sync::SyncStrategy::Unison.new(@sync_name, @options)
+        @unison = DockerSync::SyncStrategy::Unison.new(@sync_name, @options)
       end
 
       def run

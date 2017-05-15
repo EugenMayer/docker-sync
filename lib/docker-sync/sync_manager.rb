@@ -4,7 +4,7 @@ require 'docker-sync/sync_process'
 # noinspection RubyResolve
 require 'docker-sync/execution'
 
-module Docker_sync
+module DockerSync
   class SyncManager
     include Thor::Shell
 
@@ -118,14 +118,14 @@ module Docker_sync
           sync_process.stop
         end
 
-      rescue Exception => e
+      rescue StandardError => e
         puts "EXCEPTION: #{e.inspect}"
         puts "MESSAGE: #{e.message}"
       end
     end
 
     def create_sync(sync_name, sync_configuration)
-      sync_process = Docker_Sync::SyncProcess.new(sync_name, sync_configuration)
+      sync_process = DockerSync::SyncProcess.new(sync_name, sync_configuration)
       return sync_process
     end
 

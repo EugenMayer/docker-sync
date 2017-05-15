@@ -1,8 +1,7 @@
 require 'thor/shell'
-require 'docker-sync/preconditions/strategy'
 require 'terminal-notifier'
 
-module Docker_Sync
+module DockerSync
   module SyncStrategy
     class Rsync
       include Thor::Shell
@@ -22,8 +21,8 @@ module Docker_Sync
         end
 
         begin
-          DockerSync::Preconditions::Strategy.instance.rsync_available
-        rescue Exception => e
+          Dependencies::Rsync.ensure!
+        rescue StandardError => e
           say_status 'error', "#{@sync_name} has been configured to sync with rsync, but no rsync or fswatch binary available", :red
           say_status 'error', e.message, :red
           exit 1
@@ -150,7 +149,7 @@ module Docker_Sync
         say_status 'ok', "Stopping sync container #{get_container_name}"
         begin
           stop_container
-        rescue Exception => e
+        rescue StandardError => e
           say_status 'error', "Stopping failed of #{get_container_name}:", :red
           puts e.message
         end

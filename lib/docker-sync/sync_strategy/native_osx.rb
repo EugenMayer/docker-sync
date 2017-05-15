@@ -1,12 +1,11 @@
 require 'thor/shell'
-require 'docker-sync/preconditions/strategy'
 require 'docker-sync/execution'
 require 'docker-sync/update_check'
 require 'open3'
 require 'socket'
 require 'terminal-notifier'
 
-module Docker_Sync
+module DockerSync
   module SyncStrategy
     class NativeOsx
       include Thor::Shell
@@ -32,8 +31,8 @@ module Docker_Sync
         uc.check_unison_hostsync_image(true)
 
         begin
-          DockerSync::Preconditions::Strategy.instance.docker_available
-        rescue Exception => e
+          Dependencies::Docker.ensure!
+        rescue StandardError => e
           say_status 'error', "#{@sync_name} has been configured to sync with native docker volume, but docker is not found", :red
           say_status 'error', e.message, :red
           exit 1
@@ -122,7 +121,7 @@ module Docker_Sync
         say_status 'ok', "Stopping sync container #{get_container_name}"
         begin
           stop_container
-        rescue Exception => e
+        rescue StandardError => e
           say_status 'error', "Stopping failed of #{get_container_name}:", :red
           puts e.message
         end

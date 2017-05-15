@@ -1,6 +1,5 @@
 require 'docker-sync'
 require 'docker-sync/sync_manager'
-require 'docker-sync/preconditions/strategy'
 require 'docker-sync/update_check'
 require 'docker-sync/upgrade_check'
 require 'docker/compose'
@@ -35,15 +34,15 @@ class Stack < Thor
 
     begin
       config = DockerSync::ProjectConfig.new(config_path: options[:config])
-      DockerSync::Preconditions::Strategy.instance.check_all_preconditions(config)
-    rescue Exception => e
+      DockerSync::Dependencies.ensure_all!(config)
+    rescue StandardError => e
       say_status 'error', e.message, :red
       exit(1)
     end
 
     say_status 'note:', 'You can also run docker-sync in the background with docker-sync --daemon'
 
-    @sync_manager = Docker_sync::SyncManager.new(config: config)
+    @sync_manager = DockerSync::SyncManager.new(config: config)
     @sync_manager.run(options[:sync_name])
     global_options = @sync_manager.global_options
     @compose_manager = ComposeManager.new(global_options)
@@ -60,7 +59,7 @@ class Stack < Thor
 
         @sync_manager.stop
         @compose_manager.stop
-      rescue Exception => e
+      rescue StandardError => e
         puts "EXCEPTION: #{e.inspect}"
         puts "MESSAGE: #{e.message}"
     end
@@ -76,13 +75,13 @@ class Stack < Thor
 
     begin
       config = DockerSync::ProjectConfig.new(config_path: options[:config])
-      DockerSync::Preconditions::Strategy.instance.check_all_preconditions(config)
-    rescue Exception => e
+      DockerSync::Dependencies.ensure_all!(config)
+    rescue StandardError => e
       say_status 'error', e.message, :red
       exit(1)
     end
 
-    @sync_manager = Docker_sync::SyncManager.new(config: config)
+    @sync_manager = DockerSync::SyncManager.new(config: config)
     global_options = @sync_manager.global_options
     # shutdown compose first
     @compose_manager = ComposeManager.new(global_options)
