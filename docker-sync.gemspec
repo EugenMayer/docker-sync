@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.executables = %w(docker-sync docker-sync-stack docker-sync-daemon)
   s.email       = 'eugen.mayer@kontextwork.de'
   s.files       = Dir['lib/**/*.rb','tasks/**/*.thor','Thorfile','bin/*','VERSION']
-  s.license     = 'GPL'
+  s.license     = 'GPL-3.0'
   s.homepage    = 'https://github.com/EugenMayer/docker_sync'
   s.required_ruby_version = '>= 2.0'
 
