@@ -51,6 +51,7 @@ module Docker_Sync
         ignore_strings = expand_ignore_strings
         env['UNISON_EXCLUDES'] = ignore_strings.join(' ')
 
+        env['UNISON_ARGS'] = ''
         if @options.key?('sync_args')
           sync_args = @options['sync_args']
           sync_args = @options['sync_args'].join(' ') if @options['sync_args'].kind_of?(Array)
