@@ -1,22 +1,22 @@
 module DockerSync
   module Dependencies
     module PackageManager
-      class Brew < Base
-        BREW_NOT_AVAILABLE = 'Brew is not installed. Please install it (see https://brew.sh) and try again.'.freeze
+      class Yum < Base
+        YUM_NOT_AVAILABLE = 'Yum is not installed. Please install it and try again.'.freeze
 
         def self.available?
           return @available if defined? @available
-          @available = find_executable0('brew')
+          @available = find_executable0('yum')
         end
 
         def self.ensure!
-          raise(BREW_NOT_AVAILABLE) unless available?
+          raise(YUM_NOT_AVAILABLE) unless available?
         end
 
         private
 
         def install_cmd
-          "brew install #{package}"
+          "yum install #{package}"
         end
       end
     end

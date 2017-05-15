@@ -10,7 +10,9 @@ module DockerSync
 
       def self.package_manager
         return @package_manager if defined? @package_manager
-        return @package_manager = PackageManager::Brew if Environment.mac?
+        return @package_manager = PackageManager::Brew if PackageManager::Brew.available?
+        return @package_manager = PackageManager::Apt  if PackageManager::Apt.available?
+        return @package_manager = PackageManager::Yum  if PackageManager::Yum.available?
         raise(NO_SUPPORTED_PACKAGE_MANAGER)
       end
     end

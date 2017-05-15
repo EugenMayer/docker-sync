@@ -1,22 +1,22 @@
 module DockerSync
   module Dependencies
     module PackageManager
-      class Brew < Base
-        BREW_NOT_AVAILABLE = 'Brew is not installed. Please install it (see https://brew.sh) and try again.'.freeze
+      class Apt < Base
+        APT_NOT_AVAILABLE = 'APT is not installed. Please install it and try again.'.freeze
 
         def self.available?
           return @available if defined? @available
-          @available = find_executable0('brew')
+          @available = find_executable0('apt-get')
         end
 
         def self.ensure!
-          raise(BREW_NOT_AVAILABLE) unless available?
+          raise(APT_NOT_AVAILABLE) unless available?
         end
 
         private
 
         def install_cmd
-          "brew install #{package}"
+          "apt-get install #{package}"
         end
       end
     end
