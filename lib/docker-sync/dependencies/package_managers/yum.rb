@@ -16,7 +16,7 @@ module DockerSync
         private
 
         def install_cmd
-          "yum install #{package}"
+          "yum install -y #{package}"
         end
       end
     end

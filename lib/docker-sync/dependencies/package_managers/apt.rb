@@ -16,7 +16,7 @@ module DockerSync
         private
 
         def install_cmd
-          "apt-get install #{package}"
+          "apt-get install -y #{package}"
         end
       end
     end
