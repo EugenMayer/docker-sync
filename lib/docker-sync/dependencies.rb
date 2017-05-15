@@ -19,15 +19,9 @@ module DockerSync
     def self.ensure_all_for_mac!(config)
       PackageManager.ensure!
       Docker.ensure!
-
-      if config.unison_required?
-        Unison.ensure!
-      end
-
-      if config.rsync_required?
-        Rsync.ensure!
-        Fswatch.ensure!
-      end
+      Unison.ensure!  if config.unison_required?
+      Rsync.ensure!   if config.rsync_required?
+      Fswatch.ensure! if config.fswatch_required?
     end
 
     def self.ensure_all_for_linux!(_config)

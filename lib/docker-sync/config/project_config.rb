@@ -58,6 +58,11 @@ module DockerSync
       }
     end
 
+    def fswatch_required?
+      config['syncs'].any? { |name, sync_config|
+        sync_config['watch_strategy'] == 'fswatch'
+      }
+    end
 
     private
 
