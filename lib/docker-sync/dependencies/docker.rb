@@ -2,7 +2,7 @@ module DockerSync
   module Dependencies
     module Docker
       DOCKER_NOT_AVAILABLE = 'Could not find Docker. Please install it (see https://docs.docker.com/compose/install/) and try again.'.freeze
-      DOCKER_NOT_RUNNING   = 'No docker daemon seems to be running. Did you start your docker-for-mac / docker-machine?'.freeze
+      DOCKER_NOT_RUNNING   = 'No docker daemon seems to be running. Did you start docker-engine / docker-for-mac / docker-machine?'.freeze
 
       def self.available?
         return @available if defined? @available
