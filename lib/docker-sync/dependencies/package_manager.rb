@@ -1,8 +1,6 @@
 module DockerSync
   module Dependencies
     module PackageManager
-      NO_SUPPORTED_PACKAGE_MANAGER = 'No package manager available for your OS. Please file an issue on https://github.com/eugenmayer/docker-sync/issues mentioning your OS and favourite package manager.'.freeze
-
       class << self
         extend Forwardable
         def_delegators :package_manager, :available?, :ensure!, :install_package
@@ -13,7 +11,7 @@ module DockerSync
         return @package_manager = PackageManager::Brew if PackageManager::Brew.available?
         return @package_manager = PackageManager::Apt  if PackageManager::Apt.available?
         return @package_manager = PackageManager::Yum  if PackageManager::Yum.available?
-        raise(NO_SUPPORTED_PACKAGE_MANAGER)
+        @package_manager = PackageManager::None
       end
     end
   end
