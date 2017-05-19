@@ -1,3 +1,5 @@
+require 'forwardable'
+
 module DockerSync
   module Dependencies
     module PackageManager
