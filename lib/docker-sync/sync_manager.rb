@@ -40,6 +40,13 @@ module DockerSync
           end
         end
 
+        # set the global max_attempt setting, if the sync-endpoint does not define a own one
+        unless config.key?('max_attempt')
+          if @config_global.key?('max_attempt')
+            @config_syncs[name]['max_attempt'] = @config_global['max_attempt']
+          end
+        end
+
         if @config_syncs[name].key?('dest')
           puts 'Please do no longer use "dest" in your docker-sync.yml configuration - also see https://github.com/EugenMayer/docker-sync/wiki/1.2-Upgrade-Guide#dest-has-been-removed!'
           exit 1
