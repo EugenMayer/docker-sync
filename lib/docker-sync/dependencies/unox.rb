@@ -19,16 +19,21 @@ module DockerSync
 
       def self.ensure!
         return if available?
-        cleanup_legacy if File.exist?('/usr/local/bin/unison-fsmonitor')
+        cleanup_non_brew_version!
         PackageManager.install_package('eugenmayer/dockersync/unox')
       end
 
-      def self.cleanup_legacy
+      def self.cleanup_non_brew_version!
+        return unless non_brew_version_installed?
         uninstall_cmd = 'sudo rm -f /usr/local/bin/unison-fsmonitor'
         say_status 'warning', LEGACY_UNOX_WARNING, :yellow
         raise(FAILED_TO_REMOVE_LEGACY_UNOX) unless yes?('Uninstall legacy unison-fsmonitor (unox)? (y/N)')
         say_status 'command', uninstall_cmd, :white
         system(uninstall_cmd)
+      end
+
+      def self.non_brew_version_installed?
+        !available? && File.exist?('/usr/local/bin/unison-fsmonitor')
       end
     end
   end
