@@ -14,7 +14,7 @@ module DockerSync
       def self.available?
         return @available if defined? @available
         cmd = 'brew list unox &> /dev/null'
-        @available = defined?(Bundler) ? Bundler.with_clean_env { system(cmd) } : system(cmd)
+        @available = defined?(Bundler) ? Bundler.clean_system(cmd) : system(cmd)
       end
 
       def self.ensure!
