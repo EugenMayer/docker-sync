@@ -45,7 +45,9 @@ module DockerSync
         host_sync_src = @options['src']
         volume_app_sync_name = @sync_name
         env = {}
-        raise 'sync_user is no longer supported, since it ise no needed, use sync_userid only please', :yellow if @options.key?('sync_user')
+        if @options.key?('sync_user')
+          say_status 'warning', 'sync_user is no longer supported, use sync_userid only please', :yellow
+        end
 
         ignore_strings = expand_ignore_strings
         env['UNISON_EXCLUDES'] = ignore_strings.join(' ')
