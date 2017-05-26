@@ -14,7 +14,7 @@ RSpec.shared_examples 'a dependency' do
   end
 
   it 'implements `.ensure!`' do
-    expect(described_class).to respond_to :available?
+    expect(described_class).to respond_to :ensure!
   end
 end
 

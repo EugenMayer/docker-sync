@@ -14,33 +14,20 @@ RSpec.describe DockerSync::Dependencies::PackageManager::None do
   end
 
   describe '.install_package(package_name)' do
-    let(:user_confirmed?) { true }
-    let(:package_name)    { 'some-package' }
+    let(:package_name) { 'some-package' }
 
     before do
       allow(described_class).to receive(:ensure!)
       allow_any_instance_of(Thor::Shell::Color).to receive_messages(
         say_status: nil,
-        yes?: user_confirmed?
+        yes?: true
       )
     end
 
     subject { described_class.install_package(package_name) }
 
-    it 'asks for user confirmation' do
-      expect_any_instance_of(Thor::Shell::Color).to receive(:yes?)
-      ignore_errors(RuntimeError) { subject }
+    it 'tells user to install any of the supported package managers' do
+      expect { subject }.to raise_error(described_class::NO_PACKAGE_MANAGER_AVAILABLE)
     end
-
-    context 'when user confirmed installation' do
-      let(:user_confirmed?) { true }
-      it { is_expected_to_raise_error RuntimeError }
-    end
-
-    context 'when user canceled installation' do
-      let(:user_confirmed?) { false }
-      it { is_expected_to_raise_error RuntimeError }
-    end
-
   end
 end
