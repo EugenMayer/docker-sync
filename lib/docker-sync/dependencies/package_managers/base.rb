@@ -1,3 +1,5 @@
+require 'forwardable'
+
 module DockerSync
   module Dependencies
     module PackageManager
@@ -33,11 +35,7 @@ module DockerSync
         end
 
         def perform_installation
-          if defined?(Bundler)
-            Bundler.with_clean_env { system(install_cmd) }
-          else
-            system(install_cmd)
-          end
+          defined?(Bundler) ? Bundler.clean_system(install_cmd) : system(install_cmd)
         end
 
         def install_cmd
