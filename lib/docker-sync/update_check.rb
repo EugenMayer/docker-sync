@@ -103,7 +103,7 @@ class UpdateChecker
     return checker
   end
 
-  def check_and_warn(update_enforced = true)
+  def check_and_warn(update_enforced = false)
     # update the timestamp
     @config.update! 'update_last_check' => DateTime.now.iso8601(9)
 
