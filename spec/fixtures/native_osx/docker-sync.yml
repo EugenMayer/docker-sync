@@ -1,0 +1,7 @@
+version: "2"
+options:
+  verbose: true
+syncs:
+  app-sync:
+    src: spec/fixtures/app
+    sync_strategy: native_osx
