@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe 'Unison strategy' do
+RSpec.describe 'Unison strategy', command_execution: :allowed do
   include Rspec::Bash
 
   let(:bin) { 'bin/docker-sync' }
