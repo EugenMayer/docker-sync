@@ -13,7 +13,6 @@ RSpec.describe 'native_osx strategy', command_execution: :allowed do
       env.execute_inline("bin/docker-sync start #{config_switch}", test_env_vars)
       sleep 1 # because, you know ¯\_(ツ)_/¯
       example.run
-      env.execute_inline("bin/docker-sync stop #{config_switch}", test_env_vars)
       env.execute_inline("bin/docker-sync clean #{config_switch}", test_env_vars)
       env.execute_inline('rm -rf .docker-sync')
     end
