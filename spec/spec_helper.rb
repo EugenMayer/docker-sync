@@ -109,6 +109,7 @@ RSpec.configure do |config|
 =end
 end
 
-Dir[File.join(__dir__, 'helpers', '**', '*.rb')].each do |helper|
-  require helper
-end
+Dir[
+  File.join(__dir__, 'helpers', '**', '*.rb'),
+  File.join(__dir__, 'shared_examples', '**', '*.rb')
+].each { |f| require f }

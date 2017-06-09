@@ -5,7 +5,7 @@ module DockerSync
         NO_PACKAGE_MANAGER_AVAILABLE = 'No package manager was found. Please either install one of those supported (brew, apt, rpm) or install all dependencies manually.'.freeze
 
         def self.available?
-          true
+          @available ||= true
         end
 
         def self.ensure!

@@ -2,8 +2,8 @@ require 'mkmf'
 require 'thor/shell'
 
 Dir[
-  File.join(File.dirname(__FILE__), 'dependencies', 'package_managers', 'base.rb'),
-  File.join(File.dirname(__FILE__), 'dependencies', '**', '*.rb')
+  File.join(__dir__, 'dependencies', 'package_managers', 'base.rb'),
+  File.join(__dir__, 'dependencies', '**', '*.rb')
 ].each { |f| require f }
 
 module DockerSync
