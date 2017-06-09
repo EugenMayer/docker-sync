@@ -22,16 +22,7 @@ RSpec.describe 'native_osx strategy', command_execution: :allowed do
       expect(File.file?('.docker-sync/daemon.pid')).to be true
     end
 
-    it 'syncs to /host_sync' do
-      shasums, _stderr, _status = env.execute_inline('cd spec/fixtures/app/; find . -type f -exec shasum -a 256 {} \;')
-      _stdout, _stderr, status  = env.execute_inline("docker exec docker_sync_specs-sync bash -c 'cd /host_sync; echo -n \"#{shasums}\" | sha256sum -c -'")
-      expect(status).to be_success
-    end
-
-    it 'syncs to /app_sync' do
-      shasums, _stderr, _status = env.execute_inline('cd spec/fixtures/app/; find . -type f -exec shasum -a 256 {} \;')
-      _stdout, _stderr, status  = env.execute_inline("docker exec docker_sync_specs-sync bash -c 'cd /app_sync; echo -n \"#{shasums}\" | sha256sum -c -'")
-      expect(status).to be_success
-    end
+    it { expect('spec/fixtures/app').to be_in_sync_with('/host_sync').in_container('docker_sync_specs-sync') }
+    it { expect('spec/fixtures/app').to be_in_sync_with('/app_sync').in_container('docker_sync_specs-sync') }
   end
 end
