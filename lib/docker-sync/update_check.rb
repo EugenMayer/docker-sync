@@ -13,6 +13,7 @@ class UpdateChecker
   end
 
   def run
+    return if ENV['DOCKER_SYNC_SKIP_UPDATE']
     unless @config['update_check']
       say_status 'hint','Skipping up-to-date check since it has been disabled in your ~/.docker-sync-global.yml configuration',:yellow
       return

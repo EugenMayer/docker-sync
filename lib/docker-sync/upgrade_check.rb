@@ -11,6 +11,7 @@ class UpgradeChecker
   end
 
   def run
+    return if ENV['DOCKER_SYNC_SKIP_UPGRADE']
     unless should_run
       return
     end

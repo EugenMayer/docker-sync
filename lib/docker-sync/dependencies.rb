@@ -11,6 +11,7 @@ module DockerSync
     UNSUPPORTED_OPERATING_SYSTEM = 'Unsupported operating system. Are you sure you need DockerSync?'.freeze
 
     def self.ensure_all!(config)
+      return if ENV['DOCKER_SYNC_SKIP_DEPENDENCIES_CHECK']
       return ensure_all_for_mac!(config)   if Environment.mac?
       return ensure_all_for_linux!(config) if Environment.linux?
       raise(UNSUPPORTED_OPERATING_SYSTEM)
