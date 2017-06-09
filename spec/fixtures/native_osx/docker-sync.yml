@@ -2,6 +2,6 @@ version: "2"
 options:
   verbose: true
 syncs:
-  app-sync:
+  docker_sync_specs-sync:
     src: spec/fixtures/app
     sync_strategy: native_osx
