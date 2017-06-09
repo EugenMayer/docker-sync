@@ -20,13 +20,15 @@ RSpec::Matchers.define :be_in_sync_with do |container_dir|
   end
 
   diffable
-  def diff_source
-    "`#{host_dir}` filetree on host"
-  end
-  def diff_target
-    "`#{container_dir}` filetree in container `#{container_name}`"
-  end
   description { "synchronize #{diff_target} with #{diff_source}." }
   failure_message { "Expected #{diff_target} to match #{diff_source}." }
   failure_message_when_negated { "Expected #{diff_target} to be different than #{diff_source}." }
+
+  def diff_source
+    "`#{host_dir}` filetree on host"
+  end
+
+  def diff_target
+    "`#{container_dir}` filetree in container `#{container_name}`"
+  end
 end
