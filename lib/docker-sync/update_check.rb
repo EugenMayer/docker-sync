@@ -57,6 +57,7 @@ class UpdateChecker
   end
 
   def check_rsync_image
+    return if ENV['DOCKER_SYNC_SKIP_UPDATE']
     say_status 'ok','Checking if a newer rsync image is available'
 
     if system("docker pull eugenmayer/rsync | grep 'Downloaded newer image for'")
@@ -69,6 +70,7 @@ class UpdateChecker
   end
 
   def check_unison_hostsync_image(silent = false)
+    return if ENV['DOCKER_SYNC_SKIP_UPDATE']
     say_status 'ok','Checking if a newer native_osx (unison:hostsync_0.2) image is available' unless silent
 
     if system("docker pull eugenmayer/unison:hostsync_0.2 | grep 'Downloaded newer image for'")
@@ -81,6 +83,7 @@ class UpdateChecker
   end
 
   def check_unison_image
+    return if ENV['DOCKER_SYNC_SKIP_UPDATE']
     say_status 'ok','Checking if a newer unison image is available'
 
     if system("docker pull eugenmayer/unison | grep 'Downloaded newer image for'")
@@ -105,6 +108,7 @@ class UpdateChecker
   end
 
   def check_and_warn(update_enforced = true)
+    return if ENV['DOCKER_SYNC_SKIP_UPDATE']
     # update the timestamp
     @config.update! 'update_last_check' => DateTime.now.iso8601(9)
 
