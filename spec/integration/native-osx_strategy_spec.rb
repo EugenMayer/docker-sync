@@ -28,7 +28,7 @@ RSpec.describe 'native_osx strategy', command_execution: :allowed do
       expect(File.file?('.docker-sync/daemon.pid')).to be true
     end
 
-    it { expect('spec/fixtures/app').to be_in_sync_with('/host_sync').in_container('docker_sync_specs-sync') }
-    it { expect('spec/fixtures/app').to be_in_sync_with('/app_sync').in_container('docker_sync_specs-sync') }
+    it_behaves_like 'a synchronized directory', '/host_sync'
+    it_behaves_like 'a synchronized directory', '/app_sync'
   end
 end
