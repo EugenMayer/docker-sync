@@ -3,5 +3,5 @@ options:
   verbose: true
 syncs:
   docker_sync_specs-sync:
-    src: spec/fixtures/app
+    src: {{HOST_APP_PATH}}
     sync_strategy: native_osx
