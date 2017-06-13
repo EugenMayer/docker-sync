@@ -28,6 +28,10 @@ RSpec.describe 'native_osx strategy', command_execution: :allowed do
       expect(File.file?('.docker-sync/daemon.pid')).to be true
     end
 
+    it 'creates a log file' do
+      expect(File.file?('.docker-sync/daemon.log')).to be true
+    end
+
     it_behaves_like 'a synchronized directory', '/host_sync'
     it_behaves_like 'a synchronized directory', '/app_sync'
   end
