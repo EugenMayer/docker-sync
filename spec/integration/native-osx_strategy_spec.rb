@@ -34,5 +34,14 @@ RSpec.describe 'native_osx strategy', command_execution: :allowed do
 
     it_behaves_like 'a synchronized directory', '/host_sync'
     it_behaves_like 'a synchronized directory', '/app_sync'
+
+    xit "is a manual debugging test" do
+      # Welcome to a state where you can debug DockerSync synchronization. In another terminal, you can:
+      #   * open unison logs:            docker exec docker_sync_specs-sync tail -f /tmp/unison*.log
+      #   * monitor FS events:           docker exec docker_sync_specs-sync inotifywait -m -r /host_sync/
+      #   * go to synced host app:       cd #{host_app_path}
+      #   * get inside sync container:   docker exec -it docker_sync_specs-sync bash
+      binding.pry
+    end
   end
 end
