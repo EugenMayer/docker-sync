@@ -10,11 +10,11 @@ module DockerForMacConfigCheck
     File.readlines(D4M_MOUNTS_FILE).each do |mount_line|
       mount_src, mount_dst = mount_line.split(':')
       Pathname.new(Dir.tmpdir).ascend do |parent_dir|
-        return if parent_dir.to_s == mount_src
+        return if File.realpath(parent_dir) == File.realpath(mount_src)
       end
     end
     big_warning(<<~EOS
-      The OS temporary directory (#{Dir.tmpdir}) does not seem to be shared with Hyperkit VM.
+      The OS temporary directory (#{File.realpath(Dir.tmpdir)}) does not seem to be shared with Hyperkit VM.
       The integration tests will likely fail (or at least, behave unexpectedly).
       Please go to Docker -> Preferences -> File Sharing tab and add it (or a parent directory).
       EOS
