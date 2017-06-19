@@ -13,12 +13,11 @@ module DockerForMacConfigCheck
         return if File.realpath(parent_dir) == File.realpath(mount_src)
       end
     end
-    big_warning(<<~EOS
+    big_warning(<<-EOS)
       The OS temporary directory (#{File.realpath(Dir.tmpdir)}) does not seem to be shared with Hyperkit VM.
       The integration tests will likely fail (or at least, behave unexpectedly).
       Please go to Docker -> Preferences -> File Sharing tab and add it (or a parent directory).
-      EOS
-    )
+    EOS
   end
 
   def self.tmpdir_toplevel_dir
@@ -26,6 +25,7 @@ module DockerForMacConfigCheck
   end
 
   def self.big_warning(message)
+    message.gsub!(/(^\s*|\s*$)/, '')
     message_length = message.lines.max_by(&:length).length
     warning_length = WARNING_SIGN.gsub(ANSI_COLOR_CHAR_REGEX, '').length
     total_length   = warning_length * (message_length / warning_length + 1)
