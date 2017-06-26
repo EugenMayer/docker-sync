@@ -11,6 +11,7 @@ class Sync < Thor
 
   class_option :config, :aliases => '-c',:default => nil, :type => :string, :desc => 'Path of the docker_sync config'
   class_option :sync_name, :aliases => '-n',:type => :string, :desc => 'If given, only this sync configuration will be references/started/synced'
+  class_option :sync_prefix, :aliases => '-p',:type => :string, :default => '', :desc => 'If given, sync names will be prefixed with this string'
   class_option :version, :aliases => '-v',:type => :boolean, :default => false, :desc => 'prints out the version of docker-sync and exits'
 
   desc '--version, -v', 'Prints out the version of docker-sync and exits'
@@ -48,7 +49,7 @@ class Sync < Thor
     end
 
     Dir.chdir(start_dir) do # We want run these in pre-daemonized folder/directory since provided config_path might not be full_path
-      @sync_manager.run(options[:sync_name])
+      @sync_manager.run(options[:sync_name],options[:sync_prefix])
       @sync_manager.join_threads
     end
   end
@@ -61,7 +62,7 @@ class Sync < Thor
 
     config = config_preconditions
     sync_manager = DockerSync::SyncManager.new(config: config)
-    sync_manager.stop
+    sync_manager.stop(options[:sync_name], options[:sync_prefix])
     pid_file_path="#{options['dir']}/#{options['app_name']}.pid"
     if File.exist?(pid_file_path)
       begin
@@ -86,7 +87,7 @@ class Sync < Thor
     config = config_preconditions
 
     @sync_manager = DockerSync::SyncManager.new(config: config)
-    @sync_manager.sync(options[:sync_name])
+    @sync_manager.sync(options[:sync_name], options[:sync_prefix])
   end
 
   desc 'clean', 'Stop and clean up all sync endpoints'
@@ -107,7 +108,7 @@ class Sync < Thor
     FileUtils.rm_r dir if File.directory?(dir)
 
     @sync_manager = DockerSync::SyncManager.new(config: config)
-    @sync_manager.clean(options[:sync_name])
+    @sync_manager.clean(options[:sync_name], options[:sync_prefix])
     say_status 'success', 'Finished cleanup. Removed stopped, removed sync container and removed their volumes', :green
   end
 
@@ -160,9 +161,9 @@ class Sync < Thor
       end
 
       # If we're daemonizing, run a sync first to ensure the containers exist so that a docker-compose up won't fail:
-      @sync_manager.start_container(options[:sync_name])
+      @sync_manager.start_container(options[:sync_name],options[:sync_prefix])
       # the existing strategies' start_container will also sync, but just in case a strategy doesn't, sync now:
-      @sync_manager.sync(options[:sync_name])
+      @sync_manager.sync(options[:sync_name],options[:sync_prefix])
 
       dopts = {
         app_name: options['app_name'],

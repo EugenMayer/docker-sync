@@ -9,6 +9,7 @@ require 'docker-sync/config/project_config'
 class Stack < Thor
   class_option :config, :aliases => '-c', :default => nil, :type => :string, :desc => 'Path of the docker_sync config'
   class_option :sync_name, :aliases => '-n', :type => :string, :desc => 'If given, only this sync configuration will be references/started/synced'
+  class_option :sync_prefix, :aliases => '-p',:type => :string, :default => '', :desc => 'If given, sync names will be prefixed with this string'
   class_option :version, :aliases => '-v',:type => :boolean, :default => false, :desc => 'prints out the version of docker-sync and exits'
 
   desc '--version, -v', 'Prints out the version of docker-sync and exits'
@@ -43,7 +44,7 @@ class Stack < Thor
     say_status 'note:', 'You can also run docker-sync in the background with docker-sync --daemon'
 
     @sync_manager = DockerSync::SyncManager.new(config: config)
-    @sync_manager.run(options[:sync_name])
+    @sync_manager.run(options[:sync_name], options[:sync_prefix])
     global_options = @sync_manager.global_options
     @compose_manager = ComposeManager.new(global_options)
 
@@ -89,7 +90,7 @@ class Stack < Thor
     say_status 'success', 'Finished cleaning up your app stack', :green
 
     # now shutdown sync
-    @sync_manager.clean(options[:sync_name])
+    @sync_manager.clean(options[:sync_name], options[:sync_prefix])
     say_status 'success', 'Finished cleanup. Removed stopped, removed sync container and removed their volumes', :green
   end
 end
