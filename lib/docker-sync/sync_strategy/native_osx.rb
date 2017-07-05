@@ -80,7 +80,8 @@ module DockerSync
             say_status 'ok', 'Starting precopy', :white if @options['verbose']
             # we just run the precopy script and remove the container
             cmd = "docker run --rm -v #{volume_app_sync_name}:/app_sync -v #{host_sync_src}:/host_sync#{host_disk_mount_mode} -e HOST_VOLUME=/host_sync -e APP_VOLUME=/app_sync -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} #{additional_docker_env} #{run_privileged} --name #{container_name} #{@docker_image} /usr/local/bin/precopy_appsync"
-            `#{cmd}` || raise('Precopy failed')
+            say_status 'precopy', cmd, :white if @options['verbose']
+            system(cmd) || raise('Precopy failed')
             say_status 'ok', 'Starting container', :white if @options['verbose']
             # this will be run below and start unison, since we did not manipulate CMD
             cmd = "docker run -d -v #{volume_app_sync_name}:/app_sync -v #{host_sync_src}:/host_sync -e HOST_VOLUME=/host_sync -e APP_VOLUME=/app_sync -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} #{additional_docker_env} #{run_privileged} --name #{container_name} #{@docker_image}"
@@ -93,7 +94,7 @@ module DockerSync
           cmd = "docker exec #{container_name} supervisorctl restart unison"
         end
         say_status 'command', cmd, :white if @options['verbose']
-        `#{cmd}` || raise('Start failed')
+        system(cmd) || raise('Start failed')
         say_status 'ok', "starting initial sync of #{container_name}", :white if @options['verbose']
         # wait until container is started, then sync:
         say_status 'success', 'Sync container started', :green
