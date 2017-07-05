@@ -125,7 +125,7 @@ module DockerSync
       def get_group_mapping
         group_mapping = ''
         if @options.key?('sync_groupid')
-          raise 'for now, rsync does no longer support groupid, but for nearly all cases sync_userid should be enaugh'
+          raise 'for now, rsync does no longer support groupid, but for nearly all cases sync_userid should be enough'
           #group_mapping = "#{group_mapping} -e GROUP_ID=#{@options['sync_groupid']}"
         end
         return group_mapping
