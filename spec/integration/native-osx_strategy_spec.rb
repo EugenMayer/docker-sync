@@ -1,7 +1,8 @@
 require 'spec_helper'
 require 'fileutils'
+require 'os'
 
-RSpec.describe 'native_osx strategy', command_execution: :allowed do
+RSpec.describe 'native_osx strategy', command_execution: :allowed, if: OS.mac? do
   include Rspec::Bash
 
   let(:env)                  { create_stubbed_env }

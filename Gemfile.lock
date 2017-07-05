@@ -50,9 +50,10 @@ PLATFORMS
 
 DEPENDENCIES
   docker-sync!
+  os
   pry
   rspec
   rspec-bash
 
 BUNDLED WITH
-   1.14.6
+   1.15.1
