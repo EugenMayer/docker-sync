@@ -42,7 +42,7 @@ module DockerSync
       def start_container
         say_status 'ok', "Starting native_osx for sync #{@sync_name}", :white
         container_name = get_container_name
-        host_sync_src = @options['src']
+        host_sync_src = File.realpath(@options['src'])
         volume_app_sync_name = @sync_name
         env = {}
         raise 'sync_user is no longer supported, since it is not needed. Use sync_userid only please' if @options.key?('sync_user')
