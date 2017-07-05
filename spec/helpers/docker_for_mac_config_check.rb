@@ -8,7 +8,7 @@ module DockerForMacConfigCheck
   def self.included(_base)
     return unless File.exist?(D4M_MOUNTS_FILE)
     File.readlines(D4M_MOUNTS_FILE).each do |mount_line|
-      mount_src, mount_dst = mount_line.split(':')
+      mount_src, _mount_dst = mount_line.split(':')
       Pathname.new(Dir.tmpdir).ascend do |parent_dir|
         return if File.realpath(parent_dir) == File.realpath(mount_src)
       end
