@@ -134,9 +134,9 @@ module DockerSync
       def sync_prefer
         case @options.fetch('sync_prefer', 'default')
           when 'default' then "-prefer '#{@options['src']}' -copyonconflict" # thats our default, if nothing is set
-          when 'src' then "-prefer #{@options['src']}"
-          when 'dest' then "-prefer #{@options['dest']}"
-          else "-prefer #{@options['sync_prefer']}"
+          when 'src' then "-prefer '#{@options['src']}'"
+          when 'dest' then "-prefer '#{@options['dest']}'"
+          else "-prefer '#{@options['sync_prefer']}'"
         end
       end
 
