@@ -1,4 +1,5 @@
 .idea/workspace.xml
+*.sw*
 # Created by .ignore support plugin (hsz.mobi)
 ### Ruby template
 *.gem

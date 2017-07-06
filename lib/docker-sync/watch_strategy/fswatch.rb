@@ -42,7 +42,7 @@ module DockerSync
         say_status 'command', cmd, :white if @options['verbose']
 
         # run a thread here, since it is blocking
-        @watch_thread = threadexec(cmd, "Sync #{@sync_name}", :blue)
+        @watch_thread = thread_exec(cmd, "Sync #{@sync_name}", :blue)
       end
 
       def watch_options

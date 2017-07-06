@@ -66,7 +66,7 @@ module DockerSync
         cmd = cmd + 'unison ' + args.join(' ')
 
         say_status 'command', cmd, :white if @options['verbose']
-        forkexec(cmd, "Sync #{@sync_name}", :blue)
+        fork_exec(cmd, "Sync #{@sync_name}", :blue)
       end
 
       def sync
