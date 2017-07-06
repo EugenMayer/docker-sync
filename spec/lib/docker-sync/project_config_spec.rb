@@ -1,6 +1,6 @@
 require 'docker-sync/config/project_config'
 
-describe DockerSync::ProjectConfig do
+RSpec.describe DockerSync::ProjectConfig do
   let(:default_sync_strategy) { OS.linux? ? 'native' : 'unison' }
   let(:default_watch_strategy) { OS.linux? ? 'dummy' : 'unison' }
 

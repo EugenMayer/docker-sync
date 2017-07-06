@@ -2,7 +2,7 @@ require 'securerandom'
 require 'tmpdir'
 require 'docker-sync/config/global_config'
 
-describe DockerSync::GlobalConfig do
+RSpec.describe DockerSync::GlobalConfig do
   let(:faked_global_config_path) { Pathname.new(Dir.tmpdir).join("#{SecureRandom.hex}.yml") }
 
   before do
