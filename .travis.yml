@@ -1,0 +1,16 @@
+language: ruby
+
+rvm:
+  - 2.0.0-p247
+
+#os: osx
+
+services: docker
+
+before_install:
+- docker pull eugenmayer/unison:hostsync_0.2
+- docker pull eugenmayer/unison:latest
+- docker pull eugenmayer/rsync
+
+script:
+- bundle exec rspec spec
