@@ -39,8 +39,8 @@ RSpec.describe 'native_osx strategy', command_execution: :allowed, if: OS.mac? d
       expect(File.file?('.docker-sync/daemon.log')).to be true
     end
 
-    it_behaves_like 'a synchronized directory', '/host_sync', within: 2.second
-    it_behaves_like 'a synchronized directory', '/app_sync',  within: 4.seconds
+    it_behaves_like 'a synchronized directory', '/host_sync', within: 5.second
+    it_behaves_like 'a synchronized directory', '/app_sync',  within: 10.seconds
 
     xit "is a manual debugging test" do
       # Welcome to a state where you can debug DockerSync synchronization. In another terminal, you can:
