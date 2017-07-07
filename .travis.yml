@@ -13,4 +13,5 @@ before_install:
 - docker pull eugenmayer/rsync
 
 script:
-- bundle exec rspec spec
+- bundle exec rspec spec/integration/
+- bundle exec rspec spec/lib/docker-sync/
