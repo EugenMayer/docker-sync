@@ -1,7 +1,7 @@
 language: ruby
 
 rvm:
-  - 2.0.0-p247
+  - 2.0
 
 #os: osx
 
