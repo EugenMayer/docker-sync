@@ -17,6 +17,7 @@ module CommandExecutionMock
   end
 
   def disallow_command_execution
+    print "Adding RSpec hook to stub command execution... "
     RSpec.configuration.before(:each) do |example|
       unless example.metadata[:command_execution].to_s == 'allowed'
         COMMAND_EXECUTORS.each do |executor|
@@ -24,6 +25,7 @@ module CommandExecutionMock
         end
       end
     end
+    puts "OK"
   end
 
   def stub_command_executor(executor)
