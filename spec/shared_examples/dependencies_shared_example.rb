@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 RSpec.shared_examples 'a dependency' do
   before do
     described_class.remove_instance_variable(:@available) if described_class.instance_variable_defined? :@available

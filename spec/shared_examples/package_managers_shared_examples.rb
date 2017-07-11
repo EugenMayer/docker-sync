@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 RSpec.shared_examples 'a package manager' do
   it 'defines the command used to install a package' do
     expect(described_class.private_instance_methods(false)).to include :install_cmd
