@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'securerandom'
 require 'tmpdir'
 require 'docker-sync/config/global_config'

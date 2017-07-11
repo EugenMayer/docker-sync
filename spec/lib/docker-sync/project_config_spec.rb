@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'docker-sync/config/project_config'
 
 RSpec.describe DockerSync::ProjectConfig do

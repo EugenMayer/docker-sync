@@ -9,6 +9,7 @@
 /pkg/
 /spec/reports/
 /spec/examples.txt
+/.rspec
 /example/tmp/
 /example/version_tmp/
 /tmp/
