@@ -64,44 +64,45 @@ module DockerSync
       end
     end
 
-    def init_sync_processes(sync_name = nil)
+    def init_sync_processes(sync_name = nil, sync_prefix = '')
       return if @sync_processes.size != 0
+
       if sync_name.nil?
         @config_syncs.each { |name, sync_configuration|
-          @sync_processes.push(create_sync(name, sync_configuration))
+          @sync_processes.push(create_sync(sync_prefix + name, sync_configuration))
         }
       else
         unless @config_syncs.key?(sync_name)
           raise("Could not find sync configuration with name #{sync_name}")
         end
-        @sync_processes.push(create_sync(sync_name, @config_syncs[sync_name]))
+        @sync_processes.push(create_sync(sync_prefix + sync_name, @config_syncs[sync_name]))
       end
     end
 
 
-    def clean(sync_name = nil)
-      init_sync_processes(sync_name)
+    def clean(sync_name = nil, sync_prefix = '')
+      init_sync_processes(sync_name, sync_prefix)
       @sync_processes.each { |sync_process|
         sync_process.clean
       }
     end
 
-    def sync(sync_name = nil)
-      init_sync_processes(sync_name)
+    def sync(sync_name = nil, sync_prefix = '')
+      init_sync_processes(sync_name, sync_prefix)
       @sync_processes.each { |sync_process|
         sync_process.sync
       }
     end
 
-    def start_container(sync_name = nil)
-      init_sync_processes(sync_name)
+    def start_container(sync_name = nil, sync_prefix = '')
+      init_sync_processes(sync_name, sync_prefix)
       @sync_processes.each { |sync_process|
         sync_process.start_container
       }
     end
 
-    def run(sync_name = nil)
-      init_sync_processes(sync_name)
+    def run(sync_name = nil, sync_prefix = '')
+      init_sync_processes(sync_name, sync_prefix)
 
       @sync_processes.each { |sync_process|
         sync_process.run
@@ -136,8 +137,8 @@ module DockerSync
       return sync_process
     end
 
-    def stop
-      init_sync_processes
+    def stop(sync_name = nil, sync_prefix = '')
+      init_sync_processes(sync_name, sync_prefix)
       @sync_processes.each { |sync_process|
         sync_process.stop
         unless sync_process.watch_thread.nil?
