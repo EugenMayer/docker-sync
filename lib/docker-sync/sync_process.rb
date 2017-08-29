@@ -71,16 +71,14 @@ module DockerSync
     end
 
     def get_host_ip_default
-      return '127.0.0.1' if Dependencies::Docker::Driver.docker_for_mac?
+      return '127.0.0.1' unless Dependencies::Docker::Driver.docker_toolbox?
 
-      if Dependencies::Docker::Driver.docker_toolbox?
-        cmd = 'docker-machine ip $(docker-machine active)'
-        stdout, stderr, exit_status = Open3.capture3(cmd)
-        unless exit_status.success?
-          raise "Error getting sync_host_ip automatically, exit code #{$?.exitstatus} ... #{stderr}"
-        end
-        return stdout.gsub("\n",'')
+      cmd = 'docker-machine ip $(docker-machine active)'
+      stdout, stderr, exit_status = Open3.capture3(cmd)
+      unless exit_status.success?
+        raise "Error getting sync_host_ip automatically, exit code #{$?.exitstatus} ... #{stderr}"
       end
+      stdout.gsub("\n",'')
     end
 
     def run
