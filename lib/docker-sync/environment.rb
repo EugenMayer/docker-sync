@@ -11,5 +11,9 @@ module DockerSync
       return @mac if defined? @mac
       @mac = OS.mac?
     end
+
+    def self.freebsd?
+      @freebsd ||= OS.freebsd?
+    end
   end
 end

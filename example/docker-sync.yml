@@ -90,6 +90,8 @@ syncs:
     sync_host_ip: 'auto'
     # should be a unique port this sync instance uses on the host to offer the rsync service on
     sync_host_port: 20871
+    # set of IPs (10.0.2.2) or networks (10.0.0.0/8) that will be granted access to this rsync service, useful when running on FreeBSD with Virtualbox and a host-only interface
+    # sync_host_allow: '10.0.0.0/8'
     # optionl, a list of excludes for rsync - see rsync docs for details
     sync_excludes: ['Gemfile.lock', 'Gemfile', 'config.rb', '.sass-cache/', 'sass/', 'sass-cache/', 'composer.json' , 'bower.json', 'package.json', 'Gruntfile*', 'bower_components/', 'node_modules/', '.gitignore', '.git/', '*.coffee', '*.scss', '*.sass']
     # optional: use this to switch to rsync verbose mode

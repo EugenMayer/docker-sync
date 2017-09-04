@@ -96,8 +96,9 @@ module DockerSync
 
             user_mapping = get_user_mapping
             group_mapping = get_group_mapping
+            docker_env = get_docker_env
 
-            cmd = "docker run -p '#{@options['sync_host_port']}:873' -v #{volume_name}:#{@options['dest']} #{user_mapping} #{group_mapping} -e VOLUME=#{@options['dest']} -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} --name #{container_name} -d #{@docker_image}"
+            cmd = "docker run -p '#{@options['sync_host_port']}:873' -v #{volume_name}:#{@options['dest']} #{user_mapping} #{group_mapping} #{docker_env} --name #{container_name} -d #{@docker_image}"
           else # container already created, just start / reuse it
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
             cmd = "docker start #{container_name}"
@@ -129,6 +130,14 @@ module DockerSync
           #group_mapping = "#{group_mapping} -e GROUP_ID=#{@options['sync_groupid']}"
         end
         return group_mapping
+      end
+
+      def get_docker_env
+        env_mapping = []
+        env_mapping << "-e VOLUME=#{@options['dest']}"
+        env_mapping << "-e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`}"
+        env_mapping << "-e ALLOW=#{@options['sync_host_allow']}" if @options['sync_host_allow']
+        env_mapping.join(' ')
       end
 
       def stop_container
