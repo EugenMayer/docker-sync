@@ -33,6 +33,7 @@ RSpec.describe DockerSync::Dependencies::PackageManager do
       expect(subject).to match_array [
         DockerSync::Dependencies::PackageManager::Brew,
         DockerSync::Dependencies::PackageManager::Apt,
+        DockerSync::Dependencies::PackageManager::Pkg,
         DockerSync::Dependencies::PackageManager::Yum
       ]
     end
