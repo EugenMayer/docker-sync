@@ -40,7 +40,7 @@ class Stack < Thor
       exit(1)
     end
 
-    say_status 'note:', 'You can also run docker-sync in the background with docker-sync --daemon'
+    say_status 'note:', 'You can also run docker-sync in the background with docker-sync start'
 
     @sync_manager = DockerSync::SyncManager.new(config: config)
     @sync_manager.run(options[:sync_name])
