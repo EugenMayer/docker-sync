@@ -135,7 +135,7 @@ module DockerSync
         case @options.fetch('sync_prefer', 'default')
           when 'default' then "-prefer '#{@options['src']}' -copyonconflict" # thats our default, if nothing is set
           when 'src' then "-prefer '#{@options['src']}'"
-          when 'dest' then "-prefer '#{@options['dest']}'"
+          when 'dest' then "-prefer 'socket://#{@options['sync_host_ip']}:#{sync_host_port}'"
           else "-prefer '#{@options['sync_prefer']}'"
         end
       end
