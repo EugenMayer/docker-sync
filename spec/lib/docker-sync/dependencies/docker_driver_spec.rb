@@ -18,9 +18,9 @@ RSpec.describe DockerSync::Dependencies::Docker::Driver do
       it { is_expected.to execute_nothing }
     end
 
-    it 'checks if Docker is running in Alpine Linux (Hyperkit)' do
+    it 'checks if Docker is running in Hyperkit' do
       subject
-      expect(described_class).to have_received(:system).with('docker info | grep -q "Operating System: Alpine Linux"')
+      expect(described_class).to have_received(:system).with('ps x | grep MacOS | grep -q com.docker.osx.hyperkit.linux')
     end
 
     it 'checks if Docker is running from /var/lib/docker' do
