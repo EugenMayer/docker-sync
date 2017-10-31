@@ -26,7 +26,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 li {
-  line-height: 1.4 ;
+  line-height: 1.5 ;
+  padding-bottom: 10px;
 }
 
 /* Header, <header>
