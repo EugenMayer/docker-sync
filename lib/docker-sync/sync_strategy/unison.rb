@@ -164,6 +164,7 @@ module DockerSync
           exists = `docker ps --filter "status=exited" --filter "name=#{container_name}" --format "{{.Names}}" | grep '^#{container_name}$'`
           if exists == ''
             say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
+            run_privileged = ''
             run_privileged = '--privileged' if @options.key?('max_inotify_watches') #TODO: replace by the minimum capabilities required
             cmd = "docker run -p '#{@options['sync_host_ip']}::#{UNISON_CONTAINER_PORT}' -v #{volume_name}:#{@options['dest']} -e VOLUME=#{@options['dest']} -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} #{additional_docker_env} #{run_privileged} --name #{container_name} -d #{@docker_image}"
           else
@@ -184,6 +185,7 @@ module DockerSync
         attempt = 0
         max_attempt = @options['max_attempt'] || 5
         loop do
+          # noinspection RubyUnusedLocalVariable
           stdout, stderr, exit_status = Open3.capture3(cmd)
           break if exit_status == 0
           attempt += 1
@@ -194,12 +196,12 @@ module DockerSync
         say_status 'success', 'Unison server started', :green
       end
 
+      # noinspection RubyUnusedLocalVariable
       def get_host_port(container_name, container_port)
-        File.exist?('/usr/bin/sed') ? sed = '/usr/bin/sed' : sed = `which sed`.chomp # use macOS native sed in /usr/bin/sed first, fallback to sed in $PATH if it's not there
         cmd = 'docker inspect --format=\'{{(index (index .NetworkSettings.Ports "5000/tcp") 0).HostPort}}\' ' + container_name
         say_status 'command', cmd, :white if @options['verbose']
         stdout, stderr, exit_status = Open3.capture3(cmd)
-        if not exit_status.success?
+        unless exit_status.success?
           say_status 'command', cmd
           say_status 'error', "Error getting mapped port, exit code #{$?.exitstatus}", :red
           say_status 'message', stderr

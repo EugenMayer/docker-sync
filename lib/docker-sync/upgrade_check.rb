@@ -77,7 +77,6 @@ class UpgradeChecker
         system cmd1
       else
         raise('Please reinstall docker-sync yourself')
-        exit 1
       end
     end
 

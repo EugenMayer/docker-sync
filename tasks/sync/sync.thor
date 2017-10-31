@@ -128,14 +128,14 @@ class Sync < Thor
   def list
     print_version if options[:version]
 
-    config = config_preconditions
+    project_config = config_preconditions
 
-    say_status 'ok',"Found configuration at #{config.config_path}"
-    @sync_manager = DockerSync::SyncManager.new(config: config)
-    @sync_manager.get_sync_points.each do |name, config|
-      say_status name, "On address #{config['sync_host_ip']}:#{config['sync_host_port']}",:white unless options['verbose']
-      puts "\n---------------[#{name}] #{config['sync_host_ip']}:#{config['sync_host_port']} ---------------\n" if options['verbose']
-      print_table(config) if options['verbose']
+    say_status 'ok',"Found configuration at #{project_config.config_path}"
+    @sync_manager = DockerSync::SyncManager.new(config: project_config)
+    @sync_manager.get_sync_points.each do |name, sync_config|
+      say_status name, "On address #{sync_config['sync_host_ip']}:#{sync_config['sync_host_port']}",:white unless options['verbose']
+      puts "\n---------------[#{name}] #{sync_config['sync_host_ip']}:#{sync_config['sync_host_port']} ---------------\n" if options['verbose']
+      print_table(sync_config) if options['verbose']
     end
   end
 
