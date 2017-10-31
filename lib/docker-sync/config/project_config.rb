@@ -48,20 +48,21 @@ module DockerSync
 
     def unison_required?
       # noinspection RubyUnusedLocalVariable
-      config['syncs'].any? { |sync_config|
+      config['syncs'].any? { |name, sync_config|
         sync_config['sync_strategy'] == 'unison' || sync_config['watch_strategy'] == 'unison'
       }
     end
 
     def rsync_required?
       # noinspection RubyUnusedLocalVariable
-      config['syncs'].any? { |sync_config|
+      config['syncs'].any? { |name, sync_config|
         sync_config['sync_strategy'] == 'rsync'
       }
     end
 
     def fswatch_required?
-      config['syncs'].any? { |sync_config|
+      # noinspection RubyUnusedLocalVariable
+      config['syncs'].any? { |name, sync_config|
         sync_config['watch_strategy'] == 'fswatch'
       }
     end
