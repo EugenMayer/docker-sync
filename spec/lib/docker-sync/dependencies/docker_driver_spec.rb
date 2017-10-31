@@ -23,14 +23,9 @@ RSpec.describe DockerSync::Dependencies::Docker::Driver do
       expect(described_class).to have_received(:system).with('ps x | grep MacOS | grep -q com.docker.osx.hyperkit.linux')
     end
 
-    it 'checks if Docker is running from /var/lib/docker' do
-      subject
-      expect(described_class).to have_received(:system).with('docker info | grep -q "Docker Root Dir: /var/lib/docker"')
-    end
-
     it 'is memoized' do
-      expect { 2.times { described_class.docker_for_mac? } }.to change { described_class.instance_variable_defined?(:@docker_for_mac) }
-      expect(described_class).to have_received(:system).exactly(:twice)
+      expect { 1.times { described_class.docker_for_mac? } }.to change { described_class.instance_variable_defined?(:@docker_for_mac) }
+      expect(described_class).to have_received(:system).exactly(:once)
     end
   end
 

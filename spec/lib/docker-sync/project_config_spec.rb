@@ -303,13 +303,13 @@ syncs:
     it do
       use_fixture 'simplest' do
         if OS.linux?
-          is_expected.not_to be_unison_required
+          is_expected.not_to unison_required?
         else
-          is_expected.to be_unison_required
+          is_expected.to unison_required?
         end
       end
     end
-    it do use_fixture 'rsync' do is_expected.not_to be_unison_required end end
-    it do use_fixture 'unison' do is_expected.to be_unison_required end end
+    it do use_fixture 'rsync' do is_expected.not_to unison_required? end end
+    it do use_fixture 'unison' do is_expected.to unison_required? end end
   end
 end
