@@ -3,6 +3,9 @@
     Thank you for all the feedback and support i already received!
     Docker-sync has been improved by all of you in huge ways!
 
+NOTE: [Due to bind mount inotify events not delivered after container restart](https://github.com/docker/for-mac/issues/681) the native_osx strategy on macOS may not work as expected.  
+Using the [rsync strategy](https://github.com/EugenMayer/docker-sync/wiki/8.-Strategies#rsync-osx) may be viable for your use case in the meanwhile
+
 If you are eager to help and improve docker-sync
  - Help [here](https://github.com/EugenMayer/docker-sync/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) if you are a coder
  - Help [here](https://github.com/EugenMayer/docker-sync/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20label%3A%22help%20wanted%22%20%20label%3A%22documentation%22%20) with the docs no matter what skill set you have
