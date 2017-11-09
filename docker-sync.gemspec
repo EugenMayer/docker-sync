@@ -13,8 +13,8 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'thor', '~> 0.19', '>= 0.19.0'
   s.add_runtime_dependency 'gem_update_checker', '~> 0.2.0', '>= 0.2.0'
-  s.add_runtime_dependency 'docker-compose', '~> 1.0', '>= 1.0.2'
-  s.add_runtime_dependency 'terminal-notifier', '1.6.3'
+  s.add_runtime_dependency 'docker-compose', '~> 1.1', '>= 1.1.7'
+  s.add_runtime_dependency 'terminal-notifier', '2.0.0'
   s.add_runtime_dependency 'dotenv', '~> 2.1', '>= 2.1.1'
   s.add_runtime_dependency 'daemons', '~> 1.2', '>= 1.2.3'
   s.add_runtime_dependency 'os'
