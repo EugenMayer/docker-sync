@@ -1,6 +1,6 @@
 require 'singleton'
 require 'forwardable'
-require 'data'
+require 'date'
 
 require 'docker-sync/config/config_locator'
 require 'docker-sync/config/config_serializer'
