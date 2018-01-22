@@ -65,6 +65,8 @@ module DockerSync
           env['OWNER_UID'] = @options['sync_userid'] if @options.key?('sync_userid')
         end
 
+        env['ENABLE_MONIT'] = @options.fetch 'enable_monit', true
+
         host_disk_mount_mode = '' # see https://github.com/moby/moby/pull/31047
         host_disk_mount_mode = ":#{@options['host_disk_mount_mode']}" if @options.key?('host_disk_mount_mode')
 
