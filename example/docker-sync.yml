@@ -116,3 +116,11 @@ syncs:
     watch_args: '-v'
     # optional: default is fswatch, if set to disable, no watcher will be used and you would need to start the sync manually
     watch_strategy: 'fswatch'
+
+    # monit can be used to monitor the health of unison in the native_osx strategy and can restart unison if it detects a problem
+    # optional: use this to switch monit monitoring on
+    monit_enabled: false
+    # optional: use this to change how many seconds between each monit check (cycle)
+    monit_interval: 5
+    # optional: use this to change how many consecutive times high cpu usage must be observed before unison is restarted
+    monit_high_cpu_cycles: 2
