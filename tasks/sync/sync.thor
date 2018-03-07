@@ -22,7 +22,7 @@ class Sync < Thor
 
   desc 'start', 'Start all sync configurations in this project'
   method_option :daemon, :aliases => '-d', :default => false, :type => :boolean, :desc => 'Run in the background'
-  method_option :foreground, :aliases => '-d', :default => false, :type => :boolean, :desc => 'Run in the background'
+  method_option :foreground, :aliases => '-f', :default => false, :type => :boolean, :desc => 'Run in the foreground'
   method_option :app_name, :aliases => '--name', :default => 'daemon', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
   method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
   method_option :logd, :aliases => '--logd', :default => true, :type => :boolean, :desc => 'To log OUPUT to file on Daemon or not'
