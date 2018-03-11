@@ -135,7 +135,7 @@ module DockerSync
       def get_docker_env
         env_mapping = []
         env_mapping << "-e VOLUME=#{@options['dest']}"
-        env_mapping << "-e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`}"
+        env_mapping << "-e TZ=$(basename $(dirname `readlink /etc/localtime`))/$(basename `readlink /etc/localtime`)"
         env_mapping << "-e ALLOW=#{@options['sync_host_allow']}" if @options['sync_host_allow']
         env_mapping.join(' ')
       end
