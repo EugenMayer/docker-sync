@@ -5,7 +5,7 @@ module DockerSync
         def self.docker_for_mac?
           return false unless Environment.mac?
           return @docker_for_mac if defined? @docker_for_mac
-          @docker_for_mac = system('ps x | grep MacOS | grep -q com.docker.osx.hyperkit.linux')
+          @docker_for_mac = system('pgrep -q com.docker.hyperkit')
         end
 
         def self.docker_toolbox?
