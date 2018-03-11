@@ -20,7 +20,7 @@ RSpec.describe DockerSync::Dependencies::Docker::Driver do
 
     it 'checks if Docker is running in Hyperkit' do
       subject
-      expect(described_class).to have_received(:system).with('ps x | grep MacOS | grep -q com.docker.osx.hyperkit.linux')
+      expect(described_class).to have_received(:system).with('pgrep -q com.docker.hyperkit')
     end
 
     it 'is memoized' do
