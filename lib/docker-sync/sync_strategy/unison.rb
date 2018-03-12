@@ -119,11 +119,10 @@ module DockerSync
         args.push("'#{@options['src']}'")
         args.push('-auto')
         args.push('-batch')
-        sync_host_port = get_host_port(get_container_name, UNISON_CONTAINER_PORT)
-        dest = "socket://#{@options['sync_host_ip']}:#{sync_host_port}"
-        args.push(sync_prefer(dest))
+        args.push(sync_prefer)
         args.push(@options['sync_args']) if @options.key?('sync_args')
-        args.push(dest)
+        sync_host_port = get_host_port(get_container_name, UNISON_CONTAINER_PORT)
+        args.push("socket://#{@options['sync_host_ip']}:#{sync_host_port}")
 
         if @options.key?('sync_group') || @options.key?('sync_groupid')
           raise('Unison does not support sync_group, sync_groupid - please use rsync if you need that')
@@ -132,14 +131,15 @@ module DockerSync
       end
 
       # cares about conflict resolution
-      def sync_prefer dest
+      def sync_prefer
         case @options.fetch('sync_prefer', 'default')
           when 'default' then "-prefer '#{@options['src']}' -copyonconflict" # thats our default, if nothing is set
           when 'src' then "-prefer '#{@options['src']}'"
-          when 'dest' then "-prefer '#{dest}'"
+          when 'dest' then "-prefer 'socket://#{@options['sync_host_ip']}:#{sync_host_port}'"
           else "-prefer '#{@options['sync_prefer']}'"
         end
       end
+
 
       def start_container
         say_status 'ok', "Starting unison for sync #{@sync_name}", :white
