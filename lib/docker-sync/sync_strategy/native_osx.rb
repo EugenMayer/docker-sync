@@ -66,7 +66,7 @@ module DockerSync
         end
 
         monit_options = {
-          monit_enable: 'MONIT_ENABLE',
+          monit_enabled: 'MONIT_ENABLE',
           monit_interval: 'MONIT_INTERVAL',
           monit_high_cpu_cycles: 'MONIT_HIGH_CPU_CYCLES',
         }
