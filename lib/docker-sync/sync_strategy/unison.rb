@@ -22,7 +22,7 @@ module DockerSync
         if @options.key?('image')
           @docker_image = @options['image']
         else
-          @docker_image = 'eugenmayer/unison:0.3'
+          @docker_image = 'eugenmayer/unison:2.51.2.0'
         end
         begin
           Dependencies::Unison.ensure!
@@ -157,6 +157,10 @@ module DockerSync
         else
           env['OWNER_UID'] = @options['sync_userid'] if @options.key?('sync_userid')
         end
+
+        # start unison-image in unison socket mode mode
+        env['HOSTSYNC_ENABLE']=0
+        env['UNISONSOCKET_ENABLE']=1
 
         additional_docker_env = env.map{ |key,value| "-e #{key}=\"#{value}\"" }.join(' ')
         running = `docker ps --filter 'status=running' --filter 'name=#{container_name}' --format "{{.Names}}" | grep '^#{container_name}$'`
