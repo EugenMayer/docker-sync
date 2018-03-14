@@ -147,10 +147,21 @@ module DockerSync
         container_name = get_container_name
         volume_name = get_volume_name
         env = {}
-        say_status 'ok', 'sync_user is no longer supported, since it ise no needed, use sync_userid only please', :yellow if @options.key?('sync_user')
+        raise 'sync_user is no longer supported, since it ise no needed, use sync_userid only please' if @options.key?('sync_user')
 
+        env['UNISON_SRC'] = '-socket 5000'
+        env['UNISON_DEST'] = '/app_sync'
+
+
+        env['MONIT_ENABLE'] = 'false'
+        env['MONIT_INTERVAL'] = ''
+        env['MONIT_HIGH_CPU_CYCLES'] = ''
+
+        env['UNISON_ARGS'] = ''
         ignore_strings = expand_ignore_strings
-        env['UNISON_EXCLUDES'] = ignore_strings.join(' ')
+        env['UNISON_ARGS'] << ignore_strings.join(' ')
+        env['UNISON_WATCH_ARGS'] = ''
+
         env['MAX_INOTIFY_WATCHES'] = @options['max_inotify_watches'] if @options.key?('max_inotify_watches')
         if @options['sync_userid'] == 'from_host'
           env['OWNER_UID'] = Process.uid

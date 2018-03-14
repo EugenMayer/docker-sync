@@ -47,8 +47,8 @@ module DockerSync
         env = {}
         raise 'sync_user is no longer supported, since it is not needed. Use sync_userid only please' if @options.key?('sync_user')
 
-        ignore_strings = expand_ignore_strings
-        env['UNISON_EXCLUDES'] = ignore_strings.join(' ')
+        env['UNISON_SRC'] = '/host_sync'
+        env['UNISON_DEST'] = '/app_sync'
 
         env['UNISON_ARGS'] = ''
         if @options.key?('sync_args')
@@ -57,7 +57,12 @@ module DockerSync
           env['UNISON_ARGS'] = sync_args
         end
 
-        env['UNISON_SYNC_PREFER'] = sync_prefer
+        ignore_strings = expand_ignore_strings
+        env['UNISON_ARGS'] << ' ' << ignore_strings.join(' ')
+        env['UNISON_ARGS'] << ' ' << sync_prefer
+        env['UNISON_ARGS'] << ' -numericids -auto -batch'
+        env['UNISON_WATCH_ARGS'] = '-repeat watch'
+
         env['MAX_INOTIFY_WATCHES'] = @options['max_inotify_watches'] if @options.key?('max_inotify_watches')
         if @options['sync_userid'] == 'from_host'
           env['OWNER_UID'] = Process.uid
