@@ -85,7 +85,9 @@ class UpdateChecker
 
   def get_current_version
     path = File.expand_path('../../../', __FILE__)
-    return File.read("#{path}/VERSION")
+    version = File.read("#{path}/VERSION")
+    version.gsub!(/ *\n+/, "")
+    version.strip
   end
 
   def docker_sync_update_check

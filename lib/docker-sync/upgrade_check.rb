@@ -41,7 +41,7 @@ class UpgradeChecker
   def self.get_current_version
     path = File.expand_path('../../../', __FILE__)
     version = File.read("#{path}/VERSION")
-    version.gsub!(/ *\n+/, "\n")
+    version.gsub!(/ *\n+/, "")
     version.strip
   end
 
