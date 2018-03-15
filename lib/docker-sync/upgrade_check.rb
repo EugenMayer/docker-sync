@@ -40,7 +40,9 @@ class UpgradeChecker
 
   def self.get_current_version
     path = File.expand_path('../../../', __FILE__)
-    return File.read("#{path}/VERSION")
+    version = File.read("#{path}/VERSION")
+    version.gsub!(/ *\n+/, "\n")
+    version.strip
   end
 
   def docker_sync_update_check
@@ -98,7 +100,7 @@ class UpgradeChecker
 
     if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.4.2')
       checker = UpdateChecker.new
-      checker.check_unison_hostsync_image
+      checker.check_unison_image
 
       Thor::Shell::Basic.new.say_status 'warning', "The native_osx is NOW ONLY for docker-for-mac, this is due to https://github.com/EugenMayer/docker-sync/issues/346\n\nThat means that unison is picked as a default automatically if you use docker-machine", :red
 
@@ -109,17 +111,28 @@ class UpgradeChecker
 
     if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.4.3')
       checker = UpdateChecker.new
-      checker.check_unison_hostsync_image
+      checker.check_unison_image
     end
 
     if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.4.4')
       checker = UpdateChecker.new
-      checker.check_unison_hostsync_image
+      checker.check_unison_image
     end
 
     if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.4.5')
       checker = UpdateChecker.new
-      checker.check_unison_hostsync_image
+      checker.check_unison_image
+    end
+
+    if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.5.5')
+      checker = UpdateChecker.new
+      checker.check_unison_image
+
+      Thor::Shell::Basic.new.say_status 'warning', "There has been a major unison update. Please clean and restart all your stacks. If you are using the unison strategy, please upgrade unison by doing 'brew update && brew upgrade unison' to upgrade to 2.51.2", :red
+
+      unless Thor::Shell::Basic.new.yes?('Just wanted you to know that! (y/N)')
+        exit 1
+      end
     end
 
     # update the upgrade_status

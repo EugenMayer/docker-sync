@@ -25,7 +25,6 @@ class UpdateChecker
     # do not check the image if its the first run - since this it will be downloaded anyway
     unless @config.first_run?
       unless has_internet?
-        check_unison_hostsync_image
         check_unison_image
         check_rsync_image
         # stop if there was an update
@@ -47,6 +46,8 @@ class UpdateChecker
   def should_run
     return false unless has_internet?
     now = DateTime.now
+    return true if @config['update_last_check'].nil?
+
     last_check = DateTime.iso8601(@config['update_last_check'])
     check_after_days = 2
     if now - last_check > check_after_days
@@ -69,24 +70,11 @@ class UpdateChecker
 
   end
 
-  def check_unison_hostsync_image(silent = false)
-    return if ENV['DOCKER_SYNC_SKIP_UPDATE']
-    say_status 'ok','Checking if a newer native_osx (unison:hostsync_0.2) image is available' unless silent
-
-    if system("docker pull eugenmayer/unison:hostsync_0.2 | grep 'Downloaded newer image for'")
-      say_status 'ok', 'Downloaded newer image for native_osx', :green unless silent
-      @newer_image_found = true
-    else
-      say_status 'ok', 'No newer image found - current image is up to date.' unless silent
-    end
-
-  end
-
   def check_unison_image
     return if ENV['DOCKER_SYNC_SKIP_UPDATE']
     say_status 'ok','Checking if a newer unison image is available'
 
-    if system("docker pull eugenmayer/unison | grep 'Downloaded newer image for'")
+    if system("docker pull eugenmayer/unison:2.51.2.0 | grep 'Downloaded newer image for'")
       say_status 'ok', 'Downloaded newer image for unison', :green
       @newer_image_found = true
     else

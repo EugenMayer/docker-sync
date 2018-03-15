@@ -28,7 +28,7 @@ module DockerSync
 
         # TODO: remove this when we have a more stable image, but for now, we need this
         uc = UpdateChecker.new
-        uc.check_unison_hostsync_image(true)
+        uc.check_unison_image
 
         begin
           Dependencies::Docker.ensure!
