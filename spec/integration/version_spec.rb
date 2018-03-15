@@ -1,5 +1,5 @@
 require 'spec_helper'
-
+require 'docker-sync/upgrade_check'
 RSpec.describe '--version', command_execution: :allowed do
   include Rspec::Bash
 
@@ -9,7 +9,8 @@ RSpec.describe '--version', command_execution: :allowed do
 
   it 'outputs the version' do
     stdout, _stderr, _status = env.execute_inline(subject)
-    expect(stdout).to eq `cat VERSION`
+    # puts will always add a newline, so we have to compare against that
+    expect(stdout).to eq UpgradeChecker.get_current_version + "\n"
   end
 
   it 'is successful' do
