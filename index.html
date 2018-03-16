@@ -24,9 +24,9 @@
     <div class="container">
       <section id="main_content">
 	      <p>Developing with <a href="https://www.docker.com/">docker</a> under <a href="https://github.com/EugenMayer/docker-sync/wiki/docker-sync-on-OSX">OSX</a>/
-		      <a href="https://github.com/EugenMayer/docker-sync/wiki/docker-sync-on-Windows">Windows</a> is a huge pain, 
-		      since sharing your code into containers will slow down the code-execution about 60 times (depends on the solution). 
-		      Testing and working with a lot of the <a href="https://github.com/EugenMayer/docker_sync/wiki/Alternatives-to-docker-sync">alternatives</a> 
+		      <a href="https://github.com/EugenMayer/docker-sync/wiki/docker-sync-on-Windows">Windows</a> is a huge pain,
+		      since sharing your code into containers will slow down the code-execution about 60 times (depends on the solution).
+		      Testing and working with a lot of the <a href="https://github.com/EugenMayer/docker_sync/wiki/Alternatives-to-docker-sync">alternatives</a>
 		      made us pick the best of those for each platform, and combine this in one single tool: docker-sync</p>
 
 <p><a href="https://badge.fury.io/rb/docker-sync"><img src="https://badge.fury.io/rb/docker-sync.svg" alt="Gem Version"></a> <a href="https://travis-ci.org/EugenMayer/docker-sync"><img src="https://travis-ci.org/EugenMayer/docker-sync.svg?branch=master" alt="Build status"></a></p>
@@ -35,20 +35,20 @@
 </pre>
 
 <p style="font-size:80%"><a href="https://github.com/EugenMayer/docker-sync/wiki/1.-Installation">..detailed installation instructions</a></p>
-<p>Docker-sync is:</p>
+<p>docker-sync is:</p>
 
 <ul>
 	<li>Support for OSX, Windows, Linux and FreeBSD</li>
-	<li>Runs on <strong>docker for mac</strong>, <strong>docker for windows</strong> and <strong>dockertoolbox</strong></li>
-	<li>uses either <a href="https://github.com/EugenMayer/docker-sync/wiki/How-does-native_osx-work-with-OSXFS-and-is-still-native-speed-fast%3F"><strong>native_osx</strong></a>, <strong>unison</strong>  or <strong>rsync</strong> as possible <a href="https://github.com/EugenMayer/docker-sync/wiki/8.-Strategies">strategies</a>. The container performance is not influenced at all, see <a href="https://github.com/EugenMayer/docker_sync/wiki/4.-Performance">performance</a></li>
+	<li>Runs on <strong>Docker for Mac</strong>, <strong>Docker for Windows</strong> and <strong>Docker Toolbox</strong></li>
+	<li>Uses either <a href="https://github.com/EugenMayer/docker-sync/wiki/How-does-native_osx-work-with-OSXFS-and-is-still-native-speed-fast%3F"><strong>native_osx</strong></a>, <strong>unison</strong>  or <strong>rsync</strong> as possible <a href="https://github.com/EugenMayer/docker-sync/wiki/8.-Strategies">strategies</a>. The container performance is not influenced at all, see <a href="https://github.com/EugenMayer/docker_sync/wiki/4.-Performance">performance</a></li>
 	<li>Very efficient due to the <a href="https://github.com/EugenMayer/docker-sync/wiki/How-does-native_osx-work-with-OSXFS-and-is-still-native-speed-fast%3F">native_osx concept</a></li>
 	<li>Without any dependencies on OSX when using (native_osx)</li>
-	<li>Backgrounds as a daemon</li>	
-	<li>Supports multiple sync-end points and multiple projects and the same time</li>	
-	<li><strong>supports user-remapping</strong> on sync to avoid permission problems on the container</li>
-	<li>Can be used with your docker-compose way or the integrated docker-compose wahy to start the stack and sync at the same time with one command</li>
-	<li>using <a href="https://github.com/EugenMayer/docker-sync/wiki/2.-Configuration#docker-composeyml--docker-compose-devyml">overlays</a> to keep your production docker-compose.yml untouched an portable</li>
-	<li>supports <a href="https://github.com/EugenMayer/docker-sync/wiki/docker-sync-on-Linux">Linux*</a> to use the same toolchain across all platforms, but maps on a native mount in linux (no sync)</li> 
+	<li>Backgrounds as a daemon</li>
+	<li>Supports multiple sync-end points and multiple projects and the same time</li>
+	<li><strong>Supports user-remapping</strong> on sync to avoid permission problems on the container</li>
+	<li>Can be used with your docker-compose way or the integrated docker-compose way to start the stack and sync at the same time with one command</li>
+	<li>Using <a href="https://github.com/EugenMayer/docker-sync/wiki/2.-Configuration#docker-composeyml--docker-compose-devyml">overlays</a> to keep your production docker-compose.yml untouched an portable</li>
+	<li>Supports <a href="https://github.com/EugenMayer/docker-sync/wiki/docker-sync-on-Linux">Linux*</a> to use the same toolchain across all platforms, but maps on a native mount in linux (no sync)</li>
 </ul>
 
 <p>Besides performance being the first priority for docker-sync, the second is, not forcing you into using a <strong>specific</strong> docker solution. Use docker-for-mac, docker toolbox, VirtualBox, VMware Fusion or Parallels, xhyve or whatever!</p>
@@ -59,7 +59,7 @@
 <p>All the information is provided in the <a href="https://github.com/EugenMayer/docker_sync/wiki">Wiki</a></p>
       </section>
     </div>
-    <center> 
+    <center>
         <section id="downloads">
           <a href="https://github.com/EugenMayer/docker-sync" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
         </section>
