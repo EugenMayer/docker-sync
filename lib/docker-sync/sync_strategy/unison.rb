@@ -179,10 +179,17 @@ module DockerSync
           say_status 'ok', "#{container_name} container not running", :white if @options['verbose']
           exists = `docker ps --filter "status=exited" --filter "name=#{container_name}" --format "{{.Names}}" | grep '^#{container_name}$'`
           if exists == ''
-            say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
             run_privileged = ''
             run_privileged = '--privileged' if @options.key?('max_inotify_watches') #TODO: replace by the minimum capabilities required
-            cmd = "docker run -p '#{@options['sync_host_ip']}::#{UNISON_CONTAINER_PORT}' -v #{volume_name}:#{@options['dest']} -e APP_VOLUME=#{@options['dest']} -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} #{additional_docker_env} #{run_privileged} --name #{container_name} -d #{@docker_image}"
+            tz_expression = '-e TZ=$(basename $(dirname `readlink /etc/localtime`))/$(basename `readlink /etc/localtime`)'
+            say_status 'ok', 'Starting precopy', :white if @options['verbose']
+            # we just run the precopy script and remove the container
+            cmd = "docker run --rm -v \"#{volume_name}:#{@options['dest']}\" -e APP_VOLUME=#{@options['dest']} #{tz_expression} #{additional_docker_env} #{run_privileged} --name #{container_name} #{@docker_image} /usr/local/bin/precopy_appsync"
+            say_status 'precopy', cmd, :white if @options['verbose']
+            system(cmd) || raise('Precopy failed')
+
+            say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
+            cmd = "docker run -p '#{@options['sync_host_ip']}::#{UNISON_CONTAINER_PORT}' -v #{volume_name}:#{@options['dest']} -e APP_VOLUME=#{@options['dest']} #{tz_expression} #{additional_docker_env} #{run_privileged} --name #{container_name} -d #{@docker_image}"
           else
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
             cmd = "docker start #{container_name} && docker exec #{container_name} supervisorctl restart unison"

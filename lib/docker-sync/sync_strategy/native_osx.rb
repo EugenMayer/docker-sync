@@ -92,14 +92,15 @@ module DockerSync
             say_status 'ok', "creating #{container_name} container", :white if @options['verbose']
             run_privileged = ''
             run_privileged = '--privileged' if @options.key?('max_inotify_watches') #TODO: replace by the minimum capabilities required
+            tz_expression = '-e TZ=$(basename $(dirname `readlink /etc/localtime`))/$(basename `readlink /etc/localtime`)'
             say_status 'ok', 'Starting precopy', :white if @options['verbose']
             # we just run the precopy script and remove the container
-            cmd = "docker run --rm -v \"#{volume_app_sync_name}:/app_sync\" -v \"#{host_sync_src}:/host_sync#{host_disk_mount_mode}\" -e HOST_VOLUME=/host_sync -e APP_VOLUME=/app_sync -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} #{additional_docker_env} #{run_privileged} --name #{container_name} #{@docker_image} /usr/local/bin/precopy_appsync"
+            cmd = "docker run --rm -v \"#{volume_app_sync_name}:/app_sync\" -v \"#{host_sync_src}:/host_sync#{host_disk_mount_mode}\" -e HOST_VOLUME=/host_sync -e APP_VOLUME=/app_sync #{tz_expression} #{additional_docker_env} #{run_privileged} --name #{container_name} #{@docker_image} /usr/local/bin/precopy_appsync"
             say_status 'precopy', cmd, :white if @options['verbose']
             system(cmd) || raise('Precopy failed')
             say_status 'ok', 'Starting container', :white if @options['verbose']
             # this will be run below and start unison, since we did not manipulate CMD
-            cmd = "docker run -d -v \"#{volume_app_sync_name}:/app_sync\" -v \"#{host_sync_src}:/host_sync#{host_disk_mount_mode}\" -e HOST_VOLUME=/host_sync -e APP_VOLUME=/app_sync -e TZ=${TZ-`readlink /etc/localtime | sed -e 's,/usr/share/zoneinfo/,,'`} #{additional_docker_env} #{run_privileged} --name #{container_name} #{@docker_image}"
+            cmd = "docker run -d -v \"#{volume_app_sync_name}:/app_sync\" -v \"#{host_sync_src}:/host_sync#{host_disk_mount_mode}\" -e HOST_VOLUME=/host_sync -e APP_VOLUME=/app_sync #{tz_expression} #{additional_docker_env} #{run_privileged} --name #{container_name} #{@docker_image}"
           else
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
             cmd = "docker start #{container_name} && docker exec #{container_name} supervisorctl restart unison"

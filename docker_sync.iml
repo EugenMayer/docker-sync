@@ -47,8 +47,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="activesupport (v4.2.10, rbenv: 2.3.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="backticks (v1.0.2, rbenv: 2.3.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.16.0, rbenv: 2.3.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="chef (v13.7.16, rbenv: 2.3.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.16.1, rbenv: 2.3.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="chef (v13.8.5, rbenv: 2.3.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="coderay (v1.1.2, rbenv: 2.3.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="concurrent-ruby (v1.0.5, rbenv: 2.3.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="daemons (v1.2.6, rbenv: 2.3.3) [gem]" level="application" />
