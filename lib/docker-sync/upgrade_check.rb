@@ -135,6 +135,17 @@ class UpgradeChecker
       end
     end
 
+    if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.5.6')
+      checker = UpdateChecker.new
+      checker.check_unison_image
+
+      Thor::Shell::Basic.new.say_status 'warning', "If you are upgrading from 0.5.4 or below, please run `brew update && brew upgrade unison` AND `docker-compose down && docker-sync clean` or `docker-sync-stack clean` since you need to recreate the sync container", :red
+
+      unless Thor::Shell::Basic.new.yes?('Sync will fail otherwise. Continue? (y/N)')
+        exit 1
+      end
+    end
+
     # update the upgrade_status
     @config.update! 'upgrade_status' => "#{UpgradeChecker.get_current_version}"
   end
