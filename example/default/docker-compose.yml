@@ -1,0 +1,7 @@
+# This is our production compose file - not changed for docker-sync or similar
+
+version: "2"
+services:
+  app-native-osx:
+    image: alpine
+    command: 'watch -n3 cat /var/www/index.html'

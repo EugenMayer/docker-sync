@@ -1,0 +1,13 @@
+# this is our development docker-compose building on top of the production docker-compose, just mounting
+# the sync image - not redefining anything else
+
+version: "2"
+services:
+  app-native-osx:
+    volumes:
+      - appcode-native-osx-sync:/var/www:nocopy # nocopy is important
+
+# that the important thing
+volumes:
+  appcode-native-osx-sync:
+    external: true
