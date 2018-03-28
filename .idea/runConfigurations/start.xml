@@ -2,7 +2,7 @@
   <configuration default="false" name="start" type="RubyRunConfigurationType" factoryName="Ruby">
     <module name="docker_sync" />
     <RUBY_RUN_CONFIG NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
-    <RUBY_RUN_CONFIG NAME="WORK DIR" VALUE="$PROJECT_DIR$/example/data1" />
+    <RUBY_RUN_CONFIG NAME="WORK DIR" VALUE="$PROJECT_DIR$/example/default" />
     <RUBY_RUN_CONFIG NAME="SHOULD_USE_SDK" VALUE="false" />
     <RUBY_RUN_CONFIG NAME="ALTERN_SDK_NAME" VALUE="" />
     <RUBY_RUN_CONFIG NAME="myPassParentEnvs" VALUE="true" />
@@ -14,7 +14,7 @@
         <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
       </COVERAGE_PATTERN>
     </EXTENSION>
-    <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="/opt/rubies/2.2.4/lib/ruby/gems/2.2.0/gems/thor-0.19.1/bin/thor" />
+    <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="/opt/rubies/2.3.3/lib/ruby/gems/2.3.0/gems/thor-0.20.0/bin/thor" />
     <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="sync:start" />
     <method />
   </configuration>
