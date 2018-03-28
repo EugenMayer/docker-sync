@@ -26,10 +26,6 @@ module DockerSync
           @docker_image = 'eugenmayer/unison:2.51.2.0'
         end
 
-        # TODO: remove this when we have a more stable image, but for now, we need this
-        uc = UpdateChecker.new
-        uc.check_unison_image
-
         begin
           Dependencies::Docker.ensure!
         rescue StandardError => e
