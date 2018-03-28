@@ -71,10 +71,11 @@ class UpdateChecker
   end
 
   def check_unison_image
+    return # we do not need this anymore since we use versioned ( tagged ) images and they will be pulled autoamtically if they are missing
     return if ENV['DOCKER_SYNC_SKIP_UPDATE']
     say_status 'ok','Checking if a newer unison image is available'
 
-    if system("docker pull eugenmayer/unison:2.51.2.0 | grep 'Downloaded newer image for'")
+    if system("docker pull eugenmayer/unison:2.51.2.1 | grep 'Downloaded newer image for'")
       say_status 'ok', 'Downloaded newer image for unison', :green
       @newer_image_found = true
     else
