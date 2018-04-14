@@ -1,4 +1,10 @@
 [![Gem Version](https://badge.fury.io/rb/docker-sync.svg)](https://badge.fury.io/rb/docker-sync) [![Build Status](https://travis-ci.org/EugenMayer/docker-sync.svg?branch=master)](https://travis-ci.org/EugenMayer/docker-sync) [![Join the chat at https://gitter.im/EugenMayer/docker-sync](https://badges.gitter.im/EugenMayer/docker-sync.svg)](https://gitter.im/EugenMayer/docker-sync?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+<a href="https://twitter.com/intent/tweet?text=Looking+to+supercharge+your+docker-based+development+under+%23macOS+-+check+%40docker-sync+and+get+your+native+speed+back&url=http%3A%2F%2Fdocker-sync.io&hashtags=docker-sync+ma" target="_blank">
+  <img src="http://jpillora.com/github-twitter-button/img/tweet.png"
+       alt="tweet button" title="Looking to supercharge your docker-based development under #macOS - check @docker-sync and get your native speed back"></img>
+</a> 
+[![Follow][1.1]][1]
+
 
     Thank you for all the feedback and support i already received!
     Docker-sync has been improved by all of you in huge ways!
@@ -15,3 +21,6 @@ Main Contributors:
  - [mickaelperrin](https://github.com/mickaelperrin)
  - [masterful](https://github.com/masterful)
  - [rwilliams](https://github.com/rwilliams)
+
+[1.1]: http://i.imgur.com/tXSoThF.png
+[1]: http://www.twitter.com/docker-sync
