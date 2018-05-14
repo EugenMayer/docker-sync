@@ -11,7 +11,7 @@ module DockerSync
 
       def self.running?
         return @running if defined? @running
-        @running = system('docker ps &> /dev/null')
+        @running = system('docker ps 2>&1 > /dev/null')
       end
 
       def self.ensure!
