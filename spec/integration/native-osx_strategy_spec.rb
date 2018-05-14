@@ -15,7 +15,7 @@ RSpec.describe 'native_osx strategy', command_execution: :allowed, if: OS.mac? d
 
   before :all do
     # Cleanup potentially leftover container from previously killed test suite
-    system('docker rm -f -v docker_sync_specs-sync &> /dev/null')
+    system('docker rm -f -v docker_sync_specs-sync 2>&1 > /dev/null')
   end
 
   describe 'start' do
