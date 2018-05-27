@@ -27,8 +27,11 @@ module DockerSync
       end
 
       def stop
-        Process.kill 'TERM', @watch_fork
-        Process.wait @watch_fork
+        # Make sure @watch_fork is not nil otherwise a TypeError is thrown
+        if @watch_fork
+          Process.kill 'TERM', @watch_fork
+          Process.wait @watch_fork
+        end
       end
 
       def clean
