@@ -57,7 +57,7 @@ module DockerSync
     def rsync_required?
       # noinspection RubyUnusedLocalVariable
       config['syncs'].any? { |name, sync_config|
-        sync_config['sync_strategy'] == 'rsync'
+        sync_config['sync_strategy'] == 'rsync' || sync_config['sync_strategy'] == 'reverse_rsync'
       }
     end
 
@@ -151,6 +151,7 @@ module DockerSync
       def default_watch_strategy(sync_config)
         case sync_strategy_for(sync_config)
         when 'rsync' then 'fswatch'
+        when 'reverse_rsync' then 'dummy'
         when 'unison' then 'unison'
         when 'native' then 'dummy'
         when 'native_osx' then 'remotelogs'

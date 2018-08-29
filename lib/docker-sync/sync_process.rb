@@ -1,6 +1,7 @@
 require 'thor/shell'
 # noinspection RubyResolve
 require 'docker-sync/sync_strategy/rsync'
+require 'docker-sync/sync_strategy/reverse_rsync'
 require 'docker-sync/sync_strategy/unison'
 require 'docker-sync/sync_strategy/native'
 require 'docker-sync/sync_strategy/native_osx'
@@ -44,6 +45,8 @@ module DockerSync
       case @options['sync_strategy']
       when 'rsync'
         @sync_strategy = DockerSync::SyncStrategy::Rsync.new(@sync_name, @options)
+      when 'reverse_rsync'
+        @sync_strategy = DockerSync::SyncStrategy::ReverseRsync.new(@sync_name, @options)
       when 'unison'
         @sync_strategy = DockerSync::SyncStrategy::Unison.new(@sync_name, @options)
       when 'native'
