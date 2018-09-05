@@ -41,6 +41,7 @@ module DockerSync
         say_status 'command', cmd, :white if @options['verbose']
 
         out = `#{cmd}`
+        
         if $?.exitstatus > 0
           say_status 'error', "Error starting sync, exit code #{$?.exitstatus}", :red
           say_status 'message', out
@@ -107,6 +108,15 @@ module DockerSync
           `#{cmd}` || raise('Start failed')
         else
           say_status 'ok', "#{container_name} container still running", :blue if @options['verbose']
+        end
+        health_check_cmd = "rsync --dry-run rsync://#{@options['sync_host_ip']}:#{@options['sync_host_port']}:: 2> /dev/null"
+        retry_counter = 0
+        health_check = `#{health_check_cmd}`
+        while health_check == '' && retry_counter < 10 do #rsync daemon isn't listening yet
+          say_status 'ok', "waiting for rsync daemon to start in container #{container_name}", :white if @options['verbose']
+          retry_counter += 1
+          health_check = `#{health_check_cmd}`
+          sleep 1
         end
         say_status 'ok', "#{container_name}: starting initial sync of #{@options['src']}", :white if @options['verbose']
         # this sleep is needed since the container could be not started
