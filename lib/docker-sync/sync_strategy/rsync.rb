@@ -41,7 +41,6 @@ module DockerSync
         say_status 'command', cmd, :white if @options['verbose']
 
         out = `#{cmd}`
-        
         if $?.exitstatus > 0
           say_status 'error', "Error starting sync, exit code #{$?.exitstatus}", :red
           say_status 'message', out
