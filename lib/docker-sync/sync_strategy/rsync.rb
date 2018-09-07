@@ -71,6 +71,21 @@ module DockerSync
         return args
       end
 
+      # sleep until rsync --dry-run succeeds in connecting to the daemon on the configured IP and port. 
+      def health_check
+        health_check_cmd = "rsync --dry-run rsync://#{@options['sync_host_ip']}:#{@options['sync_host_port']}:: 2> /dev/null"
+
+        retry_counter = 0
+        
+        health_check_status = `#{health_check_cmd}`
+        while health_check_status == '' && retry_counter < 10 do
+          say_status 'ok', "waiting for rsync daemon on rsync://#{@options['sync_host_ip']}:#{@options['sync_host_port']}", :white if @options['verbose']
+          retry_counter += 1
+          health_check_status = `#{health_check_cmd}`
+          sleep 1
+        end
+      end
+
       def get_container_name
         return "#{@sync_name}"
       end
@@ -109,8 +124,8 @@ module DockerSync
           say_status 'ok', "#{container_name} container still running", :blue if @options['verbose']
         end
         say_status 'ok', "#{container_name}: starting initial sync of #{@options['src']}", :white if @options['verbose']
-        # this sleep is needed since the container could be not started
-        sleep 3
+
+        health_check
         sync
         say_status 'success', 'Rsync server started', :green
       end
