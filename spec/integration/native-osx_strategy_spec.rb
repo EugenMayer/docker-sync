@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'fileutils'
 require 'os'
+require 'rspec/bash'
 
 RSpec.describe 'native_osx strategy', command_execution: :allowed, if: OS.mac? do
   include Rspec::Bash

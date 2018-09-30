@@ -27,7 +27,7 @@ module DockerSync
         unless Fswatch.available?
           Fswatch.ensure!
           puts "please restart docker sync so the installation of fswatch takes effect"
-          exit 1
+          raise(UNSUPPORTED_OPERATING_SYSTEM)
         end
       end
 

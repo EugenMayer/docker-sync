@@ -6,8 +6,12 @@ RSpec.describe DockerSync::ProjectConfig do
   let(:default_watch_strategy) { OS.linux? ? 'dummy' : 'unison' }
 
   subject { described_class.new }
+  before do
+    allow(DockerSync::Dependencies::Docker::Driver).to receive(:system).with('pgrep -q com.docker.hyperkit').and_return(true)
+  end
 
   describe '#initialize' do
+
     describe 'minimum configuration with defaults' do
       it 'loads simplest config' do
         use_fixture 'simplest' do

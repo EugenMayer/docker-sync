@@ -1,5 +1,7 @@
 require 'spec_helper'
 require 'docker-sync/upgrade_check'
+require 'rspec/bash'
+
 RSpec.describe '--version', command_execution: :allowed do
   include Rspec::Bash
 

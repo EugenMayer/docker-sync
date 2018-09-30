@@ -57,6 +57,7 @@ RSpec.describe DockerSync::Dependencies do
   describe '.ensure_all_for_mac!(config)' do
     before do
       allow(described_class::PackageManager).to receive(:ensure!)
+      #allow(DockerSync::Dependencies::Fswatch).to receive(:ensure!).and_return(true)
       allow(described_class::Docker).to receive(:ensure!)
     end
 
