@@ -17,12 +17,17 @@ module DockerSync
         @options = options
         @events_to_watch = %w(AttributeModified Created Link MovedFrom MovedTo Renamed Removed Updated)
 
-        begin
-          Dependencies::Fswatch.ensure!
-        rescue StandardError => e
-          say_status 'error', e.message, :red
-          exit 1
-        end
+          unless Dependencies::Fswatch.available?
+            begin
+              Dependencies::Fswatch.ensure!
+            rescue StandardError => e
+              say_status 'error', e.message, :red
+              exit 1
+            end
+            puts "please restart docker sync so the installation of fswatch takes effect"
+            exit 1
+          end
+
       end
 
       def run
