@@ -301,6 +301,7 @@ syncs:
 
   describe '#unison_required?' do
     it do
+      allow(DockerSync::Dependencies::Docker::Driver).to receive(:system).with('pgrep -q com.docker.hyperkit').and_return(true)
       use_fixture 'simplest' do
         if OS.linux?
           is_expected.not_to be_unison_required

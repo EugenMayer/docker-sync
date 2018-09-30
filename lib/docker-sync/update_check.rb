@@ -70,20 +70,6 @@ class UpdateChecker
 
   end
 
-  def check_unison_image
-    return # we do not need this anymore since we use versioned ( tagged ) images and they will be pulled autoamtically if they are missing
-    return if ENV['DOCKER_SYNC_SKIP_UPDATE']
-    say_status 'ok','Checking if a newer unison image is available'
-
-    if system("docker pull eugenmayer/unison:2.51.2.1 | grep 'Downloaded newer image for'")
-      say_status 'ok', 'Downloaded newer image for unison', :green
-      @newer_image_found = true
-    else
-      say_status 'ok', 'No newer image found - current image is up to date.'
-    end
-
-  end
-
   def get_current_version
     path = File.expand_path('../../../', __FILE__)
     version = File.read("#{path}/VERSION")
@@ -103,7 +89,7 @@ class UpdateChecker
     # update the timestamp
     @config.update! 'update_last_check' => DateTime.now.iso8601(9)
 
-    check = docker_sync_update_check
+    check = docker_sync_update_check7
     if check.update_available
       say_status 'warning',"There is an update (#{check.latest_version}) available (current version #{check.current_version}). Please update before you continue",:yellow
       if yes?("Shall I update docker-sync to #{check.latest_version} for you?")

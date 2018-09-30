@@ -5,6 +5,7 @@ RSpec.describe DockerSync::Dependencies::Docker::Driver do
     let(:mac?) { true }
 
     before do
+      allow(DockerSync::Dependencies::Docker::Driver).to receive(:system).with('pgrep -q com.docker.hyperkit').and_return(true)
       allow(DockerSync::Environment).to receive(:mac?).and_return(mac?)
       allow(described_class).to receive(:system).and_return(true)
       described_class.remove_instance_variable(:@docker_for_mac) if described_class.instance_variable_defined? :@docker_for_mac
