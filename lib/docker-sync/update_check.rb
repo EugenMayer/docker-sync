@@ -89,7 +89,7 @@ class UpdateChecker
     # update the timestamp
     @config.update! 'update_last_check' => DateTime.now.iso8601(9)
 
-    check = docker_sync_update_check7
+    check = docker_sync_update_check
     if check.update_available
       say_status 'warning',"There is an update (#{check.latest_version}) available (current version #{check.current_version}). Please update before you continue",:yellow
       if yes?("Shall I update docker-sync to #{check.latest_version} for you?")
