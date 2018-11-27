@@ -25,7 +25,6 @@ class UpdateChecker
     # do not check the image if its the first run - since this it will be downloaded anyway
     unless @config.first_run?
       unless has_internet?
-        check_unison_image
         check_rsync_image
         # stop if there was an update
         if @newer_image_found

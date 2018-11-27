@@ -1,5 +1,6 @@
 example/default/.docker-sync
 .idea/workspace.xml
+docker-sync-boilerplate
 *.sw*
 # Created by .ignore support plugin (hsz.mobi)
 ### Ruby template

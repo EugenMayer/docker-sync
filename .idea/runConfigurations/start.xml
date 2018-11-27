@@ -1,21 +1,22 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="start" type="RubyRunConfigurationType" factoryName="Ruby">
     <module name="docker_sync" />
-    <RUBY_RUN_CONFIG NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
-    <RUBY_RUN_CONFIG NAME="WORK DIR" VALUE="$PROJECT_DIR$/example/default" />
+    <RUBY_RUN_CONFIG NAME="RUBY_ARGS" VALUE="" />
+    <RUBY_RUN_CONFIG NAME="WORK DIR" VALUE="$PROJECT_DIR$/docker-sync-boilerplate/default" />
     <RUBY_RUN_CONFIG NAME="SHOULD_USE_SDK" VALUE="false" />
     <RUBY_RUN_CONFIG NAME="ALTERN_SDK_NAME" VALUE="" />
     <RUBY_RUN_CONFIG NAME="myPassParentEnvs" VALUE="true" />
-    <envs />
     <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
     <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
-    <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">
+    <EXTENSION ID="RubyCoverageRunConfigurationExtension" track_test_folders="true" runner="rcov">
       <COVERAGE_PATTERN ENABLED="true">
         <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
       </COVERAGE_PATTERN>
     </EXTENSION>
-    <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="/opt/rubies/2.3.3/lib/ruby/gems/2.3.0/gems/thor-0.20.0/bin/thor" />
+    <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="/usr/local/lib/ruby/gems/2.5.0/gems/thor-0.20.3/bin/thor" />
     <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="sync:start" />
-    <method />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
   </configuration>
 </component>
