@@ -155,8 +155,8 @@ class Sync < Thor
 
       # Check to see if we're already running:
       if daemon_running?
-        say_status 'warning', 'docker-sync already started for this configuration', :yellow
-        exit 1
+        say_status 'ok:', 'docker-sync already started for this configuration', :white
+        exit 0
       end
 
       # If we're daemonizing, run a sync first to ensure the containers exist so that a docker-compose up won't fail:
