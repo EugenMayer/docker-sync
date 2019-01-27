@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    docker-sync (0.5.10)
+    docker-sync (0.5.10.pre.beta1)
       daemons (~> 1.2, >= 1.2.3)
       docker-compose (~> 1.1, >= 1.1.7)
       dotenv (~> 2.1, >= 2.1.1)
@@ -21,11 +21,11 @@ GEM
     backticks (1.0.2)
     coderay (1.1.2)
     concurrent-ruby (1.0.5)
-    daemons (1.2.6)
+    daemons (1.3.1)
     diff-lcs (1.3)
     docker-compose (1.1.10)
       backticks (~> 1.0)
-    dotenv (2.5.0)
+    dotenv (2.6.0)
     gem_update_checker (0.2.0)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
@@ -69,4 +69,4 @@ DEPENDENCIES
   rspec-bash
 
 BUNDLED WITH
-   1.16.1
+   1.17.3
