@@ -155,8 +155,15 @@ class Sync < Thor
 
       # Check to see if we're already running:
       if daemon_running?
-        say_status 'ok:', 'docker-sync already started for this configuration', :white
-        exit 0
+        should_exit = true
+        unless options[:sync_name].empty?
+          running = `docker ps --filter 'status=running' --filter 'name=#{options[:sync_name]}' --format "{{.Names}}" | grep '^#{options[:sync_name]}$'`
+          should_exit = false if running == ''
+        end
+        if should_exit
+          say_status 'ok:', 'docker-sync already started for this configuration', :white
+          exit 0
+        end
       end
 
       # If we're daemonizing, run a sync first to ensure the containers exist so that a docker-compose up won't fail:
