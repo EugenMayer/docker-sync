@@ -16,7 +16,7 @@ module DockerSync
         cmd = 'brew list unox 2>&1 > /dev/null'
         # TODO: Environment.linux?  was just a hotfix for something we did not dig deeper into, as we have should
         # see https://github.com/EugenMayer/docker-sync/pull/630
-        @available = Environment.linux? or defined?(Bundler) ? Bundler.clean_system(cmd) : system(cmd)
+        @available = Environment.mac? && (defined?(Bundler) ? Bundler.clean_system(cmd) : system(cmd))
       end
 
       def self.ensure!
