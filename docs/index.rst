@@ -38,5 +38,17 @@ Features
 .. _Linux*: https://github.com/EugenMayer/docker-sync/wiki/docker-sync-on-Linux
 
 .. toctree::
+   :hidden:
    :maxdepth: 2
-   :caption: Contents:
+
+   Introduction <self>
+
+.. toctree::
+   :hidden:
+   :caption: Installation
+   :maxdepth: 3
+
+   installation/installation
+   installation/osx
+   installation/linux
+   installation/windows
