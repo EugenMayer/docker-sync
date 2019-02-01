@@ -39,6 +39,7 @@ Features
 
 .. toctree::
    :hidden:
+   :caption: Getting Started
    :maxdepth: 2
 
    Introduction <self>
