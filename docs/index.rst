@@ -53,3 +53,4 @@ Features
    installation/osx
    installation/linux
    installation/windows
+   installation/upgrade
