@@ -47,10 +47,17 @@ Features
 .. toctree::
    :hidden:
    :caption: Installation
-   :maxdepth: 3
+   :maxdepth: 2
 
-   installation/installation
+   installation/index
    installation/osx
    installation/linux
    installation/windows
    installation/upgrade
+
+.. toctree::
+   :hidden:
+   :caption: Configuration
+   :maxdepth: 2
+
+   configuration/index
