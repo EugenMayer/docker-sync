@@ -1,9 +1,9 @@
 Configuration
 =============
 
-**! IMPORTANT !: When you change anything in your docker-sync.yml be sure to run docker-sync clean and docker-sync start right after it. Just running docker-sync start or stop will not recreate the container and your changes will have no effect!**
+.. caution::
 
------
+    When you change anything in your docker-sync.yml be sure to run docker-sync clean and docker-sync start right after it. Just running docker-sync start or stop will not recreate the container and your changes will have no effect!
 
 docker-sync.yml
 ---------------
@@ -14,7 +14,9 @@ In there, you usually configure one ( or more ) sync points. Be sure to decide w
 
 Below are all the available options, simple examples can be found in the docker-sync-boilerplate_.
 
-**IMPORTANT: Be sure to use a sync-name which is unique, since it will be a container name. Do not use your app name, but rather app-sync.**
+.. important::
+
+    Be sure to use a sync-name which is unique, since it will be a container name. Do not use your app name, but rather app-sync.
 
 .. _Strategies: https://github.com/EugenMayer/docker-sync/wiki/8.-Strategies
 .. _docker-sync-boilerplate: https://github.com/EugenMayer/docker-sync-boilerplate
@@ -24,7 +26,9 @@ Below are all the available options, simple examples can be found in the docker-
 Configuration References
 ------------------------
 
-**This is a configuration REFERENCE - do not use all options at once - they do not make sense! Or copy them as your starting point, rather use the docker-sync-boilerplate and then cherry pick the options you need.**
+.. caution::
+
+    This is a configuration reference. **Do not use all options at once, they do not make sense!** Or copy them as your starting point, rather use the docker-sync-boilerplate and then cherry pick the options you need.
 
 .. code-block:: yaml
 
@@ -171,7 +175,9 @@ The docker-compose-dev.yml ( it needs to be called that way, look like this ) wi
       simpleexample-sync:
         external: true
 
-**Hint:** Do check that you use nocopy, see below for the explanation
+.. tip::
+
+    Do check that you use nocopy, see below for the explanation
 
 So the docker-compose-dev.yml includes the volume mounts and defintions - your production docker-compose.yml will be overlayed by this when starting the stack with
 
