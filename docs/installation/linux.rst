@@ -16,13 +16,16 @@ The following instructions are written for Ubuntu; if you're using another linux
 
 The Ubuntu package for unison doesn't come with unison-fsmonitor, as such, we would need to build from source.
 
-sudo apt-get install build-essential ocaml
-wget https://github.com/bcpierce00/unison/archive/v2.51.2.tar.gz
-tar xvf v2.51.2.tar.gz
-cd unison-2.51.2
-make UISTYLE=text
-sudo cp src/unison /usr/local/bin/unison
-sudo cp src/unison-fsmonitor /usr/local/bin/unison-fsmonitor
+.. code-block:: shell
+
+    sudo apt-get install build-essential ocaml
+    wget https://github.com/bcpierce00/unison/archive/v2.51.2.tar.gz
+    tar xvf v2.51.2.tar.gz
+    cd unison-2.51.2
+    make UISTYLE=text
+    sudo cp src/unison /usr/local/bin/unison
+    sudo cp src/unison-fsmonitor /usr/local/bin/unison-fsmonitor
+
 and that should be enough to get you up and running using unison.
 
 **Using rsync strategy**

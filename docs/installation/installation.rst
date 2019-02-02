@@ -3,7 +3,9 @@ Installation
 
 No matter if its OSX/Linux/Windows
 
-gem install docker-sync
+.. code-block:: shell
+
+    gem install docker-sync
 
 OS-Specific
 -----------

@@ -11,11 +11,15 @@ Optionally, if you do not want to use unison or want a better rsync or use uniso
 
 **if you use unison**
 
-brew install unison
-brew install eugenmayer/dockersync/unox
+.. code-block:: shell
+
+    brew install unison
+    brew install eugenmayer/dockersync/unox
 
 **if you use rsync**
 
-brew install rsync
+.. code-block:: shell
+
+    brew install rsync
 
 Homebrew aka brew is a tool you need under OSX to install / easy compile other tools. You can use other tools/ways to install or compile fswatch, but those are out of scope for this docs. All we need is the binary in PATH.
