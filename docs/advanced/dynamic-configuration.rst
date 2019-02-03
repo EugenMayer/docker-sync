@@ -4,7 +4,7 @@ Dynamic Configuration
 Environment variables support
 -----------------------------
 
-docker-sync supports the use of environment variables from version 0.2.0.
+Docker-sync supports the use of environment variables from version 0.2.0.
 
 The support is added via implementation of https://github.com/bkeepers/dotenv.
 

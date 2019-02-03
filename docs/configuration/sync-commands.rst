@@ -16,7 +16,7 @@ Start
 
 .. tip::
 
-    Check `sync stack commands`_ on how ``docker-sync-stack start`` works to start sync / compose at the same time.
+    Check :doc:`../configuration/sync-stack-commands` on how ``docker-sync-stack start`` works to start sync / compose at the same time.
 
 This creates and starts the sync containers, watchers and the sync itself. It blocks your shell and you should leave it running in the background. When you are done, just press ``CTRL-C`` and the containers will be stopped ( not removed ).
 
@@ -25,8 +25,6 @@ Running start the second time will be a lot faster, since containers and volumes
 .. tip::
 
     You can use ``-n <sync-endpoint-name>`` to only start one of your configured sync-endpoints.
-
-.. _sync stack commands: https://github.com/EugenMayer/docker-sync/wiki/2.2-sync-stack-commands
 
 Sync
 ----

@@ -10,9 +10,8 @@ Benefits of Docker-sync on Windows
 Current Documented/Working Environments for Windows
 ---------------------------------------------------
 
-- `Ubuntu Bash on Windows`_ (WSL)
+- Ubuntu Bash on Windows (WSL). See :doc:`../installation/windows`.
 
-.. _Ubuntu Bash on Windows: https://github.com/EugenMayer/docker-sync/wiki/docker-sync-on-Windows
 
 Possible Future Supported Environments
 --------------------------------------

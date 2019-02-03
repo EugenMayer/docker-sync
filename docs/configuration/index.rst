@@ -10,7 +10,7 @@ docker-sync.yml
 
 The file docker-sync.yml should be placed in the top-level folder of your project, so docker-sync can find it. The configuration will be searched from the point you run docker-sync from, traversing up the path tree
 
-In there, you usually configure one ( or more ) sync points. Be sure to decide which sync-strategy you want to chose, see Strategies_.
+In there, you usually configure one ( or more ) sync points. Be sure to decide which sync-strategy you want to chose, see :doc:`../advanced/sync-strategies`.
 
 Below are all the available options, simple examples can be found in the docker-sync-boilerplate_.
 
@@ -18,7 +18,6 @@ Below are all the available options, simple examples can be found in the docker-
 
     Be sure to use a sync-name which is unique, since it will be a container name. Do not use your app name, but rather app-sync.
 
-.. _Strategies: https://github.com/EugenMayer/docker-sync/wiki/8.-Strategies
 .. _docker-sync-boilerplate: https://github.com/EugenMayer/docker-sync-boilerplate
 
 -----
@@ -137,6 +136,8 @@ Configuration References
 
 -----
 
+.. _docker-compose-yml-docker-compose-dev-yml:
+
 docker-compose.yml / docker-compose-dev.yml
 -------------------------------------------
 
@@ -190,6 +191,8 @@ This effectively does this in docker-compose terms
 .. code-block:: shell
 
     docker-compose -f docker-compose.yml -f docker-compose-dev.yml up
+
+.. _why-nocopy-important:
 
 Why :nocopy is important?
 -------------------------

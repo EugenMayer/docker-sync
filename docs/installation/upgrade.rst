@@ -6,21 +6,28 @@ Upgrade Guide
 
 Nothing special, just be sure to pull the newest docker-images for your strategy and do not leave any older version behind
 
+----
+
 0.4.1
 -----
-- ``:nocopy`` needs to be added to all named-volume mounts, see https://github.com/EugenMayer/docker-sync/wiki/2.-Configuration#why-nocopy-is-important
+- ``:nocopy`` needs to be added to all named-volume mounts, see :ref:`why-nocopy-important`
 
 - if you want to use native_osx with docker-machine ( toolbox ) + virtualbox, it will not work https://github.com/EugenMayer/docker-sync/issues/346
 
 The ``:nocopy`` issue has been there for a while, but nobody really recognized it.
 
+----
+
 0.4.0
 -----
-!!! Ensure you run docker-sync clean after the upgrade. Do not reuse the old containers !!!
+
+.. attention::
+
+    Ensure you run docker-sync clean after the upgrade. Do not reuse the old containers!
 
 **The default strategy is now native_osx**
 
-More on https://github.com/EugenMayer/docker-sync/wiki/8.-Strategies#native_osx
+Read more at :ref:`strategies-native-osx`.
 
 **Background by default**
 
@@ -34,6 +41,8 @@ Being deprecated in 0.2, it's now throwing an error if still present
 
 It's deprecated and will be removed in 0.5
 
+----
+
 0.3.0
 -----
 
@@ -43,7 +52,7 @@ Due to a lot of issues and inconvinience with the installation of unox and the l
 
 **Scaffolding usages needs to be migrated**
 
-If you scaffolded / scripted with docker-sync using it as a ruby lib, you will now need to change your implementation due to the changes to preconditions and config. Important new/replacing calls are. Please see the updated example at https://github.com/EugenMayer/docker-sync/wiki/7.-Scripting-with-docker-sync for how to load the project config, how to get its path and how to call the preconditions
+If you scaffolded / scripted with docker-sync using it as a ruby lib, you will now need to change your implementation due to the changes to preconditions and config. Important new/replacing calls are. Please see the updated example at :doc:`../advanced/scripting` for how to load the project config, how to get its path and how to call the preconditions
 
 **Dest has been removed**
 
@@ -58,6 +67,8 @@ After making dest deprecated in the 0.2 release, since we introduce named volume
          - fullexample-sync:/var/www:rw # will be mounted on /var/www
 
 So here, the destination will be ``/var/www``
+
+----
 
 0.2.0+
 ------

@@ -66,7 +66,7 @@ Mot probably last 0.4.x maintenance release - with 0.5.x a rewrite of the Config
 
 0.4.0
 -----
- - **New Sync Strategy native_osx.** See https://github.com/EugenMayer/docker-sync/wiki/8.-Strategies#native_osx
+ - **New Sync Strategy native_osx.** See :ref:`strategies-native-osx`
  - Daemon mode is now the default mode
  - No need for unison/unox by default when using native_osx
  - Better performance when using native_osx
@@ -143,31 +143,35 @@ Thank you a lot for the contributions guys, a lot of team effort in this release
 -----
  - Small bugfixes
 
-0.1.0 Unison-Unox strategy for transparent 2-way sync introduced
-----------------------------------------------------------------
- - Full changelog at: https://github.com/EugenMayer/docker-sync/releases/tag/0.1.0
+0.1.0
+-----
+- **Unison-Unox strategy for transparent 2-way sync introduced.**
+- Full changelog at: https://github.com/EugenMayer/docker-sync/releases/tag/0.1.0
 
-0.0.15 Notifications, cli mode
-------------------------------
- - cli-mode selection https://github.com/EugenMayer/docker-sync/pull/66
- - Notifications on sync https://github.com/EugenMayer/docker-sync/pull/63, thank you midN_
+0.0.15
+------
+- **Notifications, cli mode**
+- cli-mode selection https://github.com/EugenMayer/docker-sync/pull/66
+- Notifications on sync https://github.com/EugenMayer/docker-sync/pull/63, thank you midN_
 
 .. _midN: https://github.com/midN
 
-0.0.14 Welcome unison-dualside for real 2-way-sync
---------------------------------------------------
- - ``unison-dualside strategy``_ introduced for real 2 way syncing, thank you mickaelperrin_
- - New `image for rsync`_ based on alpine (10MB), thank you Duske_.
- - optimize fswatch to watch only useful events (better performance), thank you mickaelperrin_
- - Different fixes with filepaths, symlinks and some minors
- - Detailed list at https://github.com/EugenMayer/docker-sync/milestone/5?closed=1
+0.0.14
+------
+- **Welcome unison-dualside for real 2-way-sync**
+- unison-dualside strategy introduced for real 2 way syncing, thank you mickaelperrin_. See :doc:`../advanced/sync-strategies`.
+- New `image for rsync`_ based on alpine (10MB), thank you Duske_.
+- Optimize fswatch to watch only useful events (better performance), thank you mickaelperrin_
+- Different fixes with filepaths, symlinks and some minors
+- Detailed list at https://github.com/EugenMayer/docker-sync/milestone/5?closed=1
 
 .. _unison-dualside strategy: https://github.com/EugenMayer/docker-sync/wiki/8.-Strategies
 .. _image for rsync: https://github.com/EugenMayer/docker-unison
 .. _Duske: https://github.com/Duske
 
-0.0.13 docker-compose-dev.yml make docker-compose.yml portable
---------------------------------------------------------------
+0.0.13
+------
+- **docker-compose-dev.yml make docker-compose.yml portable**
 - By moving all changes initially made to your docker-compose.yml into docker-compose-dev.yml, your production docker-compose.yml stays portable `#41`_
 - Fixing a bug when docker-sync / docker-sync-stack has been symlinked `#44`_ by mickaelperrin_
 
@@ -175,8 +179,9 @@ Thank you a lot for the contributions guys, a lot of team effort in this release
 .. _#44: https://github.com/EugenMayer/docker-sync/issues/44
 .. _mickaelperrin: https://github.com/mickaelperrin
 
-0.0.12 Unison slim image, docker-compose path and fswatch disabling
--------------------------------------------------------------------
+0.0.12
+-------
+- **Unison slim image, docker-compose path and fswatch disabling**
 - You can no configure were you docker-compose file is located at. See :doc:`../configuration/index`.
 - You can now disable the filewatcher using watch_strategy. See :doc:`../configuration/index`.
 - docker-compose gem is now part of the gem
@@ -187,28 +192,34 @@ Thank you a lot for the contributions guys, a lot of team effort in this release
 
 .. _onnimonni: https://github.com/onnimonni
 
-0.0.11 docker-sync-stack is here
---------------------------------
+0.0.11
+------
+- **docker-sync-stack is here**
 - **You can now start sync and docker-compose in one go** - See :doc:`../configuration/sync-stack-commands`.
 - rsync image is now checked for update ability to avoid issues with outdated images
 
-0.0.10 Yanked, broken release
------------------------------
+0.0.10
+------
 
-0.0.9 Adresses further unison issues, minor features
-----------------------------------------------------
+- Yanked, broken release
+
+0.0.9
+-----
+- **Adresses further unison issues, minor features**
 - Missing stdout pipe and wrong color, thank you @mickaelperrin
 - More verbose outputs on unison runs with verbose,, thank you @mickaelperrin
 - Adding update-checker to ensure, that you run the newest docker-sync
 
-0.0.8 Fix unison startup
-------------------------
-- Fixed isseu during unison startup
+0.0.8
+-----
+- **Fix unison startup**
+- Fixed issue during unison startup
 
-0.0.7 Convinience / Bugfixes
-----------------------------
-- Fixed container-re-usage issue
+0.0.7
+-----
+- ** Convenience / Bugfixes**
 - **Add the possibility to map user/group on sync**
+- Fixed container-re-usage issue
 - Add preconditions to properly detect if fswatch, unison, docker, and others are in proper state
 - Better log output
 - Do no longer enforce verbose flag
@@ -217,10 +228,11 @@ Thank you a lot for the contributions guys, a lot of team effort in this release
 - Fixed source code mapping when using test
 - Renamed test to example
 
-0.0.6 Critical issue in sync
-----------------------------
+0.0.6
+-----
+- **Critical issue in sync**
 - Fixing critical issue where sync has been called using the old sync:sync syntax - not syncing at all
 
-0.0.5 Unison support
---------------------
-- Added unison support
+0.0.5
+-----
+- **Added unison support**

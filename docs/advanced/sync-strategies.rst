@@ -9,6 +9,8 @@ The sync strategies depend on the OS, so not all strategies are available on all
 
 ----
 
+.. _strategies-native-osx:
+
 native_osx (OSX)
 ----------------
 

@@ -22,7 +22,7 @@ OSX
 | Docker for Mac Edge :cached_   |                  17.65s | 0.21s  |        0.22s |
 +--------------------------------+-------------------------+--------+--------------+
 
-Setup and details at https://github.com/EugenMayer/docker-sync/wiki/Performance-Tests-2017
+Setup and details at :doc:`../miscellaneous/performance-tests-2017`.
 
 .. _issue: https://github.com/EugenMayer/docker-sync/issues/346
 .. _cached: https://blog.docker.com/2017/05/user-guided-caching-in-docker-for-mac/
