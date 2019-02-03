@@ -1,22 +1,20 @@
-Scripting with docker-sync
-==========================
+Scripting
+=========
 
 We use docker-sync as a library in our own docker-stack startup script. It starts the docker-compose stack using a Ruby gem `EugenMayer/docker-compose`_ all this wrapped into a thor task. So:
 
  - Start docker-sync
  - Start a docker-compose stack based on some arguments like --dev and load the specific docker-compose files for that using `xeger/docker-compose`_
 
-.. _EugenMayer/docker-compose: https://github.com/EugenMayer/docker-compose
-.. _xeger/docker-compose: https://github.com/xeger/docker-compose
-
-Example
--------
-
 docker-sync-stack is actually an example already, just see here:
 
 1. You run the sync manager with run : https://github.com/EugenMayer/docker-sync/blob/master/tasks/stack/stack.thor#L37
 2. But you do not call .join_threads after that like her https://github.com/EugenMayer/docker-sync/blob/master/tasks/sync/sync.thor#L36
 3. Then you just continue doing what you want to script, in my case, i start a new blocking task - docker-compose. But you could do anything.
+
+.. _EugenMayer/docker-compose: https://github.com/EugenMayer/docker-compose
+.. _xeger/docker-compose: https://github.com/xeger/docker-compose
+
 
 Simple scripting example
 ------------------------
@@ -54,5 +52,3 @@ Simple scripting example
       puts "MESSAGE: #{e.message}"
 
     end
-
-That is basically it. Fairly easy, I would say.

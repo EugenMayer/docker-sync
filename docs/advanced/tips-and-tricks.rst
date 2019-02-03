@@ -1,8 +1,9 @@
-Complimentary Projects and Tips
-===============================
+***************
+Tips and tricks
+***************
 
 HTTP Proxy and DNS
-------------------
+==================
 
 The HTTP Proxy and DNS used in dinghy_ is available as a standalone project dinghy-http-proxy_.  The proxy is based on jwilder's excellent
 nginx-proxy_ project, with modifications to make it more suitable for local development work. A DNS resolver is also added. By default it will resolve all ``*.docker`` domains to the Docker VM, but this can be changed.
@@ -12,14 +13,14 @@ nginx-proxy_ project, with modifications to make it more suitable for local deve
 .. _nginx-proxy: https://github.com/jwilder/nginx-proxy
 
 SSH-Agent Forwarding
---------------------
+====================
 
 If you need to access some private git repos or ssh servers, it could be useful to use have a ssh-agent accessible from your containers. `whilp/ssh-agent`_ helps you to do so easily.
 
 .. _whilp/ssh-agent: https://github.com/whilp/ssh-agent
 
 Running composer or other tools like if they were on the host
--------------------------------------------------------------
+=============================================================
 
 If you run composer and other tools directly in containers, you could use a combination of the autoenv_ zsh plugin and a simple wrapper script to run it easily directly from the host. In your project folder, create a ``.autoenv.zsh`` file with the name of your container:
 
@@ -43,12 +44,12 @@ then create a simple function in your ``.zshrc``:
 .. _autoenv: https://github.com/Tarrasch/zsh-autoenv
 
 Ignore files in your IDE
----------------------------
+========================
 
 It's a good idea to add the temporary sync files to your IDE's ignore list to prevent your IDE from indexing them all the time or showing up in search results. In case of unison and PHPStorm for example just go to Preferences -> File Types -> Ignore files and folders and add ``.unison`` to the pattern.
 
 Don't sync everything
----------------------
+=====================
 
 You should only sync files that you really need on both the host and client side. You will see that the sync performance will improve drastically when you ignore unnecessary files. How and which files to ignore depends on your syncing strategy (rsync/unison/...) and your project.
 

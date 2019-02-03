@@ -1,12 +1,13 @@
+*************
 Configuration
-=============
+*************
 
 .. caution::
 
     When you change anything in your docker-sync.yml be sure to run docker-sync clean and docker-sync start right after it. Just running docker-sync start or stop will not recreate the container and your changes will have no effect!
 
 docker-sync.yml
----------------
+===============
 
 The file docker-sync.yml should be placed in the top-level folder of your project, so docker-sync can find it. The configuration will be searched from the point you run docker-sync from, traversing up the path tree
 
@@ -20,10 +21,8 @@ Below are all the available options, simple examples can be found in the docker-
 
 .. _docker-sync-boilerplate: https://github.com/EugenMayer/docker-sync-boilerplate
 
------
-
-Configuration References
-------------------------
+References
+----------
 
 .. caution::
 
@@ -136,10 +135,10 @@ Configuration References
 
 -----
 
-.. _docker-compose-yml-docker-compose-dev-yml:
+.. _docker-compose-yml:
 
-docker-compose.yml / docker-compose-dev.yml
--------------------------------------------
+docker-compose.yml
+==================
 
 You should split your docker-compose configuration for production and development (as usual). The production stack (docker-compose.yml) does not need any changes and would look like this (and is portable, no docker-sync adjustments).
 
@@ -156,7 +155,10 @@ You should split your docker-compose configuration for production and developmen
         container_name: 'simpleexample_app'
         command: ['watch', '-n1', 'cat /app/code/somefile.txt']
 
-The docker-compose-dev.yml ( it needs to be called that way, look like this ) will override this and looks like this
+docker-compose-dev.yml
+======================
+
+The docker-compose-dev.yml ( it needs to be called that way, look like this ) will override this and looks like this.
 
 .. code-block:: yaml
 
@@ -192,10 +194,44 @@ This effectively does this in docker-compose terms
 
     docker-compose -f docker-compose.yml -f docker-compose-dev.yml up
 
+Portable docker-compose.yml
+---------------------------
+
+Most of you do not want to inject docker-sync specific things into the production ``docker-compose.yml`` to keep it portable. There is a good way to achieve this very cleanly based on docker-compose overrides.
+
+1. Create a ``docker-compose.yml`` (you might already have that one) - that is your production file. Do not change anything here, just keep it the way you would run your production environment.
+2. Create a ``docker-compose-dev.yml`` - this is where you put your overrides into. You will add the external volume and the mount here, also adding other development ENV variables you might need anyway
+
+Start your compose using:
+
+.. code-block:: shell
+
+    docker-compose -f docker-compose.yml -f docker-compose-dev.yml up
+
+If you only have macOS- and Linux-based development environments, create ``docker-compose-Linux.yml`` and ``docker-compose-Darwin.yml`` to put your OS-specific overrides into. Then you may start up your dev environment as:
+
+.. code-block:: shell
+
+    docker-compose -f docker-compose.yml -f docker-compose-$(uname -s).yml up
+
+You can simplify this command by creating an appropriate `shell alias`_ or a Makefile_. There is also a `feature undergo`_ to let ``docker-sync-stack`` support this out of the box, by simply calling:
+
+.. code-block:: shell
+
+    docker-sync-stack start
+
+A good example for this is a part of the `boilerplate project`_.
+
+.. _shell alias: https://en.wikipedia.org/wiki/Alias_(command)
+.. _Makefile: https://en.wikipedia.org/wiki/Makefile
+.. _feature undergo: https://github.com/EugenMayer/docker-sync/issues/41
+.. _boilerplate project: https://github.com/EugenMayer/docker-sync-boilerplate
+
+
 .. _why-nocopy-important:
 
 Why :nocopy is important?
--------------------------
+=========================
 
 In case the folder we mount to has been declared as a VOLUME during image build, its content will be merged with the name volume we mount from the host - and thats not what we want. So with nocopy we ignore the contents which have been on the initial volume / image and do enforce the content from our host on the initial wiring
 
@@ -217,3 +253,49 @@ to
       someapp:
         volumes:
           - fullexample-sync:/var/www:nocopy
+
+.. _environment-variables:
+
+Environment variables support
+=============================
+
+Docker-sync supports the use of environment variables from version 0.2.0.
+
+The support is added via implementation of https://github.com/bkeepers/dotenv.
+
+You can set your environment variables by creating a .env file at the root of your project (or form where you will be running the docker-sync commands).
+
+The environment variables work the same as they do with docker-compose.
+
+This allows for simplifying your setup, as you are now able to change the project dependent values instead of modifying yaml files for each project.
+
+
+.. tip::
+
+    You can change the default file using ``DOCKER_SYNC_ENV_FILE``, e.g. if .env is already used for something else, you could use ``.docker-sync-env`` by setting export ``DOCKER_SYNC_ENV_FILE=.docker-sync-env``
+
+
+.. code-block:: shell
+
+    # contents of your .env file
+    WEB_ROOT=/Users/me/Development/web
+    API_ROOT=./dir
+
+The environment variables will be picked up by docker-compose
+
+.. code-block:: yaml
+
+    services:
+      api:
+        build: ${API_ROOT}
+
+and by docker-sync as well.
+
+.. code-block:: yaml
+
+    # WEB_ROOT is /Users/me/Development/web
+    syncs:
+      web-rsync:
+        src: "${WEB_ROOT}"
+
+For a detailed example take a look at https://github.com/EugenMayer/docker-sync-boilerplate/tree/master/dynamic-configuration-dotnev.

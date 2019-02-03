@@ -1,5 +1,5 @@
-Alternatives to docker sync
-===========================
+Alternatives
+============
 
 This is a list of alternatives grouped by technology. Feel free to add the missing ones.
 

@@ -1,4 +1,4 @@
-Sync Strategies
+Sync strategies
 ===============
 
 The sync strategies depend on the OS, so not all strategies are available on all operating system
@@ -17,7 +17,7 @@ native_osx (OSX)
 .. image:: /_static/native_osx.png
   :alt: DockerSync native_osx strategy overview
 
-For advanced understanding, please read :doc:`../advanced/native-osx-under-the-hood`.
+For advanced understanding, please read :ref:`native_osx in depth`.
 
 Native-OSX is a combination of two concepts, `OSXFS only`_ and Unison together. We use OSX to sync the file-system into a sync-container to /host_sync. In that sync container we sync from /host_sync to /app_sync using Unison. /app_sync is exposed as a named volume mount and consumed in the app. You ask yourself, why? Its fairly simple.
 
@@ -45,7 +45,7 @@ Cons
 
 ----
 
-Unison (OSX/Windows/Linux)
+unison (OSX/Windows/Linux)
 --------------------------
 
 This strategy has the biggest drive to become the new default player out of the current technologies. It seems to work very well with huge codebases too. It generally is build to handle 2 way sync, so syncs back changes from the container to the host.
@@ -97,4 +97,4 @@ Native linux is actually no real implementation, it just wraps docker-sync aroun
 Sync Flags or Options
 ---------------------
 
-You find the available options for each strategy in :doc:`../configuration/index`.
+You find the available options for each strategy in :doc:`../getting-started/configuration`.

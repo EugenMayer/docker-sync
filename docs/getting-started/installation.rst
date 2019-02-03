@@ -1,7 +1,94 @@
-Docker-sync on Windows
-======================
+************
+Installation
+************
 
-Windows support is still to be considered BETA, - do not get too crazy if there are some bugs!
+No matter if its OSX/Linux/Windows
+
+.. code-block:: shell
+
+    gem install docker-sync
+
+Depending on the OS, you might need more steps to setup. Continue reading below.
+
+----
+
+.. _installation-osx:
+
+OSX
+===
+
+Dependencies
+------------
+With native_osx we no longer have any host dependencies.
+
+Advanced / optional
+-------------------
+Optionally, if you do not want to use unison or want a better rsync or use unison (than the built-in OS X one)
+
+**if you use unison**
+
+.. code-block:: shell
+
+    brew install unison
+    brew install eugenmayer/dockersync/unox
+
+**if you use rsync**
+
+.. code-block:: shell
+
+    brew install rsync
+
+Homebrew aka brew is a tool you need under OSX to install / easy compile other tools. You can use other tools/ways to install or compile fswatch, but those are out of scope for this docs. All we need is the binary in PATH.
+
+----
+
+.. _installation-linux:
+
+Linux
+=====
+
+Linux support is still to be considered BETA - do not get too crazy if we have bugs!
+
+Dependencies
+------------
+Default sync strategy for linux (native) do not need any host dependencies.
+
+Advanced / optional
+-------------------
+Optionally, if you want to use unison, then you would need to install some more stuff.
+
+The following instructions are written for Ubuntu; if you're using another linux flavor, you might need to adjust some stuff like using a different package manager.
+
+**Using Unison Strategy**
+
+The Ubuntu package for unison doesn't come with unison-fsmonitor, as such, we would need to build from source.
+
+.. code-block:: shell
+
+    sudo apt-get install build-essential ocaml
+    wget https://github.com/bcpierce00/unison/archive/v2.51.2.tar.gz
+    tar xvf v2.51.2.tar.gz
+    cd unison-2.51.2
+    make UISTYLE=text
+    sudo cp src/unison /usr/local/bin/unison
+    sudo cp src/unison-fsmonitor /usr/local/bin/unison-fsmonitor
+
+and that should be enough to get you up and running using unison.
+
+**Using rsync strategy**
+
+rsync strategy is not currently supported under linux, but it can be done. If you need this, please see #386, and send us some help.
+
+----
+
+.. _installation-windows:
+
+Windows
+=======
+
+.. caution::
+
+    Windows support is still to be considered BETA, - do not get too crazy if there are some bugs!
 
 This guide provides detailed instructions on getting docker-sync running on Windows Subsystem for Linux.
 
@@ -9,8 +96,22 @@ As the time goes by these instructions may not be updated, so please also check 
 
 Still the procedure is pretty straightforward and should help set you up and running without too much hassle.
 
+Benefits of Docker-sync on Windows
+----------------------------------
+
+- Inotify works on containers that support it. No more polling!
+- Performance might be a bit better or right on par with native Windows volumes. This needs more testing.
+
+Possible Future Supported Environments
+--------------------------------------
+
+- Cygwin
+- Native Windows (no posix)
+
+
 My Setup (for reference)
 ------------------------
+
 Windows 10 Pro 1709
 
 Pro version required for using Docker for Windows (Hyper-V), also update your system to the latest available version from MS
@@ -21,6 +122,7 @@ Docker for Windows CE 18.03.0-ce-rc3-win56 (16433) edge
 
 Let's go!
 ---------
+
 1. Enable WSL
 Open the Windows Control Panel, Programs and Features, click on the left on Turn Windows features on or off and check Windows Subsystem for Linux near the bottom.
 
@@ -223,3 +325,53 @@ FYI - An example of a docker-sync.yml file
             sync_host_ip: '127.0.0.1' #host ip isn't properly inferred
             sync_excludes: ['.gitignore', '.idea/*','.git/*', '*.coffee', '*.scss', '*.sass','*.log']
             src: './'
+
+----
+
+.. _installation-freebsd:
+
+FreeBSD
+=======
+
+.. caution:
+
+    FreeBSD support should be considered BETA.
+
+Dependencies
+------------
+
+Default sync strategy for FreeBSD is ``rsync``, you need to install it first:
+
+.. code-block:: shell
+
+    # pkg install rsync
+
+Using ``rsync``
+---------------
+
+To setup an rsync resource you need a ``docker-sync.yml`` similar to:
+
+.. code-block:: yaml
+
+    version: "2"
+
+    syncs:
+      code-sync:
+        sync_strategy: "rsync"
+        src: "path/to/src"
+        sync_host_port: 10871
+        # sync_host_allow: "..."
+
+``sync_host_port`` is mandatory and it must be unique for this shared resource.
+
+You might need to specify ``sync_host_allow``, this will let the rsync daemon know from which IP to expect connections from, network format (``10.0.0.0/8``) or an specific IP (``10.2.2.2``) is supported. The value depends on your virtualization solution and network stack defined (``NAT`` vs ``host-only``). A quick way to determine the value is to run ``docker-sync start`` and let it fail, the error will show you the needed IP value.
+
+Using ``unison``
+----------------
+
+``unison`` could be supported on FreeBSD, but it wasn't tested yet.
+
+Using ``native_osx``
+--------------------
+
+This strategy is not supported, its OSX only.

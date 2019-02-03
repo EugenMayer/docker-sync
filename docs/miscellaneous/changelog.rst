@@ -133,22 +133,22 @@ Thank you a lot for the contributions guys, a lot of team effort in this release
 
 0.2.0
 -----
- - You can now start docker-sync in daemon mode ``docker-sync-daemon``. See :doc:`../configuration/daemon-mode`.
- - The default sync strategy is now unison, no longer rsync. Check :doc:`../installation/upgrade`.
+ - You can now start docker-sync in daemon mode ``docker-sync-daemon``. See :ref:`daemon-mode`.
+ - The default sync strategy is now unison, no longer rsync. Check :doc:`../getting-started/upgrade`.
  - Unison sync now starts slightly faster
- - New default setting for ``--prefer``: ``--prefer <src> --copyonconflict``. Check :doc:`../installation/upgrade`.
+ - New default setting for ``--prefer``: ``--prefer <src> --copyonconflict``. Check :doc:`../getting-started/upgrade`.
  - Detection of macfsevents installation including some edge cases does properly work now `#243`_.
  - You can now run ``docker-sync start --version`` to see your version
  - You can now use spaces in the src/dest path `#211`_.
- - unison:onesideded sync has been entirely removed. Check :doc:`../installation/upgrade`.
- - ``sync_user`` option has been removed (use ``sync_userid`` only), since it only spread confusion. Check :doc:`../installation/upgrade`.
- - Better way of mounting sync-volumes. Check :doc:`../installation/upgrade`.
- - sync_exclude 'type' for unison is now `Name`, not ``Path`` by default. Check :doc:`../installation/upgrade`.
- - You can now use environment variables in your docker-sync.yml using ``dotenv``. See :doc:`../advanced/dynamic-configuration`.
+ - unison:onesideded sync has been entirely removed. Check :doc:`../getting-started/upgrade`.
+ - ``sync_user`` option has been removed (use ``sync_userid`` only), since it only spread confusion. Check :doc:`../getting-started/upgrade`.
+ - Better way of mounting sync-volumes. Check :doc:`../getting-started/upgrade`.
+ - sync_exclude 'type' for unison is now `Name`, not ``Path`` by default. Check :doc:`../getting-started/upgrade`.
+ - You can now use environment variables in your docker-sync.yml using ``dotenv``. See :ref:`environment-variables`.
  - unison using ``--testserver`` now to avoid startup issues and also speedup the startup
  - Check for updates only for the actually strategy picked, not all
  - Add support for ``--abort-on-container-exit`` for docker-compose `#163`_.
- - To share more code and features between the rsync / unison images, we aligned those images to share the same codebase, thus they have been renamed. The ENV variables are changed and some things you should not even notice, since it is all handled by docker-sync. Check :doc:`../installation/upgrade`.
+ - To share more code and features between the rsync / unison images, we aligned those images to share the same codebase, thus they have been renamed. The ENV variables are changed and some things you should not even notice, since it is all handled by docker-sync. Check :doc:`../getting-started/upgrade`.
  - Fix dynamic port detection with unison / make it more robust `#247`_.
  - New and more robust unison/rsync images
 
@@ -219,8 +219,8 @@ Thank you a lot for the contributions guys, a lot of team effort in this release
 0.0.12
 -------
 - **Unison slim image, docker-compose path and fswatch disabling**
-- You can no configure were you docker-compose file is located at. See :doc:`../configuration/index`.
-- You can now disable the filewatcher using watch_strategy. See :doc:`../configuration/index`.
+- You can no configure were you docker-compose file is located at. See :doc:`../getting-started/configuration`.
+- You can now disable the filewatcher using watch_strategy. See :doc:`../getting-started/configuration`.
 - docker-compose gem is now part of the gem
 - gem / lib was re-layouted to fit the library usage better
 - tons of requires have been fixed for the script usage. See :doc:`../advanced/scripting`.
@@ -234,7 +234,7 @@ Thank you a lot for the contributions guys, a lot of team effort in this release
 0.0.11
 ------
 - **docker-sync-stack is here**
-- **You can now start sync and docker-compose in one go** - See :doc:`../configuration/sync-stack-commands`.
+- **You can now start sync and docker-compose in one go** - See :ref:`sync-stack-commands`.
 - rsync image is now checked for update ability to avoid issues with outdated images
 
 ----

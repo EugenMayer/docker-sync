@@ -1,21 +1,20 @@
-native_osx Debugging Guide
-==========================
+***************
+Troubleshooting
+***************
+
+``native_osx`` strategy
+=======================
 
 .. note::
 
     This document is a work in progress. Each time you encounter the scenario below, please revisit this document and [report any new findings](https://github.com/EugenMayer/docker-sync/issues/410).
 
-Debugging the native_osx sync strategy when it stops syncing
-------------------------------------------------------------
+Syncing stopped
+^^^^^^^^^^^^^^^
 
 The osx_native sync strategy is the fastest sync strategy for docker-sync under Docker4Mac. Unfortunately a recurring issue has emerged where the `sync strategy stops functioning`_. This page is to guide you on how to debug this situation to provide information so that it can be solved.
 
 .. _sync strategy stops functioning: https://github.com/EugenMayer/docker-sync/issues/410
-
-How does the issue look like
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-When you make changes to your code in your host machine and do not see the changes reflected in your container you may be suffering from this issue.
 
 Prepare: Identify the docker-sync container involved
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -118,8 +117,8 @@ And paste those on Hastebin_ and include the link in your report
 
 .. _Hastebin: https://hastebin.com
 
-If nothing yet uncovered an issue
----------------------------------
+If the debugging guide doesn't help yet...
+------------------------------------------
 
 Ensure your mount location is correct
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
