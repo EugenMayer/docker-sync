@@ -21,14 +21,14 @@ There are some important keypoints to notice here:
 FAQ
 ---
 
-Why use OSXFS in the first place (instead of the ``unison`` strategy) to sync from the host to the sync-container"
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Why use OSXFS in the first place (instead of the ``unison`` strategy) to sync from the host to the sync-container
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There are several reasons, one of the most important being the performance. Since MacOS/OSX has very bad filesystem events support on HFS/APFS, watching the file-system for changes using ``unox`` or ``fswatch`` was causing a heavy CPU load. This CPU load is very significant, even on modern high-end CPUs (like a i7 4770k / 3.5GHz).
 
 The second issue was dependencies. With native_osx you do not need to install anything on your host OS except the docker-sync gem. So no need to compile unox or install unison manually, deploy with brew and fail along the way - just keeping you system clean.
 
-**Is this strategy absolutely bullet proof?**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Is this strategy absolutely bullet proof?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 No, it is not. But it has been pretty battle proven already - the main issue is https://github.com/EugenMayer/docker-sync/issues/410 - so sometimes OSXFS just stops triggering FS events in Hyperkit, thus in the sync-container. This leads to an issue with our sync, since the ``unison`` daemon inside the app-sync  container relies on those events to sync the changes (it does not have the ability to poll, which would be disastrous performance-wise, anyway).

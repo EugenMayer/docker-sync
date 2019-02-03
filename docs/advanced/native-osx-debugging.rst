@@ -73,6 +73,7 @@ Run this to verify that the changes have been sync from host_sync to app_sync on
 If you see a message one of the messages, this so called app_sync is broken:
 
 .. code-block:: shell
+
     Files some-dir/another-dir/my-file.ext and /dev/fd/63 differ
     diff: some-dir/another-dir/my-file.ext: No such file or directory
 

@@ -51,7 +51,7 @@ Unison (OSX/Windows/Linux)
 This strategy has the biggest drive to become the new default player out of the current technologies. It seems to work very well with huge codebases too. It generally is build to handle 2 way sync, so syncs back changes from the container to the host.
 
 Pros
- - Offers 2 way sync *(please see unison-dualside why this is misleading here)
+ - Offers 2 way sync (please see unison-dualside why this is misleading here)
  - Still very effective and works for huge projects
  - Native speed in for the application
 

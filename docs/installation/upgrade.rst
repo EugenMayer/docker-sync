@@ -81,7 +81,7 @@ From 0.2.0 you need to add a new setting to your docker-sync.yml ``version: "2"`
 
 Prior to 0.2.0 the exclude default syntax of the unison strategy was "Path" - since we decided that this is counter-intuitive in most cases, we have changed the default to ``Name`` - please see the `unison documentation for more`_ - mostly you would have expected the ``Name`` behavior anyway, so you might want to stick with it. TLTR: ``Path`` math matches the exact path ( not sub-directories ) while name just matches string on the path - no matter which "nesting level". You could go back to ``Path`` by setting sync_exclude_type_ to 'Path'.
 
-See this issue: ``Make 'Name' the default exclude_type in 0.2.0``_.
+See this issue: `Make Name the default exclude_type in 0.2.0`_.
 
 **rsync trailing slash changes**
 
@@ -118,6 +118,6 @@ To share more code and features between the rsync / unison images, we aligned th
 .. _change: https://github.com/EugenMayer/docker-sync-boilerplate/commit/9d2cd625282f968161e3ecf4ed85b5b52dbd8cbd
 .. _unison documentation for more: http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#ignore
 .. _sync_exclude_type: https://github.com/EugenMayer/docker-sync/blob/master/example/docker-sync.yml#L56
-.. _Make 'Name' the default exclude_type in 0.2.0: https://github.com/EugenMayer/docker-sync/issues/133
+.. _Make Name the default exclude_type in 0.2.0: https://github.com/EugenMayer/docker-sync/issues/133
 .. _Rework the way we mount the volume: https://github.com/EugenMayer/docker-sync/issues/116
 .. _Migration Guide from rsync to unison as default: https://github.com/EugenMayer/docker-sync/issues/115

@@ -28,7 +28,7 @@ Features
 - Supports user-remapping on sync to avoid permission problems on the container
 - Can be used with your docker-compose way or the integrated docker-compose way to start the stack and sync at the same time with one command
 - Using overlays to keep your production docker-compose.yml untouched an portable. See :ref:`docker-compose-yml-docker-compose-dev-yml`.
-- Supports `Linux*`_ to use the same toolchain across all platforms, but maps on a native mount in linux (no sync)
+- Supports Linux* to use the same toolchain across all platforms, but maps on a native mount in linux (no sync)
 - Besides performance being the first priority for docker-sync, the second is, not forcing you into using a specific docker solution. Use docker-for-mac, docker toolbox, VirtualBox, VMware Fusion or Parallels, xhyve or whatever!
 
 .. toctree::
@@ -41,7 +41,7 @@ Features
 .. toctree::
    :hidden:
    :caption: Installation
-   :maxdepth: 2
+   :maxdepth: 0
 
    installation/index
    installation/osx

@@ -11,6 +11,7 @@ Changelog
 .. note::
 
     This release has no breaking changes, so it is a drop-in-replacement for 0.4.6 without migration.
+
 -----
 
 Features/Improvements
@@ -35,6 +36,8 @@ Special thanks to @michaelbaudino who has done a incredible job
 
 .. _diagram to explain how native_osx works: https://github.com/EugenMayer/docker-sync/blob/master/doc/native_osx.png
 
+----
+
 0.4.6
 -----
 
@@ -42,6 +45,8 @@ Fixes:
  - Fixed Issue introduced with 0.4.5: #367
 
 Nothing else - most probably the last 0.4.x release.
+
+----
 
 0.4.5
 -----
@@ -52,17 +57,23 @@ Windows and Linux support now got documented and the documentation has been made
 
 Mot probably last 0.4.x maintenance release - with 0.5.x a rewrite of the Config/Dependency/Env/Os handling is supercharged by @michaelbaudino. This will help improving the overall quality of the codebase and reduce the clusterfuck when we do cross-platform implementation / splits. Be tensed.
 
+----
+
 0.4.2
 -----
  - Implement proper selective sync default: native_osx for d4m and unison for docker-machine, see https://github.com/EugenMayer/docker-sync/issues/350
  - When you run --foreground with native_osx you now see the unison logs running in the container, see https://github.com/EugenMayer/docker-sync/issues/341
  - Properly pull new unison:hostsync image to fix 0.4.0 bugs
 
+----
+
 0.4.1
 -----
  - Fixing issue with sync_userid and native_osx
  - Fixing different new and old issues with native_osx and unison / installation and upgrade issues
  - More at https://github.com/EugenMayer/docker-sync/issues?q=is%3Aclosed+milestone%3A0.4.1
+
+----
 
 0.4.0
 -----
@@ -72,6 +83,8 @@ Mot probably last 0.4.x maintenance release - with 0.5.x a rewrite of the Config
  - Better performance when using native_osx
  - Fixed auto-ip guessing
  - More at https://github.com/EugenMayer/docker-sync/milestone/17?closed=1
+
+----
 
 0.3.6
 -----
@@ -84,9 +97,13 @@ Mot probably last 0.4.x maintenance release - with 0.5.x a rewrite of the Config
  - Overall making docker-sync more robust and verbose if things are not as intended
  - More at https://github.com/EugenMayer/docker-sync/milestone/16?closed=1
 
+----
+
 0.3.1 - 0.3.5
 -------------
  - Bugfixes
+
+----
 
 0.3.0
 -----
@@ -100,13 +117,19 @@ Mot probably last 0.4.x maintenance release - with 0.5.x a rewrite of the Config
 
 Thank you a lot for the contributions guys, a lot of team effort in this release!
 
+----
+
 0.2.3
 -----
  - Smaller Bugfixes and minor features: https://github.com/EugenMayer/docker-sync/releases/tag/0.2.3
 
+----
+
 0.2.1
 -----
  - Smaller bugfixes https://github.com/EugenMayer/docker-sync/milestone/15?closed=1
+
+----
 
 0.2.0
 -----
@@ -134,19 +157,27 @@ Thank you a lot for the contributions guys, a lot of team effort in this release
 .. _#243: https://github.com/EugenMayer/docker-sync/issues/243
 .. _#247: https://github.com/EugenMayer/docker-sync/issues/247
 
+----
+
 0.1.2
 -----
  - Adjustments and bugfixes
  - Full changelog at: https://github.com/EugenMayer/docker-sync/releases/tag/0.1.2
 
+----
+
 0.1.1
 -----
  - Small bugfixes
+
+----
 
 0.1.0
 -----
 - **Unison-Unox strategy for transparent 2-way sync introduced.**
 - Full changelog at: https://github.com/EugenMayer/docker-sync/releases/tag/0.1.0
+
+----
 
 0.0.15
 ------
@@ -155,6 +186,8 @@ Thank you a lot for the contributions guys, a lot of team effort in this release
 - Notifications on sync https://github.com/EugenMayer/docker-sync/pull/63, thank you midN_
 
 .. _midN: https://github.com/midN
+
+----
 
 0.0.14
 ------
@@ -169,6 +202,8 @@ Thank you a lot for the contributions guys, a lot of team effort in this release
 .. _image for rsync: https://github.com/EugenMayer/docker-unison
 .. _Duske: https://github.com/Duske
 
+----
+
 0.0.13
 ------
 - **docker-compose-dev.yml make docker-compose.yml portable**
@@ -178,6 +213,8 @@ Thank you a lot for the contributions guys, a lot of team effort in this release
 .. _#41: https://github.com/EugenMayer/docker-sync/issues/41
 .. _#44: https://github.com/EugenMayer/docker-sync/issues/44
 .. _mickaelperrin: https://github.com/mickaelperrin
+
+----
 
 0.0.12
 -------
@@ -192,16 +229,22 @@ Thank you a lot for the contributions guys, a lot of team effort in this release
 
 .. _onnimonni: https://github.com/onnimonni
 
+----
+
 0.0.11
 ------
 - **docker-sync-stack is here**
 - **You can now start sync and docker-compose in one go** - See :doc:`../configuration/sync-stack-commands`.
 - rsync image is now checked for update ability to avoid issues with outdated images
 
+----
+
 0.0.10
 ------
 
 - Yanked, broken release
+
+----
 
 0.0.9
 -----
@@ -210,10 +253,14 @@ Thank you a lot for the contributions guys, a lot of team effort in this release
 - More verbose outputs on unison runs with verbose,, thank you @mickaelperrin
 - Adding update-checker to ensure, that you run the newest docker-sync
 
+----
+
 0.0.8
 -----
 - **Fix unison startup**
 - Fixed issue during unison startup
+
+----
 
 0.0.7
 -----
@@ -228,10 +275,14 @@ Thank you a lot for the contributions guys, a lot of team effort in this release
 - Fixed source code mapping when using test
 - Renamed test to example
 
+----
+
 0.0.6
 -----
 - **Critical issue in sync**
 - Fixing critical issue where sync has been called using the old sync:sync syntax - not syncing at all
+
+----
 
 0.0.5
 -----
