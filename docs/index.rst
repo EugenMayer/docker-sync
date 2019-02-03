@@ -49,6 +49,7 @@ Features
    installation/osx
    installation/linux
    installation/windows
+   installation/freebsd
    installation/upgrade
 
 .. toctree::
@@ -71,13 +72,20 @@ Features
    advanced/scripting
    advanced/native-osx-under-the-hood
    advanced/native-osx-debugging
+   advanced/native-osx-monitoring
 
 .. toctree::
    :hidden:
    :caption: Miscellaneous
    :maxdepth: 2
 
-   miscellaneous/tests
-   miscellaneous/performance
-   miscellaneous/changelog
    miscellaneous/development
+   miscellaneous/performance
+   miscellaneous/performance-tests-2017
+   miscellaneous/tests
+   miscellaneous/changelog
+   miscellaneous/alternatives
+   miscellaneous/behind-the-scene
+   miscellaneous/complimentary-projects
+   miscellaneous/portable-docker-compose
+   miscellaneous/windows-home
