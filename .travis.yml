@@ -1,8 +1,9 @@
 language: ruby
 
 rvm:
-  - 2.0
-  - 2.1
+# Removed those to since bundler is to old on those 2
+#  - 2.0
+#  - 2.1
   - 2.2
   - 2.3
   - 2.4
