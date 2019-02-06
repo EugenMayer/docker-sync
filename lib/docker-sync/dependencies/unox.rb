@@ -12,20 +12,19 @@ module DockerSync
       end
 
       def self.available?
+        # should never have been called anyway - fix the call that it should check for the OS
+        raise 'Unox cannot be available for other platforms then MacOS' unless Environment.mac?
+
         return @available if defined? @available
         cmd = 'brew list unox 2>&1 > /dev/null'
-        # TODO: Environment.linux?  was just a hotfix for something we did not dig deeper into, as we have should
-        # see https://github.com/EugenMayer/docker-sync/pull/630
-        if Environment.mac?
-          @available = defined?(Bundler) ? Bundler.clean_system(cmd) : system(cmd)
-        else
-          @available = true
-        end
+        @available = defined?(Bundler) ? Bundler.clean_system(cmd) : system(cmd)
         @available
       end
 
       def self.ensure!
         return if available?
+        raise 'Unox cannot be installed on other platforms then MacOS' unless Environment.mac?
+
         cleanup_non_brew_version!
         PackageManager.install_package('eugenmayer/dockersync/unox')
       end

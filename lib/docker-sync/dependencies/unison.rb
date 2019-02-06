@@ -8,7 +8,6 @@ module DockerSync
 
       def self.ensure!
         PackageManager.install_package('unison') unless available?
-        Unox.ensure!
       end
     end
   end

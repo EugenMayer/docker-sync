@@ -26,6 +26,7 @@ module DockerSync
         end
         begin
           Dependencies::Unison.ensure!
+          Dependencies::Unox.ensure! if Environment.mac?
         rescue StandardError => e
           say_status 'error', "#{@sync_name} has been configured to sync with unison, but no unison available", :red
           say_status 'error', e.message, :red

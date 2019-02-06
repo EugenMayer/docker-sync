@@ -9,7 +9,11 @@ RSpec.describe DockerSync::Dependencies::Unox do
   it_behaves_like 'a dependency'
 
   describe '.available?' do
+    let(:mac?)   { true }
+
     before do
+      # unox is only available/allowed for mac
+      allow(DockerSync::Environment).to receive(:mac?).and_return(:mac?)
       described_class.remove_instance_variable(:@available) if described_class.instance_variable_defined? :@available
     end
 
@@ -37,6 +41,14 @@ RSpec.describe DockerSync::Dependencies::Unox do
         expect(Bundler).to have_received(:clean_system).with(/^brew list unox/)
       end
     end
+
+    context 'when its not a mac' do
+      let(:mac?) { false }
+
+      it "unox should not be used - so raise" do
+        expect{subject}.to raise_error()
+      end
+    end
   end
 
   describe '.ensure!' do
@@ -61,6 +73,14 @@ RSpec.describe DockerSync::Dependencies::Unox do
       it 'tries to install it' do
         subject
         expect(DockerSync::Dependencies::PackageManager).to have_received(:install_package).with('eugenmayer/dockersync/unox')
+      end
+    end
+
+    context 'when its not a mac' do
+      let(:mac?) { false }
+
+      it "unox should not be used - so raise" do
+        expect{subject}.to raise_error()
       end
     end
   end
