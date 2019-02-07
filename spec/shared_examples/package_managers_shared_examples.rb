@@ -8,8 +8,8 @@ RSpec.shared_examples 'a package manager' do
     let(:package_name)    { 'some-package' }
 
     before do
+      allow(DockerSync::Environment).to receive(:system).and_return(true)
       allow(described_class).to receive(:ensure!)
-      allow(Kernel).to receive(:system).and_return(true)
       allow_any_instance_of(Thor::Shell::Color).to receive_messages(
         say_status: nil,
         yes?: user_confirmed?
@@ -34,7 +34,7 @@ RSpec.shared_examples 'a package manager' do
 
       it 'executes the package installation command' do
         subject
-        expect(Kernel).to have_received(:system).with(install_command)
+        expect(DockerSync::Environment).to have_received(:system).with(install_command)
       end
     end
 

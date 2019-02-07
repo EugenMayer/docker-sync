@@ -35,7 +35,7 @@ module DockerSync
         end
 
         def perform_installation
-          defined?(Bundler) ? Bundler.clean_system(install_cmd) : system(install_cmd)
+          Environment.system(install_cmd)
         end
 
         def install_cmd
