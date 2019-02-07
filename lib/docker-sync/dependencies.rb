@@ -26,14 +26,16 @@ module DockerSync
       Fswatch.ensure! if config.fswatch_required?
     end
 
-    def self.ensure_all_for_linux!(_config)
+    def self.ensure_all_for_linux!(config)
       Docker.ensure!
+      Fswatch.forbid! if config.fswatch_required?
     end
 
     def self.ensure_all_for_freebsd!(config)
       Docker.ensure!
       Unison.ensure!  if config.unison_required?
       Rsync.ensure!   if config.rsync_required?
+      Fswatch.forbid! if config.fswatch_required?
     end
   end
 end
