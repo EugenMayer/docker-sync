@@ -23,24 +23,19 @@ module DockerSync
       Docker.ensure!
       Unison.ensure!  if config.unison_required?
       Rsync.ensure!   if config.rsync_required?
-      if config.fswatch_required?
-        unless Fswatch.available?
-          Fswatch.ensure!
-          puts "please restart docker sync so the installation of fswatch takes effect"
-          raise(UNSUPPORTED_OPERATING_SYSTEM)
-        end
-      end
-
+      Fswatch.ensure! if config.fswatch_required?
     end
 
-    def self.ensure_all_for_linux!(_config)
+    def self.ensure_all_for_linux!(config)
       Docker.ensure!
+      Fswatch.forbid! if config.fswatch_required?
     end
 
     def self.ensure_all_for_freebsd!(config)
       Docker.ensure!
       Unison.ensure!  if config.unison_required?
       Rsync.ensure!   if config.rsync_required?
+      Fswatch.forbid! if config.fswatch_required?
     end
   end
 end

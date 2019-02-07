@@ -17,7 +17,7 @@ module DockerSync
 
         return @available if defined? @available
         cmd = 'brew list unox 2>&1 > /dev/null'
-        @available = defined?(Bundler) ? Bundler.clean_system(cmd) : system(cmd)
+        @available = Environment.system(cmd)
         @available
       end
 
@@ -35,7 +35,7 @@ module DockerSync
         say_status 'warning', LEGACY_UNOX_WARNING, :yellow
         raise(FAILED_TO_REMOVE_LEGACY_UNOX) unless yes?('Uninstall legacy unison-fsmonitor (unox)? (y/N)')
         say_status 'command', uninstall_cmd, :white
-        system(uninstall_cmd)
+        Environment.system(uninstall_cmd)
       end
 
       def self.non_brew_version_installed?

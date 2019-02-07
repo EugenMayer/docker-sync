@@ -5,9 +5,9 @@ RSpec.describe DockerSync::Dependencies::Docker::Driver do
     let(:mac?) { true }
 
     before do
-      allow(DockerSync::Dependencies::Docker::Driver).to receive(:system).with('pgrep -q com.docker.hyperkit').and_return(true)
+      allow(DockerSync::Environment).to receive(:system).with('pgrep -q com.docker.hyperkit').and_return(true)
       allow(DockerSync::Environment).to receive(:mac?).and_return(mac?)
-      allow(described_class).to receive(:system).and_return(true)
+
       described_class.remove_instance_variable(:@docker_for_mac) if described_class.instance_variable_defined? :@docker_for_mac
     end
 
@@ -21,12 +21,14 @@ RSpec.describe DockerSync::Dependencies::Docker::Driver do
 
     it 'checks if Docker is running in Hyperkit' do
       subject
-      expect(described_class).to have_received(:system).with('pgrep -q com.docker.hyperkit')
+
+      expect(DockerSync::Environment).to have_received(:system).with('pgrep -q com.docker.hyperkit')
     end
 
     it 'is memoized' do
       expect { 1.times { described_class.docker_for_mac? } }.to change { described_class.instance_variable_defined?(:@docker_for_mac) }
-      expect(described_class).to have_received(:system).exactly(:once)
+
+      expect(DockerSync::Environment).to have_received(:system).exactly(:once)
     end
   end
 
@@ -36,8 +38,9 @@ RSpec.describe DockerSync::Dependencies::Docker::Driver do
 
     before do
       allow(DockerSync::Environment).to receive(:mac?).and_return(mac?)
+      allow(DockerSync::Environment).to receive(:system).and_return(true)
       allow(described_class).to receive(:find_executable0).with('docker-machine').and_return(docker_machine_available?)
-      allow(described_class).to receive(:system).and_return(true)
+
       described_class.remove_instance_variable(:@docker_toolbox) if described_class.instance_variable_defined? :@docker_toolbox
     end
 
@@ -57,12 +60,12 @@ RSpec.describe DockerSync::Dependencies::Docker::Driver do
 
     it 'checks if Docker is running in Boot2Docker' do
       subject
-      expect(described_class).to have_received(:system).with('docker info | grep -q "Operating System: Boot2Docker"')
+      expect(DockerSync::Environment).to have_received(:system).with('docker info | grep -q "Operating System: Boot2Docker"')
     end
 
     it 'is memoized' do
       expect { 2.times { described_class.docker_toolbox? } }.to change { described_class.instance_variable_defined?(:@docker_toolbox) }
-      expect(described_class).to have_received(:system).exactly(:once)
+      expect(DockerSync::Environment).to have_received(:system).exactly(:once)
     end
   end
 end
