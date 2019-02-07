@@ -8,9 +8,12 @@ module DockerSync
       end
 
       def self.ensure!
-        raise 'Fswatch cannot be installed on other platforms then MacOS' unless Environment.mac?
-        PackageManager.install_package('fswatch') unless available?
-      end
+        return if available?
+
+        PackageManager.install_package('fswatch')
+        puts "please restart docker sync so the installation of fswatch takes effect"
+        exit(1)
+    end
     end
   end
 end

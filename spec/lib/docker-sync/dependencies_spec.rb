@@ -2,14 +2,16 @@ require 'spec_helper'
 
 RSpec.describe DockerSync::Dependencies do
   let(:config) { double(:config, unison_required?: false, rsync_required?: false, fswatch_required?: false) }
+  let(:linux?) { false }
+  let(:mac?)   { false }
+
+  before do
+    allow(DockerSync::Environment).to receive(:linux?).and_return(linux?)
+    allow(DockerSync::Environment).to receive(:mac?).and_return(mac?)
+  end
 
   describe '.ensure_all!(config)' do
-    let(:mac?)   { false }
-    let(:linux?) { false }
-
     before do
-      allow(DockerSync::Environment).to receive(:mac?).and_return(mac?)
-      allow(DockerSync::Environment).to receive(:linux?).and_return(linux?)
       allow(described_class).to receive(:ensure_all_for_mac!)
       allow(described_class).to receive(:ensure_all_for_linux!)
     end
@@ -42,6 +44,8 @@ RSpec.describe DockerSync::Dependencies do
   end
 
   describe '.ensure_all_for_linux!(_config)' do
+    let(:linux?) { true }
+
     before do
       allow(described_class::Docker).to receive(:ensure!)
     end
@@ -55,9 +59,10 @@ RSpec.describe DockerSync::Dependencies do
   end
 
   describe '.ensure_all_for_mac!(config)' do
+    let(:mac?) { true }
+
     before do
       allow(described_class::PackageManager).to receive(:ensure!)
-      #allow(DockerSync::Dependencies::Fswatch).to receive(:ensure!).and_return(true)
       allow(described_class::Docker).to receive(:ensure!)
     end
 
