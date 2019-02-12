@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+# TODO: the unox part should only be called if it is MacOS - its only needed then
 RSpec.describe DockerSync::Dependencies::Unison do
   before do
     allow(DockerSync::Dependencies::PackageManager).to receive(:install_package)
@@ -20,19 +21,10 @@ RSpec.describe DockerSync::Dependencies::Unison do
     context 'when unison is available' do
       let(:available?) { true }
 
-      it 'ensures that Unox is available too' do
-        subject
-        expect(DockerSync::Dependencies::Unox).to have_received(:ensure!)
-      end
     end
 
     context 'when unison is not available' do
       let(:available?) { false }
-
-      it 'ensures that Unox is available too' do
-        subject
-        expect(DockerSync::Dependencies::Unox).to have_received(:ensure!)
-      end
     end
   end
 end

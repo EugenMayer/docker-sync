@@ -15,5 +15,9 @@ module DockerSync
     def self.freebsd?
       @freebsd ||= OS.freebsd?
     end
+
+    def self.system(cmd)
+      defined?(Bundler) ? Bundler.clean_system(cmd) : Kernel.system(cmd)
+    end
   end
 end

@@ -54,16 +54,6 @@ class UpgradeChecker
 
   def check_and_warn
     return if ENV['DOCKER_SYNC_SKIP_UPGRADE']
-    if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.5.5')
-      checker = UpdateChecker.new
-      checker.check_unison_image
-
-      Thor::Shell::Basic.new.say_status 'warning', "There has been a major unison update. Please clean and restart all your stacks. If you are using the unison strategy, please upgrade unison by doing 'brew update && brew upgrade unison' to upgrade to 2.51.2", :red
-
-      unless Thor::Shell::Basic.new.yes?('Just wanted you to know that! (y/N)')
-        exit 1
-      end
-    end
 
     if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.5.6')
       Thor::Shell::Basic.new.say_status 'warning', "If you are upgrading from 0.5.4 or below, please run `brew update && brew upgrade unison` AND `docker-compose down && docker-sync clean` or `docker-sync-stack clean` since you need to recreate the sync container", :red

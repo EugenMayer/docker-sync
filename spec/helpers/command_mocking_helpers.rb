@@ -1,5 +1,5 @@
 module CommandExecutionMock
-  COMMAND_EXECUTORS = %i(system exec spawn `).freeze
+  COMMAND_EXECUTORS = %i(system exec exit spawn `).freeze
 
   def self.included(_base)
     define_custom_matchers

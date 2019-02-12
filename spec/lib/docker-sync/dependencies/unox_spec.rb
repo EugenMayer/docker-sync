@@ -1,40 +1,40 @@
 require 'spec_helper'
 
+# unox is only available/allowed for mac
 RSpec.describe DockerSync::Dependencies::Unox do
+  let(:available) { true }
+  let(:mac?)   { true }
+
   before do
-    allow(described_class).to receive(:system).with(/^brew list unox/)
-    allow(Bundler).to receive(:clean_system).with(/^brew list unox/)
+    allow(DockerSync::Environment).to receive(:system)
+    allow(DockerSync::Environment).to receive(:system).with(/^brew list unox/).and_return(available)
+    allow(DockerSync::Environment).to receive(:mac?).and_return(mac?)
+
+    described_class.remove_instance_variable(:@available) if described_class.instance_variable_defined? :@available
   end
 
   it_behaves_like 'a dependency'
 
   describe '.available?' do
-    before do
-      described_class.remove_instance_variable(:@available) if described_class.instance_variable_defined? :@available
-    end
-
     subject { described_class.available? }
 
-    context 'when Bundler is not used' do
-      before { hide_const("Bundler") if defined? Bundler }
+    context "when Unox was installed using brew" do
+      let(:available) { true }
 
-      context "when Unox was installed using brew" do
-        before { allow(described_class).to receive(:system).with(/^brew list unox/).and_return(true) }
-        it { is_expected.to be true }
-      end
-
-      context "when Unox was not installed using brew" do
-        before { allow(described_class).to receive(:system).with(/^brew list unox/).and_return(false) }
-        it { is_expected.to be false }
-      end
+      it { is_expected.to be true }
     end
 
-    context 'when Bundler is used' do
-      before { stub_const("Bundler") unless defined? Bundler }
+    context "when Unox was not installed using brew" do
+      let(:available) { false }
 
-      it 'performs brew search in clean env (outside of Bundler env)' do
-        subject
-        expect(Bundler).to have_received(:clean_system).with(/^brew list unox/)
+      it { is_expected.to be false }
+    end
+
+    context 'when its not a mac' do
+      let(:mac?) { false }
+
+      it "unox should not be used - so raise" do
+        expect{subject}.to raise_error()
       end
     end
   end
@@ -43,13 +43,13 @@ RSpec.describe DockerSync::Dependencies::Unox do
     subject { described_class.ensure! }
 
     context 'when it is already available' do
-      before { allow(described_class).to receive(:available?).and_return(true) }
       it { is_expected_to_not_raise_error }
     end
 
     context 'when it is not available' do
+      let(:available) { false }
+
       before do
-        allow(described_class).to receive(:available?).and_return(false)
         allow(DockerSync::Dependencies::PackageManager).to receive(:install_package)
       end
 
@@ -63,12 +63,19 @@ RSpec.describe DockerSync::Dependencies::Unox do
         expect(DockerSync::Dependencies::PackageManager).to have_received(:install_package).with('eugenmayer/dockersync/unox')
       end
     end
+
+    context 'when its not a mac' do
+      let(:mac?) { false }
+
+      it "unox should not be used - so raise" do
+        expect{subject}.to raise_error()
+      end
+    end
   end
 
   describe 'cleanup_non_brew_version!' do
     before do
       allow_any_instance_of(Thor::Shell::Color).to receive(:say_status)
-      allow(described_class).to receive(:system)
     end
 
     subject { described_class.cleanup_non_brew_version! }
@@ -78,7 +85,7 @@ RSpec.describe DockerSync::Dependencies::Unox do
 
       it 'does nothing' do
         subject
-        expect(described_class).to_not have_received(:system)
+        expect(DockerSync::Environment).to_not have_received(:system)
       end
     end
 
@@ -90,7 +97,7 @@ RSpec.describe DockerSync::Dependencies::Unox do
 
         it 'deletes the binary' do
           subject
-          expect(described_class).to have_received(:system).with('sudo rm -f /usr/local/bin/unison-fsmonitor')
+          expect(DockerSync::Environment).to have_received(:system).with('sudo rm -f /usr/local/bin/unison-fsmonitor')
         end
       end
 

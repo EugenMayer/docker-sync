@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    docker-sync (0.5.10)
+    docker-sync (0.5.11)
       daemons (~> 1.2, >= 1.2.3)
       docker-compose (~> 1.1, >= 1.1.7)
       dotenv (~> 2.1, >= 2.1.1)

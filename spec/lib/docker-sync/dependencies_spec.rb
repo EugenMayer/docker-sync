@@ -2,15 +2,20 @@ require 'spec_helper'
 
 RSpec.describe DockerSync::Dependencies do
   let(:config) { double(:config, unison_required?: false, rsync_required?: false, fswatch_required?: false) }
+  let(:linux?)   { false }
+  let(:freebsd?) { false }
+  let(:mac?)     { false }
+
+  before do
+    allow(DockerSync::Environment).to receive(:linux?).and_return(linux?)
+    allow(DockerSync::Environment).to receive(:freebsd?).and_return(freebsd?)
+    allow(DockerSync::Environment).to receive(:mac?).and_return(mac?)
+  end
 
   describe '.ensure_all!(config)' do
-    let(:mac?)   { false }
-    let(:linux?) { false }
-
     before do
-      allow(DockerSync::Environment).to receive(:mac?).and_return(mac?)
-      allow(DockerSync::Environment).to receive(:linux?).and_return(linux?)
       allow(described_class).to receive(:ensure_all_for_mac!)
+      allow(described_class).to receive(:ensure_all_for_freebsd!)
       allow(described_class).to receive(:ensure_all_for_linux!)
     end
 
@@ -28,9 +33,18 @@ RSpec.describe DockerSync::Dependencies do
     context 'when running on Linux' do
       let(:linux?) { true }
 
-      it 'delegates to `ensure_all_for_mac!` with given config' do
+      it 'delegates to `ensure_all_for_linux!` with given config' do
         subject
         expect(described_class).to have_received(:ensure_all_for_linux!).with(config)
+      end
+    end
+
+    context 'when running on FreeBSD' do
+      let(:freebsd?) { true }
+
+      it 'delegates to `ensure_all_for_freebsd!` with given config' do
+        subject
+        expect(described_class).to have_received(:ensure_all_for_freebsd!).with(config)
       end
     end
 
@@ -42,6 +56,8 @@ RSpec.describe DockerSync::Dependencies do
   end
 
   describe '.ensure_all_for_linux!(_config)' do
+    let(:linux?) { true }
+
     before do
       allow(described_class::Docker).to receive(:ensure!)
     end
@@ -52,12 +68,48 @@ RSpec.describe DockerSync::Dependencies do
       subject
       expect(described_class::Docker).to have_received(:ensure!)
     end
+
+    context "when FSWatch is required by given `config`" do
+      before do
+        allow(config).to receive(:fswatch_required?).and_return(true)
+      end
+
+      it 'is forbidden' do
+        expect { subject }.to raise_error(DockerSync::Dependencies::Fswatch::UNSUPPORTED)
+      end
+    end
+  end
+
+  describe '.ensure_all_for_freebsd!(_config)' do
+    let(:freebsd?) { true }
+
+    before do
+      allow(described_class::Docker).to receive(:ensure!)
+    end
+
+    subject { described_class.ensure_all_for_freebsd!(config) }
+
+    it 'ensures that Docker is available' do
+      subject
+      expect(described_class::Docker).to have_received(:ensure!)
+    end
+
+    context "when FSWatch is required by given `config`" do
+      before do
+        allow(config).to receive(:fswatch_required?).and_return(true)
+      end
+
+      it 'is forbidden' do
+        expect { subject }.to raise_error(DockerSync::Dependencies::Fswatch::UNSUPPORTED)
+      end
+    end
   end
 
   describe '.ensure_all_for_mac!(config)' do
+    let(:mac?) { true }
+
     before do
       allow(described_class::PackageManager).to receive(:ensure!)
-      #allow(DockerSync::Dependencies::Fswatch).to receive(:ensure!).and_return(true)
       allow(described_class::Docker).to receive(:ensure!)
     end
 
