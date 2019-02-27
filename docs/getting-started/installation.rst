@@ -181,11 +181,11 @@ with Windows 10 >= 1803 you can place a symlink to the Windows binary
 
 7. Install docker-sync
 
-Currently the last version of docker-sync that's working on Windows is 0.5.7.
+Install the gem
 
 .. code-block:: shell
 
-    sudo gem install docker-sync -v 0.5.7
+    sudo gem install docker-sync
 
 8. Set your Docker for Windows host as an ENV variable
 
