@@ -60,8 +60,9 @@ References
 
     syncs:
       default-sync:
-        # os aware sync strategy, default to native_osx under MacOS (except with docker-machine which use unison), and native docker volume under linux
-        sync_strategy: 'default'
+        # os aware sync strategy, defaults to native_osx under MacOS (except with docker-machine which use unison), and native docker volume under linux
+        # remove this option to use the default strategy per os or set a specific one
+        sync_strategy: 'native_osx'
         # which folder to watch / sync from - you can use tilde, it will get expanded.
         # the contents of this directory will be synchronized to the Docker volume with the name of this sync entry ('default-sync' here)
         src: './default-data/'
