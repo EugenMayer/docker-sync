@@ -47,7 +47,9 @@ Homebrew aka brew is a tool you need under OSX to install / easy compile other t
 Linux
 =====
 
-Linux support is still to be considered BETA - do not get too crazy if we have bugs!
+.. caution::
+
+    Linux support is still to be considered BETA - do not get too crazy if we have bugs!
 
 Dependencies
 ------------
