@@ -1,8 +1,5 @@
 [![Gem Version](https://badge.fury.io/rb/docker-sync.svg)](https://badge.fury.io/rb/docker-sync) [![Build Status](https://travis-ci.org/EugenMayer/docker-sync.svg?branch=master)](https://travis-ci.org/EugenMayer/docker-sync) [![Join the chat at https://gitter.im/EugenMayer/docker-sync](https://badges.gitter.im/EugenMayer/docker-sync.svg)](https://gitter.im/EugenMayer/docker-sync)
 
-[![Follow][1.1]][1]
-
-
     Thank you for all the feedback and support i already received!
     Docker-sync has been improved by all of you in huge ways!
 
