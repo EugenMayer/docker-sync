@@ -106,6 +106,7 @@ syncs:
     sync_userid: '5000'
     # optional: usually if you map groups you want to set the group id of your application container here
     # this does not user groupmap but rather configures the server to map
+    # this is only available for unison/rsync, not for d4m/native (default) strategies
     sync_groupid: '6000'
 
     # optional: enable fswatch in the container side (unison only) to automatically retrieve files created in the container to the host
