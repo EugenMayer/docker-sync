@@ -10,6 +10,25 @@ No matter if its OSX/Linux/Windows
 
 Depending on the OS, you might need more steps to setup. Continue reading below.
 
+Installation as non-root
+========================
+
+You may elect to install ``docker-sync`` as a non-root user.  To install as the current user:
+
+.. code-block:: shell
+
+    gem install --user-install docker-sync
+
+Then set-up your shell to add the ``docker-sync`` command to the ``PATH``.  Edit ``.bashrc``:
+
+.. code-block:: shell
+
+    if which ruby >/dev/null && which gem >/dev/null; then
+      PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+    fi
+
+... the start a new shell and run ``docker-sync``.
+
 ----
 
 .. _installation-osx:
