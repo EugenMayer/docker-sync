@@ -113,6 +113,11 @@ References
         # optional: usually if you map users you want to set the user id of your application container here
         sync_userid: '5000'
 
+        # optional: usually if you map groups you want to set the group id of your application container here
+        # this does not user groupmap but rather configures the server to map
+        # this is only available for unison/rsync, not for d4m/native (default) strategies
+        sync_groupid: '6000'
+        
         # defines how sync-conflicts should be handled. With default it will prefer the source with --copyonconflict
         # so on conflict, pick the one from the host and copy the conflicted file for backup
         sync_prefer: 'default'
