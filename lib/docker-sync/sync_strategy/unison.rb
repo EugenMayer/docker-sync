@@ -133,6 +133,7 @@ module DockerSync
 
       # cares about conflict resolution
       def sync_prefer
+        sync_host_port = get_host_port(get_container_name, UNISON_CONTAINER_PORT)
         case @options.fetch('sync_prefer', 'default')
           when 'default' then "-prefer '#{@options['src']}' -copyonconflict" # thats our default, if nothing is set
           when 'src' then "-prefer '#{@options['src']}'"
