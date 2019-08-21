@@ -204,7 +204,7 @@ module DockerSync
         say_status 'ok', "starting initial sync of #{container_name}", :white if @options['verbose']
         # wait until container is started, then sync:
         sync_host_port = get_host_port(get_container_name, UNISON_CONTAINER_PORT)
-        cmd = "unison -testserver #{@options['dest']} \"socket://#{@options['sync_host_ip']}:#{sync_host_port}\""
+        cmd = "unison -testserver #{@options['dest']} \"socket://#{@options['sync_host_ip']}:#{@options['sync_host_port']}\""
         say_status 'command', cmd, :white if @options['verbose']
         attempt = 0
         max_attempt = @options['max_attempt'] || 5
