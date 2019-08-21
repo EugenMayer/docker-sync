@@ -62,6 +62,7 @@ Features
    :caption: Troubleshooting
    :maxdepth: 2
 
+   troubleshooting/sync-stopping
    troubleshooting/common-issues
    troubleshooting/native-osx-troubleshooting
 
