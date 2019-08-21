@@ -4,7 +4,7 @@ To re-generate the docs on your local machine, simply follow the commands below.
 
 ```shell
 # Install required dependencies
-pip install sphinx sphinx_rtd_theme
+pip install sphinx sphinx-autobuild sphinx_rtd_theme
 
 # Spins up the worker that will watch and re-generate the docs when changed
 make livehtml
