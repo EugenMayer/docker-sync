@@ -26,9 +26,9 @@ copyright = '2019, Eugen Mayer'
 author = 'Eugen Mayer'
 
 # The short X.Y version
-version = '0.5.10'
+version = '0.5.11'
 # The full version, including alpha/beta/rc tags
-release = '0.5.10'
+release = '0.5.11'
 
 
 # -- General configuration ---------------------------------------------------
