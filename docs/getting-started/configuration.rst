@@ -188,7 +188,7 @@ The docker-compose-dev.yml ( it needs to be called that way, look like this ) wi
 
     Do check that you use nocopy, see below for the explanation
 
-So the docker-compose-dev.yml includes the volume mounts and defintions - your production docker-compose.yml will be overlayed by this when starting the stack with
+So the docker-compose-dev.yml includes the volume mounts and definitions - your production docker-compose.yml will be overlaid by this when starting the stack with
 
 .. code-block:: shell
 

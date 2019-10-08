@@ -112,7 +112,7 @@ Beginning with version **0.4.0** Daemon mode is now the default, just use ``dock
 
 Beginning with version **0.2.0**, docker-sync has the ability to run in a daemonized (background) mode.
 
-In general you now run `docker-sync-daemon` to start in demonised mode, type ``docker-sync-daemon <enter>`` to see all options
+In general you now run `docker-sync-daemon` to start in daemonized mode, type ``docker-sync-daemon <enter>`` to see all options
 
 Start
 -----
