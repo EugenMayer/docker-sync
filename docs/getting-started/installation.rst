@@ -27,7 +27,7 @@ Then set-up your shell to add the ``docker-sync`` command to the ``PATH``.  Edit
       PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
     fi
 
-... the start a new shell and run ``docker-sync``.
+... then start a new shell and run ``docker-sync``.
 
 ----
 

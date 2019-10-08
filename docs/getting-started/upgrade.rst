@@ -48,7 +48,7 @@ It's deprecated and will be removed in 0.5
 
 **Reinstallation of unox**
 
-Due to a lot of issues and inconvinience with the installation of unox and the lack of versioning of unox, i took the step to create a homebrew formula myself, while working with the unox author hand in hand. This way we can ease up the installation and also be able to avoid issues as https://github.com/EugenMayer/docker-sync/issues/296 The installer will take care of everything for you in this regard
+Due to a lot of issues and inconvenience with the installation of unox and the lack of versioning of unox, i took the step to create a homebrew formula myself, while working with the unox author hand in hand. This way we can ease up the installation and also be able to avoid issues as https://github.com/EugenMayer/docker-sync/issues/296 The installer will take care of everything for you in this regard
 
 **Scaffolding usages needs to be migrated**
 

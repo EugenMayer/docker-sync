@@ -7,7 +7,7 @@ Npm / webpack / gulp based projects
 
 Npm, webpack, gulp, and any other tooling that watches, deletes and/or creates a lot of files may cause sync to stop.
 
-In most cases, this has nothing to do with docker-sync at all, but with OSXFS getting stucked in the FS event queue, which then also stops events for unison in our docker image (linux, so inode events) and thus breaks syncing.
+In most cases, this has nothing to do with docker-sync at all, but with OSXFS getting stuck in the FS event queue, which then also stops events for unison in our docker image (linux, so inode events) and thus breaks syncing.
 
 - Run ``npm i``, ``composer install``, and the likes **before** ``docker-sync start``. This way we avoid tracking unnecessary FS events prior to start.
 
