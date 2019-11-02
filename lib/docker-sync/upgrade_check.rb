@@ -63,6 +63,14 @@ class UpgradeChecker
       end
     end
 
+    if Gem::Version.new(last_upgraded_version) <  Gem::Version.new('0.5.12')
+      Thor::Shell::Basic.new.say_status 'warning', "0.5.12 uses a newer OCALM 4.08.1 version in the Unison image. If you use the unison strategy, please upgrade your local unison to be compiled against OCALM 4.08.1", :red
+
+      unless Thor::Shell::Basic.new.yes?('Sync will fail otherwise. Continue? (y/N)')
+        exit 1
+      end
+    end
+
     # update the upgrade_status
     @config.update! 'upgrade_status' => "#{UpgradeChecker.get_current_version}"
   end
