@@ -10,7 +10,7 @@ require 'timeout'
 class Sync < Thor
 
   class_option :config, :aliases => '-c',:default => nil, :type => :string, :desc => 'Path of the docker_sync config'
-  class_option :sync_name, :aliases => '-n',:type => :string, :desc => 'If given, only this sync configuration will be references/started/synced'
+  class_option :sync_name, :aliases => '-n',:default => '', :type => :string, :desc => 'If given, only this sync configuration will be references/started/synced'
   class_option :version, :aliases => '-v',:type => :boolean, :default => false, :desc => 'prints out the version of docker-sync and exits'
 
   desc '--version, -v', 'Prints out the version of docker-sync and exits'
