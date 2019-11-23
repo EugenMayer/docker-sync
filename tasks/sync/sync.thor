@@ -156,7 +156,7 @@ class Sync < Thor
       # Check to see if we're already running:
       if daemon_running?
         should_exit = true
-        unless options[:sync_name].empty?
+        unless options[:sync_name].nil? || options[:sync_name].empty?
           running = `docker ps --filter 'status=running' --filter 'name=#{options[:sync_name]}' --format "{{.Names}}" | grep '^#{options[:sync_name]}$'`
           should_exit = false if running == ''
         end
