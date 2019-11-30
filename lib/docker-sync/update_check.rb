@@ -93,7 +93,7 @@ class UpdateChecker
       say_status 'warning',"There is an update (#{check.latest_version}) available (current version #{check.current_version}). Please update before you continue",:yellow
       if yes?("Shall I update docker-sync to #{check.latest_version} for you?")
         if system('gem update docker-sync')
-          say_status 'success','Successfully updated, please restart docker-sync and check the changelog at https://github.com/EugenMayer/docker-sync/wiki/5.-Changelog',:green
+          say_status 'success','Successfully updated, please restart docker-sync and check the changelog at https://github.com/EugenMayer/docker-sync/releases',:green
           exit 0
         else
           say_status 'error','Unable to update docker-sync',:red
