@@ -126,7 +126,7 @@ The `docker-sync-daemon start` command has the following options to help configu
 Stop
 ----
 
-The ``docker-sync-daemon`` stop command is available to stop the background process. It also takes the ``--app_name`` and ``--dir`` arguments.
+The ``docker-sync-daemon stop`` command is available to stop the background process. It also takes the ``--app_name`` and ``--dir`` arguments.
 
 Log
 ---
