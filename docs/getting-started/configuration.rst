@@ -30,6 +30,7 @@ References
 
 .. code-block:: yaml
 
+    version: "2"
     options:
       # default: docker-compose.yml if you like, you can set a custom location (path) of your compose file like ~/app/compose.yml
       # HINT: you can also use this as an array to define several compose files to include. Order is important!
