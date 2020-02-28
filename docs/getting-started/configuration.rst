@@ -59,12 +59,12 @@ References
       project_root: 'pwd'
 
     syncs:
-      default-sync:
+      shortexample-sync:
         # os aware sync strategy, defaults to native_osx under MacOS (except with docker-machine which use unison), and native docker volume under linux
         # remove this option to use the default strategy per os or set a specific one
         sync_strategy: 'native_osx'
         # which folder to watch / sync from - you can use tilde, it will get expanded.
-        # the contents of this directory will be synchronized to the Docker volume with the name of this sync entry ('default-sync' here)
+        # the contents of this directory will be synchronized to the Docker volume with the name of this sync entry ('shortexample-sync' here)
         src: './default-data/'
 
         host_disk_mount_mode: 'cached' # see https://docs.docker.com/docker-for-mac/osxfs-caching/#cached
