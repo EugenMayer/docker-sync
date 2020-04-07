@@ -38,7 +38,15 @@ OSX
 
 Dependencies
 ------------
-With native_osx we no longer have any host dependencies.
+
+**Docker4Mac**
+If you use Docker4Mac, you can use the native_osx synching strategy and don't have any host dependencies.
+
+**docker-machine**
+If you're using docker-machine, you need to pick one of `the other sync strategies`_, because the native_osx strategy `doesn't work`_ on docker-machine.
+
+.. _the other sync strategies: https://docker-sync.readthedocs.io/en/latest/advanced/sync-strategies.html
+.. _doesn't work: https://github.com/EugenMayer/docker-sync/issues/410#issuecomment-609855963
 
 Advanced / optional
 -------------------
