@@ -2,8 +2,7 @@ module DockerSync
   module Dependencies
     module Rsync
       def self.available?
-        return @available if defined? @available
-        @available = find_executable0('rsync')
+        find_executable0('rsync')
       end
 
       def self.ensure!
