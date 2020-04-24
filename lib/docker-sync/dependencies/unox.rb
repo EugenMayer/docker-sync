@@ -15,7 +15,7 @@ module DockerSync
         # should never have been called anyway - fix the call that it should check for the OS
         raise 'Unox cannot be available for other platforms then MacOS' unless Environment.mac?
 
-        cmd = 'brew list unox 2>&1 > /dev/null'
+        cmd = 'brew list unox > /dev/null 2>&1'
         Environment.system(cmd)
       end
 
