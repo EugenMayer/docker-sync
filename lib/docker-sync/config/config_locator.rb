@@ -16,6 +16,11 @@ module DockerSync
         path
       end
 
+      # @return [String] the path to directory where project configuration file is found
+      def lookup_project_config_dir
+        File.dirname(lookup_project_config_path)
+      end
+
       # @return [String] the path to the project configuration found
       def lookup_project_config_path
         files = project_config_find

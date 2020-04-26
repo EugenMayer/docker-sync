@@ -117,7 +117,7 @@ module DockerSync
           'sync_strategy' => sync_strategy_for(sync_config),
           'watch_strategy' => watch_strategy_for(sync_config)
         }.merge(sync_config).merge(
-          'src' => expand_path(sync_config['src']),
+          'src' => expand_path(DockerSync::ConfigLocator.lookup_project_config_dir + '/' + sync_config['src']),
         )
       end
 

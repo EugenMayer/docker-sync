@@ -8,6 +8,7 @@ require 'docker-sync/config/project_config'
 require 'timeout'
 
 class Sync < Thor
+  @docker_sync_dir_path = DockerSync::ConfigLocator.lookup_project_config_dir + '/.docker-sync'
 
   class_option :config, :aliases => '-c',:default => nil, :type => :string, :desc => 'Path of the docker_sync config'
   class_option :sync_name, :aliases => '-n',:type => :string, :desc => 'If given, only this sync configuration will be references/started/synced'
@@ -24,7 +25,7 @@ class Sync < Thor
   method_option :daemon, :aliases => '-d', :default => false, :type => :boolean, :desc => 'Run in the background'
   method_option :foreground, :aliases => '-f', :default => false, :type => :boolean, :desc => 'Run in the foreground'
   method_option :app_name, :aliases => '--name', :default => 'daemon', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
-  method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
+  method_option :dir, :aliases => '--dir', :default => @docker_sync_dir_path, :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
   method_option :logd, :aliases => '--logd', :default => true, :type => :boolean, :desc => 'To log OUPUT to file on Daemon or not'
   def start
     print_version if options[:version]
@@ -55,7 +56,7 @@ class Sync < Thor
 
   desc 'stop', 'Stop docker-sync daemon'
   method_option :app_name, :aliases => '--name', :default => 'daemon', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
-  method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
+  method_option :dir, :aliases => '--dir', :default => @docker_sync_dir_path, :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
   def stop
     print_version if options[:version]
 
@@ -83,7 +84,7 @@ class Sync < Thor
   method_option :daemon, :aliases => '-d', :default => false, :type => :boolean, :desc => 'Run in the background'
   method_option :foreground, :aliases => '-f', :default => false, :type => :boolean, :desc => 'Run in the foreground'
   method_option :app_name, :aliases => '--name', :default => 'daemon', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
-  method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
+  method_option :dir, :aliases => '--dir', :default => '@docker_sync_dir_path', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
   method_option :logd, :aliases => '--logd', :default => true, :type => :boolean, :desc => 'To log OUPUT to file on Daemon or not'
   def restart
     invoke :stop, options.select{|k, _| ["app_name", "dir"].include?(k) }
@@ -107,15 +108,14 @@ class Sync < Thor
     config = config_preconditions
 
     # Look for any background syncs and stop them if we see them
-    dir = './.docker-sync'
-    files = Dir[File.join(dir, '*.pid')]
+    files = Dir[File.join(@docker_sync_dir_path, '*.pid')]
     files.each do |pid_file|
       pid = File.read(pid_file).to_i
       Process.kill(:INT, -(Process.getpgid(pid))) if Daemons::Pid.running?(pid)
       say_status 'shutdown', 'Background sync has been stopped'
     end
     # Remove the .docker-sync directory
-    FileUtils.rm_r dir if File.directory?(dir)
+    FileUtils.rm_r @docker_sync_dir_path if File.directory?(@docker_sync_dir_path)
 
     @sync_manager = DockerSync::SyncManager.new(config: config)
     @sync_manager.clean(options[:sync_name])
@@ -125,7 +125,7 @@ class Sync < Thor
   desc 'logs', 'Prints last 100 lines of daemon log. Only for use with docker-sync started in background.'
   method_option :lines, :aliases => '--lines', :default => 100, :type => :numeric, :desc => 'Specify number of lines to tail'
   method_option :follow, :aliases => '-f', :default => false, :type => :boolean, :desc => 'Specify if the logs should be streamed'
-  method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
+  method_option :dir, :aliases => '--dir', :default => @docker_sync_dir_path, :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
   method_option :logd, :aliases => '--logd', :default => true, :type => :boolean, :desc => 'To log OUPUT to file on Daemon or not'
   method_option :app_name, :aliases => '--name', :default => 'daemon', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
   def logs
