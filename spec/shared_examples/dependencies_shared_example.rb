@@ -7,10 +7,6 @@ RSpec.shared_examples 'a dependency' do
     expect(described_class).to respond_to :available?
   end
 
-  it 'memoizes availability' do
-    expect { described_class.available? }.to change { described_class.instance_variable_defined? :@available }.from(false).to(true)
-  end
-
   it 'implements `.ensure!`' do
     expect(described_class).to respond_to :ensure!
   end
