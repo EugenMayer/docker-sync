@@ -19,5 +19,13 @@ module DockerSync
     def self.system(cmd)
       defined?(Bundler) ? Bundler.clean_system(cmd) : Kernel.system(cmd)
     end
+
+    def self.compose_file
+      if ENV['COMPOSE_FILE']
+        ENV['COMPOSE_FILE'].split(/[:;]/)
+      else
+        ["docker-compose.yml"]
+      end
+    end
   end
 end
