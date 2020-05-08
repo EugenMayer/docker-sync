@@ -8,7 +8,10 @@ class ComposeManager
     @global_options = global_options
 
     ### production docker-compose.yml
-    compose_files = [File.expand_path('docker-compose.yml')]
+    compose_files = DockerSync::Environment.compose_file.map do |f|
+      File.expand_path(f)
+    end
+    
     if @global_options.key?('compose-file-path')
       compose_files = [] # replace
       apply_path_settings(compose_files, @global_options['compose-file-path'], 'compose-file-path')
