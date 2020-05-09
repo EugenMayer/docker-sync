@@ -60,7 +60,7 @@ RSpec.describe DockerSync::Dependencies::Docker::Driver do
 
     it 'checks if Docker is running in Boot2Docker' do
       subject
-      expect(DockerSync::Environment).to have_received(:system).with('docker info | grep -q "Operating System: Boot2Docker"')
+      expect(DockerSync::Environment).to have_received(:system).with('docker info | grep -q -E "Operating System: {1,}"')
     end
 
     it 'is memoized' do
