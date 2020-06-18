@@ -30,6 +30,15 @@ Running start the second time will be a lot faster, since containers and volumes
 
     You can use ``-n <sync-endpoint-name>`` to only start one of your configured sync-endpoints.
 
+Restart
+-----
+
+.. code-block:: shell
+
+    docker-sync restart
+
+This restarts docker-sync daemon, so this is the same as ``docker-sync stop && docker-sync start``. You can use the same options as ``docker-sync start`` command. 
+
 Sync
 ----
 
@@ -112,7 +121,7 @@ Beginning with version **0.4.0** Daemon mode is now the default, just use ``dock
 
 Beginning with version **0.2.0**, docker-sync has the ability to run in a daemonized (background) mode.
 
-In general you now run `docker-sync-daemon` to start in demonised mode, type ``docker-sync-daemon <enter>`` to see all options
+In general you now run `docker-sync-daemon` to start in daemonized mode, type ``docker-sync-daemon <enter>`` to see all options
 
 Start
 -----
@@ -126,7 +135,7 @@ The `docker-sync-daemon start` command has the following options to help configu
 Stop
 ----
 
-The ``docker-sync-daemon`` stop command is available to stop the background process. It also takes the ``--app_name`` and ``--dir`` arguments.
+The ``docker-sync-daemon stop`` command is available to stop the background process. It also takes the ``--app_name`` and ``--dir`` arguments.
 
 Log
 ---

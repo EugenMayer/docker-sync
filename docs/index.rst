@@ -45,7 +45,6 @@ Features
    getting-started/installation
    getting-started/configuration
    getting-started/commands
-   getting-started/troubleshooting
    getting-started/upgrade
 
 .. toctree::
@@ -57,6 +56,15 @@ Features
    advanced/scripting
    advanced/how-it-works
    advanced/tips-and-tricks
+
+.. toctree::
+   :hidden:
+   :caption: Troubleshooting
+   :maxdepth: 2
+
+   troubleshooting/sync-stopping
+   troubleshooting/common-issues
+   troubleshooting/native-osx-troubleshooting
 
 .. toctree::
    :hidden:

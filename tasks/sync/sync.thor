@@ -79,6 +79,17 @@ class Sync < Thor
 
   end
 
+  desc 'restart', 'Restart docker-sync daemon'
+  method_option :daemon, :aliases => '-d', :default => false, :type => :boolean, :desc => 'Run in the background'
+  method_option :foreground, :aliases => '-f', :default => false, :type => :boolean, :desc => 'Run in the foreground'
+  method_option :app_name, :aliases => '--name', :default => 'daemon', :type => :string, :desc => 'App name used in PID and OUTPUT file name for Daemon'
+  method_option :dir, :aliases => '--dir', :default => './.docker-sync', :type => :string, :desc => 'Path to PID and OUTPUT file Directory'
+  method_option :logd, :aliases => '--logd', :default => true, :type => :boolean, :desc => 'To log OUPUT to file on Daemon or not'
+  def restart
+    invoke :stop, options.select{|k, _| ["app_name", "dir"].include?(k) }
+    invoke :start
+  end
+
   desc 'sync', 'just sync - do not start a watcher though'
   def sync
     print_version if options[:version]
@@ -156,7 +167,7 @@ class Sync < Thor
       # Check to see if we're already running:
       if daemon_running?
         should_exit = true
-        unless options[:sync_name].empty?
+        unless options[:sync_name].nil? || options[:sync_name].empty?
           running = `docker ps --filter 'status=running' --filter 'name=#{options[:sync_name]}' --format "{{.Names}}" | grep '^#{options[:sync_name]}$'`
           should_exit = false if running == ''
         end

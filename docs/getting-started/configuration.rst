@@ -30,6 +30,7 @@ References
 
 .. code-block:: yaml
 
+    version: "2"
     options:
       # default: docker-compose.yml if you like, you can set a custom location (path) of your compose file like ~/app/compose.yml
       # HINT: you can also use this as an array to define several compose files to include. Order is important!
@@ -59,12 +60,12 @@ References
       project_root: 'pwd'
 
     syncs:
-      default-sync:
+      shortexample-sync:
         # os aware sync strategy, defaults to native_osx under MacOS (except with docker-machine which use unison), and native docker volume under linux
         # remove this option to use the default strategy per os or set a specific one
         sync_strategy: 'native_osx'
         # which folder to watch / sync from - you can use tilde, it will get expanded.
-        # the contents of this directory will be synchronized to the Docker volume with the name of this sync entry ('default-sync' here)
+        # the contents of this directory will be synchronized to the Docker volume with the name of this sync entry ('shortexample-sync' here)
         src: './default-data/'
 
         host_disk_mount_mode: 'cached' # see https://docs.docker.com/docker-for-mac/osxfs-caching/#cached
@@ -188,7 +189,7 @@ The docker-compose-dev.yml ( it needs to be called that way, look like this ) wi
 
     Do check that you use nocopy, see below for the explanation
 
-So the docker-compose-dev.yml includes the volume mounts and defintions - your production docker-compose.yml will be overlayed by this when starting the stack with
+So the docker-compose-dev.yml includes the volume mounts and definitions - your production docker-compose.yml will be overlaid by this when starting the stack with
 
 .. code-block:: shell
 
