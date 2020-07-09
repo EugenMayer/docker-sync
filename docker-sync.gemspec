@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.files       = Dir['lib/**/*.rb','tasks/**/*.thor','Thorfile','bin/*','VERSION']
   s.license     = 'GPL-3.0'
   s.homepage    = 'https://github.com/EugenMayer/docker_sync'
-  s.required_ruby_version = '>= 2.0'
+  s.required_ruby_version = '>= 2.2'
 
-  s.add_runtime_dependency 'thor', '~> 0.20', '>= 0.20.0'
+  s.add_runtime_dependency 'thor', '~> 1.0', '>= 1.0.0'
   s.add_runtime_dependency 'gem_update_checker', '~> 0.2.0', '>= 0.2.0'
   s.add_runtime_dependency 'docker-compose', '~> 1.1', '>= 1.1.7'
   s.add_runtime_dependency 'terminal-notifier', '2.0.0'
