@@ -40,6 +40,12 @@ General options
 ---------------
 Configuration options below the top-level ``options`` key.
 
+.. code-block:: yaml
+
+    version: "2"
+    options:
+      verbose: true
+
 
 cli_mode
 ^^^^^^^^
@@ -153,6 +159,14 @@ possible values:
 Synchronization options
 -----------------------
 Configuration options for a synchronzation definition below the top-level ``syncs``.
+
+.. code-block:: yaml
+
+    version: "2"
+    syncs:
+      appcode-native-osx-sync:
+        src: './app'
+        sync_excludes: ['ignored_folder', '.ignored_dot_folder']
 
 
 host_disk_mount_mode
