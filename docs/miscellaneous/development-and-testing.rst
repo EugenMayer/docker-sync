@@ -7,7 +7,7 @@ Development
 
 You do not really need a lot to start developing.
 
- - A local Ruby > 1.9 (I think we need that)
+ - A local Ruby >= 2.0
 
 .. code-block:: shell
 
