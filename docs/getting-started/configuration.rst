@@ -69,7 +69,7 @@ Path                          Your path to the source you want to sync to the co
 ==========================    ===============
 
 sync_host_port\*
-^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 Type:
   mandatory if rsync
 
@@ -104,10 +104,10 @@ default:
 Options                       Description
 ==========================    ===============
 **empty**                     Dynamic detection, depends on the OS.
-native_osx                    Native docker-for-mac OSFS based sync (OSX only)
-unison                        Unison based sync (Linux, OSX, Windows)
-rsync                         Rsync based sync (OSX only)
-native_linux                  No sync, native mount (Linux only)
+``native_osx``                Native docker-for-mac OSFS based sync (OSX only)
+``unison``                    Unison based sync (Linux, OSX, Windows)
+``rsync``                     Rsync based sync (OSX only)
+``native_linux``              No sync, native mount (Linux only)
 ==========================    ===============
 
 sync_userid
@@ -120,7 +120,8 @@ application container here.
 
 This does not user groupmap but rather configures the server to map.
 
-Optional.
+default:
+  empty
 
 ==========================    ===============
 Options                       Description
@@ -141,7 +142,7 @@ This does not user groupmap but rather configures the server to map.
 This is only available for unison/rsync, not for d4m/native (default) strategies.
 
 default:
-  ``empty``
+  empty
 
 ==========================    ===============
 Options                       Description
@@ -156,8 +157,6 @@ Type:
   optional
 
 Use this to switch to rsync verbose mode
-
-Optional.
 
 default:
   empty
@@ -179,8 +178,6 @@ A list of excludes. These patterns will not be synced.
 See
 http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#ignore
 for the possible syntax and see ``sync_excludes_type`` below.
-
-Optional.
 
 default:
   empty
@@ -223,10 +220,10 @@ possible values:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**Name**                      If a file or a folder does match this string ( solves nesting problem )
-Path                          You match the exact path ( nesting problem )
-Regex                         Define a regular expression
-none                          You can define a type for each sync exclude  ``['Name .git', 'Path Gemlock']``
+**``Name``**                  If a file or a folder does match this string ( solves nesting problem )
+``Path``                      You match the exact path ( nesting problem )
+``Regex``                     Define a regular expression
+``none``                      You can define a type for each sync exclude  ``['Name .git', 'Path Gemlock']``
 ==========================    ===============
 
 sync_host_ip
@@ -243,7 +240,7 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**auto**                      docker-machine/docker host ip will be detected automatically.
+**``auto``**                  docker-machine/docker host ip will be detected automatically.
 IP address                    If you set this to a concrete IP, this OP will be enforced
 ==========================    ===============
 
@@ -254,16 +251,14 @@ Type:
 
 Defines how sync conflicts should be handled.
 
-Optional.
-
 default:
   ``default``
 
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**default**                   It will prefer the source
-copyonconflict                On conflict, pick the one from the host and copy the conflicted file for backup
+**``default``**               It will prefer the source
+``copyonconflict``            On conflict, pick the one from the host and copy the conflicted file for backup
 ==========================    ===============
 
 watch_args
@@ -323,10 +318,10 @@ See https://docs.docker.com/docker-for-mac/osxfs-caching/#cached
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**default**
-cached
-consistent
-delegated
+**``default``**
+``cached``
+``consistent``
+``delegated``
 ==========================    ===============
 
 monit_enable
@@ -343,8 +338,8 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**false**
-true                          Enable monit
+**``false``**
+``true``                      Enable monit
 ==========================    ===============
 
 
@@ -363,7 +358,7 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**2**                         Wait for 2 cycles
+**``2``**                     Wait for 2 cycles
 <any integer>
 ==========================    ===============
 
@@ -375,15 +370,13 @@ Type:
 
 Use this to change how many seconds between each monit check (cycle).
 
-Optional.
-
 default:
   none
 
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**none**
+**``none``**
 <any integer>                 Number in seconds
 ==========================    ===============
 
@@ -408,13 +401,13 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**false**
-true                          Show notifications
+**``false``**
+``true``                      Show notifications
 ==========================    ===============
 
 
 Advanced options
----------------
+----------------
 Configuration options below the top-level ``options`` key. All `advanced options` are **optional** and have default values.
 
 .. code-block:: yaml
@@ -436,9 +429,9 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**auto**                          try to guess automatically
-docker-sync
-thor
+**``auto``**                  try to guess automatically
+``docker-sync``
+``thor``
 ==========================    ===============
 
 
@@ -456,7 +449,7 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**docker-compose.yml**        The default docker-compose.yml file
+**``docker-compose.yml``**    The default docker-compose.yml file
 A single file name            Alternative docker-compose file
 An array of file names        A list of docker-compose files, loaded in order
 ==========================    ===============
@@ -474,13 +467,13 @@ Order is important!
 default:
   ``docker-compose-dev.yml``
 
-==========================    ===============
-Options                       Description
-==========================    ===============
-**docker-compose-dev.yml**    The default docker-compose-dev.yml file
-A single file name            Alternative docker-compose file
-An array of file names        A list of docker-compose files, loaded in order
-==========================    ===============
+============================== ===============
+Options                        Description
+============================== ===============
+**``docker-compose-dev.yml``** The default docker-compose-dev.yml file
+A single file name             Alternative docker-compose file
+An array of file names         A list of docker-compose files, loaded in order
+============================== ===============
 
 max_attemp
 ^^^^^^^^^^^
@@ -503,7 +496,7 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**pwd**                       Current working directory
+**``pwd``**                   Current working directory
 config_path                   The directory where docker-sync.yml is found
 ==========================    ===============
 
@@ -530,8 +523,8 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**false**
-true                          Output everything
+**``false``**
+``true``                      Output everything
 ==========================    ===============
 
 
