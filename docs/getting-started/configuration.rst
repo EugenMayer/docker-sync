@@ -220,7 +220,7 @@ possible values:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**``Name``**                  If a file or a folder does match this string ( solves nesting problem )
+``Name``                      If a file or a folder does match this string ( solves nesting problem )
 ``Path``                      You match the exact path ( nesting problem )
 ``Regex``                     Define a regular expression
 ``none``                      You can define a type for each sync exclude  ``['Name .git', 'Path Gemlock']``
@@ -240,7 +240,7 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**``auto``**                  docker-machine/docker host ip will be detected automatically.
+``auto``                      docker-machine/docker host ip will be detected automatically.
 IP address                    If you set this to a concrete IP, this OP will be enforced
 ==========================    ===============
 
@@ -257,7 +257,7 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**``default``**               It will prefer the source
+``default``                   It will prefer the source
 ``copyonconflict``            On conflict, pick the one from the host and copy the conflicted file for backup
 ==========================    ===============
 
@@ -318,7 +318,7 @@ See https://docs.docker.com/docker-for-mac/osxfs-caching/#cached
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**``default``**
+``default``
 ``cached``
 ``consistent``
 ``delegated``
@@ -338,7 +338,7 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**``false``**
+``false``
 ``true``                      Enable monit
 ==========================    ===============
 
@@ -358,7 +358,7 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**``2``**                     Wait for 2 cycles
+``2``                         Wait for 2 cycles
 <any integer>
 ==========================    ===============
 
@@ -376,7 +376,7 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**``none``**
+``none``
 <any integer>                 Number in seconds
 ==========================    ===============
 
@@ -401,7 +401,7 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**``false``**
+``false``
 ``true``                      Show notifications
 ==========================    ===============
 
@@ -429,7 +429,7 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**``auto``**                  try to guess automatically
+``auto``                      try to guess automatically
 ``docker-sync``
 ``thor``
 ==========================    ===============
@@ -449,7 +449,7 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**``docker-compose.yml``**    The default docker-compose.yml file
+``docker-compose.yml``        The default docker-compose.yml file
 A single file name            Alternative docker-compose file
 An array of file names        A list of docker-compose files, loaded in order
 ==========================    ===============
@@ -467,13 +467,13 @@ Order is important!
 default:
   ``docker-compose-dev.yml``
 
-============================== ===============
-Options                        Description
-============================== ===============
-**``docker-compose-dev.yml``** The default docker-compose-dev.yml file
-A single file name             Alternative docker-compose file
-An array of file names         A list of docker-compose files, loaded in order
-============================== ===============
+========================== ===============
+Options                    Description
+========================== ===============
+``docker-compose-dev.yml`` The default docker-compose-dev.yml file
+A single file name         Alternative docker-compose file
+An array of file names     A list of docker-compose files, loaded in order
+========================== ===============
 
 max_attemp
 ^^^^^^^^^^^
@@ -496,7 +496,7 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**``pwd``**                   Current working directory
+``pwd``                       Current working directory
 config_path                   The directory where docker-sync.yml is found
 ==========================    ===============
 
@@ -523,7 +523,7 @@ default:
 ==========================    ===============
 Options                       Description
 ==========================    ===============
-**``false``**
+``false``
 ``true``                      Output everything
 ==========================    ===============
 
