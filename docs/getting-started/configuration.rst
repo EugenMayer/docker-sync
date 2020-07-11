@@ -25,135 +25,14 @@ Below are all the available options, simple examples can be found in the docker-
 Simple configuration file
 -------------------------
 
+This is the simplest version for a configuration.
+
 .. code-block:: yaml
 
     version: "2"
-    options:
-      verbose: true
     syncs:
       appcode-native-osx-sync:
         src: './app'
-        sync_excludes: ['ignored_folder', '.ignored_dot_folder']
-
-
-General options
----------------
-Configuration options below the top-level ``options`` key.
-
-.. code-block:: yaml
-
-    version: "2"
-    options:
-      verbose: true
-
-
-cli_mode
-^^^^^^^^
-Defines how the sync will be invoked on the command line.
-Mostly depending if your are using docker-sync solo,
-scaffolded or in development (thor).
-
-Optional.
-
-default:
-  ``auto``
-
-possible values:
-  - ``docker-sync``
-  - ``thor``
-  - ``auto``
-
-
-compose-file-path
-^^^^^^^^^^^^^^^^^
-If you like, you can set a custom location (path) of your compose file like
-``~/app/compose.yml``.
-
-You can also use this as an array to define several compose files to include.
-Order is important!
-
-Optional.
-
-default:
-  ``docker-compose.yml``
-
-possible values:
-  - A single file name
-  - An array of file names
-
-
-compose-dev-file-path
-^^^^^^^^^^^^^^^^^^^^^
-If you like, you can set a custom location (path) of your compose file.
-Do not set it, if you do not want to use it at all.
-
-If its there, it gets used. If you name it explicitly, it HAS to exist.
-
-HINT: you can also use this as an array to define several compose files to include.
-Order is important!
-
-Optional.
-
-default:
-  ``docker-compose-dev.yml``
-
-possible values:
-  - A single file name
-  - An array of file names
-
-
-max_attempt
-^^^^^^^^^^^
-Maximum number of attempts for unison waiting for the success exit status.
-
-Each attempt means 1-second sleep.
-Only used in unison.
-
-Optional.
-
-default:
-  ``5``
-
-
-project_root
-^^^^^^^^^^^^
-Root directory to be used when transforming sync src into absolute path.
-
-Optional
-
-default:
-  ``pwd``
-
-possible values:
-  - ``pwd`` (current working directory)
-  - ``config_path`` (the directory where docker-sync.yml is found)
-
-
-<sync_strategy>_image
-^^^^^^^^^^^^^^^^^^^^^
-The image to use for the rsync container.
-
-Do not change this until you exactly know, what you are doing
-
-Replace ``<sync_strategy>`` with either ``rsync``, ``unison``, ``native_osx``
-to set a custom image for all sync of this type.
-
-
-verbose
-^^^^^^^
-Activate this if you need to debug something.
-
-IMPORTANT: do not run stable with this, it creates a memory leak.
-Turn off verbose when you are done testing
-
-Optional.
-
-default:
-  ``false``
-
-possible values:
-  - ``true``
-  - ``false``
 
 
 Synchronization options
@@ -169,80 +48,11 @@ Configuration options for a synchronzation definition below the top-level ``sync
         sync_excludes: ['ignored_folder', '.ignored_dot_folder']
 
 
-host_disk_mount_mode
-^^^^^^^^^^^^^^^^^^^^
-See https://docs.docker.com/docker-for-mac/osxfs-caching/#cached
+src\*
+^^^^^^
+Type:
+  mandatory
 
-possible values:
-  - ``cached``
-  - ``consistent``
-  - ``default``
-  - ``delegated``
-
-
-monit_enable
-^^^^^^^^^^^^
-Monit can be used to monitor the health of unison in the ``native_osx`` strategy
-and can restart unison if it detects a problem.
-
-Optional.
-
-default:
-  ``false``
-
-possible values:
-  - ``true``
-  - ``false``
-
-
-monit_high_cpu_cycles
-^^^^^^^^^^^^^^^^^^^^^
-Use this to change how many consecutive times high cpu usage must be observed
-before unison is restarted.
-
-Optional.
-
-default:
-  2 FIXME
-
-possible values:
-  Integer numbers
-
-
-monit_interval
-^^^^^^^^^^^^^^
-Use this to change how many seconds between each monit check (cycle).
-
-Optional.
-
-default:
-  none
-
-possible values:
-  Number of seconds (``5``)
-
-
-notify_terminal
-^^^^^^^^^^^^^^^
-Enable terminal_notifier.
-On every sync sends a Terminal Notification regarding files being synced.
-(Mac Only).
-
-Good thing in case you are developing and want to know exactly when your
-changes took effect.
-Be aware in case of unison this only gives you a notification on the initial sync,
-not the syncs after changes.
-
-default:
-  ``false``
-
-possible values:
-  - ``true``
-  - ``false``
-
-
-src
-^^^
 Which folder to watch / sync from - you can use tilde ``~``, it will get expanded.
 
 The contents of this directory will be synchronized to the Docker volume
@@ -252,17 +62,99 @@ Be aware that the trailing slash makes a difference.
 If you add them, only the inner parts of the folder gets synced,
 otherwise the parent folder will be synced as top-level folder.
 
-Mandatory.
+==========================    ===============
+Options                       Description
+==========================    ===============
+Path                          Your path to the source you want to sync to the container
+==========================    ===============
+
+sync_host_port\*
+^^^^^^^^^^^^^^
+Type:
+  mandatory if rsync
+
+Should be a unique port this sync instance uses on the host to offer
+the rsync service on (do not use this for unison - not needed there.)
 
 default:
   No default value
 
-possible values:
-  A directory name
+==========================    ===============
+Options                       Description
+==========================    ===============
+Any number                    The port to use (make sure it is unused!)
+==========================    ===============
+
+sync_strategy
+^^^^^^^^^^^^^
+Type:
+  optional
+
+Operating system aware sync strategy.
+
+Remove this option to use the default strategy per OS.
+
+See :doc:`../advanced/sync-strategies`.
+
+default:
+  - ``native_osx`` under MacOS (except with docker-machine which use unison),
+  - ``native_linux`` docker volume under linux
+
+==========================    ===============
+Options                       Description
+==========================    ===============
+**empty**                     Dynamic detection, depends on the OS.
+native_osx                    Native docker-for-mac OSFS based sync (OSX only)
+unison                        Unison based sync (Linux, OSX, Windows)
+rsync                         Rsync based sync (OSX only)
+native_linux                  No sync, native mount (Linux only)
+==========================    ===============
+
+sync_userid
+^^^^^^^^^^^
+Type:
+  optional
+
+Usually if you map users you want to set the user id of your
+application container here.
+
+This does not user groupmap but rather configures the server to map.
+
+Optional.
+
+==========================    ===============
+Options                       Description
+==========================    ===============
+Any number                    The userid you want to map to
+==========================    ===============
+
+
+sync_groupid
+^^^^^^^^^^^^
+Type:
+  optional
+
+Usually if you map groups you want to set the group id of your application
+container here.
+
+This does not user groupmap but rather configures the server to map.
+This is only available for unison/rsync, not for d4m/native (default) strategies.
+
+default:
+  ``empty``
+
+==========================    ===============
+Options                       Description
+==========================    ===============
+Any number                    The groupid you want to map to
+==========================    ===============
 
 
 sync_args
 ^^^^^^^^^
+Type:
+  optional
+
 Use this to switch to rsync verbose mode
 
 Optional.
@@ -270,12 +162,18 @@ Optional.
 default:
   empty
 
-possible values:
-  Any option accepted by ``rsync``, e.g. ``-v`` or ``-L``.
+==========================    ===============
+Options                       Description
+==========================    ===============
+String                        Any option accepted by ``rsync``, e.g. ``-v`` or ``-L``.
+==========================    ===============
 
 
 sync_excludes
 ^^^^^^^^^^^^^
+Type:
+  optional
+
 A list of excludes. These patterns will not be synced.
 
 See
@@ -287,9 +185,12 @@ Optional.
 default:
   empty
 
-possible values:
-  Array of file and directory names
-
+==========================    ===============
+Options                       Description
+==========================    ===============
+**empty**                     do not exclude anything
+Array of strings              Array of file and directory names to exclude from sync
+==========================    ===============
 
 Example::
 
@@ -306,67 +207,51 @@ List example::
 
 sync_excludes_type
 ^^^^^^^^^^^^^^^^^^
+Type:
+  optional
+
 Use this to change the ``sync_exclude`` syntax.
 
 For more information see
 http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#pathspec
 
-Optional.
-
 default:
   ``Name``
 
 possible values:
-  - ``Path``: you match the exact path ( nesting problem )
-  - ``Name``: If a file or a folder does match this string ( solves nesting problem )
-  - ``Regex``: Define a regular expression
-  - ``none``: You can define a type for each sync exclude, so sync_excludes::
 
-      ['Name .git', 'Path Gemlock']
-
-
-sync_groupid
-^^^^^^^^^^^^
-Usually if you map groups you want to set the group id of your application
-container here.
-
-This does not user groupmap but rather configures the server to map.
-This is only available for unison/rsync, not for d4m/native (default) strategies.
-
-Optional.
-
-possible values:
-  Container group IDs (``6000``)
-
+==========================    ===============
+Options                       Description
+==========================    ===============
+**Name**                      If a file or a folder does match this string ( solves nesting problem )
+Path                          You match the exact path ( nesting problem )
+Regex                         Define a regular expression
+none                          You can define a type for each sync exclude  ``['Name .git', 'Path Gemlock']``
+==========================    ===============
 
 sync_host_ip
 ^^^^^^^^^^^^
+Type:
+  optional
+
 When a port of a container is exposed, on which IP does it get exposed.
 Localhost for docker for mac, something else for docker-machine.
 
 default:
   ``auto``
 
-possible values:
-  - ``auto``:your docker-machine/docker host ip will be detected automatically.
-  - IP address: If you set this to a concrete IP, this OP will be enforced
+==========================    ===============
+Options                       Description
+==========================    ===============
+**auto**                      docker-machine/docker host ip will be detected automatically.
+IP address                    If you set this to a concrete IP, this OP will be enforced
+==========================    ===============
 
-
-sync_host_port
-^^^^^^^^^^^^^^
-Should be a unique port this sync instance uses on the host to offer
-the rsync service on.
-
-Do not use this for unison - not needed there.
-
-Mandatory for ``rsync``.
-
-default:
-  No default value
-
-
-sync_prefer
+sync_prefe
 ^^^^^^^^^^^
+Type:
+  optional
+
 Defines how sync conflicts should be handled.
 
 Optional.
@@ -374,61 +259,36 @@ Optional.
 default:
   ``default``
 
-possible values:
-  - ``default``: It will prefer the source
-  - ``copyonconflict``: On conflict, pick the one from the host and copy the
-    conflicted file for backup
-
-
-sync_strategy
-^^^^^^^^^^^^^
-Operating system aware sync strategy.
-
-Remove this option to use the default strategy per OS.
-
-See :doc:`../advanced/sync-strategies`.
-
-Optional.
-
-default:
-  - ``native_osx`` under MacOS (except with docker-machine which use unison),
-  - ``native_linux`` docker volume under linux
-
-possible values:
-  - ``native_linux`` (Linux)
-  - ``native_osx`` (OSX)
-  - ``unison`` (Linux, OSX, Windows)
-  - ``rsync`` (OSX)
-
-
-sync_userid
-^^^^^^^^^^^
-Usually if you map users you want to set the user id of your
-application container here.
-
-This does not user groupmap but rather configures the server to map.
-
-Optional.
-
-possible values:
-  Container user IDs (``5000``)
-
+==========================    ===============
+Options                       Description
+==========================    ===============
+**default**                   It will prefer the source
+copyonconflict                On conflict, pick the one from the host and copy the conflicted file for backup
+==========================    ===============
 
 watch_args
 ^^^^^^^^^^
-Use this to switch to ``fswatch`` verbose mode
+Type:
+  optional
 
-Optional.
+Use this to switch to ``fswatch`` verbose mode
 
 default:
   Empty
 
-possible values:
-  Every ``fswatch`` option like ``-v``
+
+==========================    ===============
+Options                       Description
+==========================    ===============
+String                        Every ``fswatch`` option like ``-v``
+==========================    ===============
 
 
 watch_excludes
 ^^^^^^^^^^^^^^
+Type:
+  optional
+
 A list of regular expressions to exclude from the fswatch - see fswatch docs
 for details.
 
@@ -437,8 +297,12 @@ IMPORTANT: this is not supported by ``native_osx``.
 default:
   empty
 
-possible values:
-  directory and file names, ``*`` are supported
+
+==========================    ===============
+Options                       Description
+==========================    ===============
+Array of globs                directory and file names, ``*`` are supported
+==========================    ===============
 
 Example::
 
@@ -446,6 +310,230 @@ Example::
 
 
 -----
+
+
+
+host_disk_mount_mode
+^^^^^^^^^^^^^^^^^^^^
+Type:
+  optional
+
+See https://docs.docker.com/docker-for-mac/osxfs-caching/#cached
+
+==========================    ===============
+Options                       Description
+==========================    ===============
+**default**
+cached
+consistent
+delegated
+==========================    ===============
+
+monit_enable
+^^^^^^^^^^^^
+Type:
+  optional
+
+Monit can be used to monitor the health of unison in the ``native_osx`` strategy
+and can restart unison if it detects a problem.
+
+default:
+  ``false``
+
+==========================    ===============
+Options                       Description
+==========================    ===============
+**false**
+true                          Enable monit
+==========================    ===============
+
+
+monit_high_cpu_cycles
+^^^^^^^^^^^^^^^^^^^^^
+Type:
+  optional
+
+Use this to change how many consecutive times high cpu usage must be observed
+before unison is restarted.
+
+
+default:
+  2
+
+==========================    ===============
+Options                       Description
+==========================    ===============
+**2**                         Wait for 2 cycles
+<any integer>
+==========================    ===============
+
+
+monit_interval
+^^^^^^^^^^^^^^
+Type:
+  optional
+
+Use this to change how many seconds between each monit check (cycle).
+
+Optional.
+
+default:
+  none
+
+==========================    ===============
+Options                       Description
+==========================    ===============
+**none**
+<any integer>                 Number in seconds
+==========================    ===============
+
+
+notify_terminal
+^^^^^^^^^^^^^^^
+Type:
+  optional
+
+Enable terminal_notifier.
+On every sync sends a Terminal Notification regarding files being synced.
+(Mac Only).
+
+Good thing in case you are developing and want to know exactly when your
+changes took effect.
+Be aware in case of unison this only gives you a notification on the initial sync,
+not the syncs after changes.
+
+default:
+  ``false``
+
+==========================    ===============
+Options                       Description
+==========================    ===============
+**false**
+true                          Show notifications
+==========================    ===============
+
+
+Advanced options
+---------------
+Configuration options below the top-level ``options`` key. All `advanced options` are **optional** and have default values.
+
+.. code-block:: yaml
+
+    version: "2"
+    options:
+      verbose: true
+
+
+cli_mode
+^^^^^^^^
+Defines how the sync will be invoked on the command line.
+Mostly depending if your are using docker-sync solo,
+scaffolded or in development (thor).
+
+default:
+  `auto`
+
+==========================    ===============
+Options                       Description
+==========================    ===============
+**auto**                          try to guess automatically
+docker-sync
+thor
+==========================    ===============
+
+
+compose-file-path
+^^^^^^^^^^^^^^^^^
+If you like, you can set a custom location (path) of your compose file like
+``~/app/compose.yml``.
+
+You can also use this as an array to define several compose files to include.
+Order is important!
+
+default:
+  ``docker-compose.yml``
+
+==========================    ===============
+Options                       Description
+==========================    ===============
+**docker-compose.yml**        The default docker-compose.yml file
+A single file name            Alternative docker-compose file
+An array of file names        A list of docker-compose files, loaded in order
+==========================    ===============
+
+compose-dev-file-path
+^^^^^^^^^^^^^^^^^^^^^
+If you like, you can set a custom location (path) of your compose file.
+Do not set it, if you do not want to use it at all.
+
+If its there, it gets used. If you name it explicitly, it HAS to exist.
+
+HINT: you can also use this as an array to define several compose files to include.
+Order is important!
+
+default:
+  ``docker-compose-dev.yml``
+
+==========================    ===============
+Options                       Description
+==========================    ===============
+**docker-compose-dev.yml**    The default docker-compose-dev.yml file
+A single file name            Alternative docker-compose file
+An array of file names        A list of docker-compose files, loaded in order
+==========================    ===============
+
+max_attemp
+^^^^^^^^^^^
+Maximum number of attempts for unison waiting for the success exit status.
+
+Each attempt means 1-second sleep.
+Only used in unison.
+
+default:
+  ``5``
+
+project_root
+^^^^^^^^^^^^
+Root directory to be used when transforming sync src into absolute path.
+
+
+default:
+  ``pwd``
+
+==========================    ===============
+Options                       Description
+==========================    ===============
+**pwd**                       Current working directory
+config_path                   The directory where docker-sync.yml is found
+==========================    ===============
+
+<sync_strategy>_image
+^^^^^^^^^^^^^^^^^^^^^
+The image to use for the rsync container.
+
+Do not change this until you exactly know, what you are doing
+
+Replace ``<sync_strategy>`` with either ``rsync``, ``unison``, ``native_osx``
+to set a custom image for all sync of this type.
+
+
+verbose
+^^^^^^^
+Activate this if you need to debug something.
+
+IMPORTANT: do not run stable with this, it creates a memory leak.
+Turn off verbose when you are done testin
+
+default:
+  ``false``
+
+==========================    ===============
+Options                       Description
+==========================    ===============
+**false**
+true                          Output everything
+==========================    ===============
+
 
 .. _docker-compose-yml:
 
