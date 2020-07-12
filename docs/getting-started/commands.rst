@@ -31,13 +31,13 @@ Running start the second time will be a lot faster, since containers and volumes
     You can use ``-n <sync-endpoint-name>`` to only start one of your configured sync-endpoints.
 
 Restart
------
+-------
 
 .. code-block:: shell
 
     docker-sync restart
 
-This restarts docker-sync daemon, so this is the same as ``docker-sync stop && docker-sync start``. You can use the same options as ``docker-sync start`` command. 
+This restarts docker-sync daemon, so this is the same as ``docker-sync stop && docker-sync start``. You can use the same options as ``docker-sync start`` command.
 
 Sync
 ----
