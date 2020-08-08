@@ -56,7 +56,7 @@ Type:
 Which folder to watch / sync from - you can use tilde ``~``, it will get expanded.
 
 The contents of this directory will be synchronized to the Docker volume
-with the name of this sync entry (``shortexample-sync`` here).
+with the name of this sync entry (``appcode-native-osx-sync`` here).
 
 Be aware that the trailing slash makes a difference.
 If you add them, only the inner parts of the folder gets synced,
