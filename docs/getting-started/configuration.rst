@@ -475,7 +475,7 @@ A single file name         Alternative docker-compose file
 An array of file names     A list of docker-compose files, loaded in order
 ========================== ===============
 
-max_attemp
+max_attempt
 ^^^^^^^^^^^
 Maximum number of attempts for unison waiting for the success exit status.
 
