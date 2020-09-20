@@ -48,7 +48,7 @@ module DockerSync
         end
 
         if @config_syncs[name].key?('dest')
-          puts 'Please do no longer use "dest" in your docker-sync.yml configuration - also see https://github.com/EugenMayer/docker-sync/wiki/1.2-Upgrade-Guide#dest-has-been-removed!'
+          puts 'Please do no longer use "dest" in your docker-sync.yml configuration - also see https://docker-sync.readthedocs.io/en/latest/getting-started/upgrade.html#id4'
           exit 1
         else
           @config_syncs[name]['dest'] = '/app_sync'
