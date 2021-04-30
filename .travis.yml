@@ -1,17 +1,16 @@
 language: ruby
 
 rvm:
-# Removed those to since bundler is to old on those 2
-  - 2.2
-  - 2.3
+  # Removed those to since bundler is to old on those 2
   - 2.4
+  - 2.7
 
 #os: osx
 
 services: docker
 
 before_install:
-  - docker pull eugenmayer/unison:2.51.2.0
+  - docker pull eugenmayer/unison:2.51.3.0
   - docker pull eugenmayer/rsync
 
 script: bundle exec rspec --format=documentation

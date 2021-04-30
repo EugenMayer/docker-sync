@@ -95,9 +95,9 @@ The Ubuntu package for unison doesn't come with unison-fsmonitor, as such, we wo
 .. code-block:: shell
 
     sudo apt-get install build-essential ocaml
-    wget https://github.com/bcpierce00/unison/archive/v2.51.2.tar.gz
-    tar xvf v2.51.2.tar.gz
-    cd unison-2.51.2
+    wget https://github.com/bcpierce00/unison/archive/v2.51.3.tar.gz
+    tar xvf v2.51.3.tar.gz
+    cd unison-2.51.3
     make UISTYLE=text
     sudo cp src/unison /usr/local/bin/unison
     sudo cp src/unison-fsmonitor /usr/local/bin/unison-fsmonitor
@@ -259,9 +259,9 @@ As for now the procedure is as follows:
 
 .. code-block:: shell
 
-    wget https://github.com/bcpierce00/unison/archive/v2.51.2.tar.gz
-    tar xvf v2.51.2.tar.gz
-    cd unison-2.51.2
+    wget https://github.com/bcpierce00/unison/archive/v2.51.3.tar.gz
+    tar xvf v2.51.3.tar.gz
+    cd unison-2.51.3
     # The implementation src/system.ml does not match the interface system.cmi:curl and needs to be patched
     curl https://github.com/bcpierce00/unison/commit/23fa1292.diff?full_index=1 -o patch.diff
     git apply patch.diff
