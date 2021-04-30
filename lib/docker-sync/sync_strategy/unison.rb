@@ -14,16 +14,16 @@ module DockerSync
       @sync_name
       @watch_thread
       @local_server_pid
-      UNISON_CONTAINER_PORT = '5000'
+      UNISON_CONTAINER_PORT = '5000'.freeze
       def initialize(sync_name, options)
         @options = options
         @sync_name = sync_name
         # if a custom image is set, apply it
-        if @options.key?('image')
-          @docker_image = @options['image']
-        else
-          @docker_image = 'eugenmayer/unison:2.51.3.0'
-        end
+        @docker_image = if @options.key?('image')
+                          @options['image']
+                        else
+                          'eugenmayer/unison:2.51.3-4.12.0'
+                        end
         begin
           Dependencies::Unison.ensure!
           Dependencies::Unox.ensure! if Environment.mac?
@@ -61,7 +61,7 @@ module DockerSync
 
       def watch
         args = sync_options
-        args.push("-repeat watch")
+        args.push('-repeat watch')
         cmd = ''
         cmd = cmd + 'ulimit -n ' + @options['max_inotify_watches'].to_s + ' && ' if @options.key?('max_inotify_watches')
         cmd = cmd + 'unison ' + args.join(' ')
@@ -77,18 +77,18 @@ module DockerSync
         say_status 'command', cmd, :white if @options['verbose']
 
         stdout, stderr, exit_status = Open3.capture3(cmd)
-        if not exit_status.success?
+        if !exit_status.success?
           say_status 'error', "Error starting sync, exit code #{$?.exitstatus}", :red
           say_status 'message', stdout
           say_status 'message', stderr
         else
-          TerminalNotifier.notify(
-              "Synced #{@options['src']}", :title => @sync_name
-          ) if @options['notify_terminal']
-          say_status 'ok', "Synced #{@options['src']}", :white
-          if @options['verbose']
-            say_status 'output', stdout
+          if @options['notify_terminal']
+            TerminalNotifier.notify(
+              "Synced #{@options['src']}", title: @sync_name
+            )
           end
+          say_status 'ok', "Synced #{@options['src']}", :white
+          say_status 'output', stdout if @options['verbose']
         end
       end
 
@@ -96,18 +96,16 @@ module DockerSync
         expanded_ignore_strings = []
 
         exclude_type = 'Name'
-        unless @options['sync_excludes_type'].nil?
-          exclude_type = @options['sync_excludes_type']
-        end
+        exclude_type = @options['sync_excludes_type'] unless @options['sync_excludes_type'].nil?
 
         unless @options['sync_excludes'].nil?
           expanded_ignore_strings = @options['sync_excludes'].map do |pattern|
-            if exclude_type == 'none'
-              # the ignore type like Name / Path are part of the pattern
-              ignore_string = "#{pattern}"
-            else
-              ignore_string = "#{exclude_type} #{pattern}"
-            end
+            ignore_string = if exclude_type == 'none'
+                              # the ignore type like Name / Path are part of the pattern
+                              pattern.to_s
+                            else
+                              "#{exclude_type} #{pattern}"
+                            end
             "-ignore='#{ignore_string}'"
           end
         end
@@ -128,19 +126,19 @@ module DockerSync
         if @options.key?('sync_group') || @options.key?('sync_groupid')
           raise('Unison does not support sync_group, sync_groupid - please use rsync if you need that')
         end
-        return args
+
+        args
       end
 
       # cares about conflict resolution
       def sync_prefer
         case @options.fetch('sync_prefer', 'default')
-          when 'default' then "-prefer '#{@options['src']}' -copyonconflict" # thats our default, if nothing is set
-          when 'src' then "-prefer '#{@options['src']}'"
-          when 'dest' then "-prefer 'socket://#{@options['sync_host_ip']}:#{sync_host_port}'"
-          else "-prefer '#{@options['sync_prefer']}'"
+        when 'default' then "-prefer '#{@options['src']}' -copyonconflict" # thats our default, if nothing is set
+        when 'src' then "-prefer '#{@options['src']}'"
+        when 'dest' then "-prefer 'socket://#{@options['sync_host_ip']}:#{sync_host_port}'"
+        else "-prefer '#{@options['sync_prefer']}'"
         end
       end
-
 
       def start_container
         say_status 'ok', "Starting unison for sync #{@sync_name}", :white
@@ -148,11 +146,12 @@ module DockerSync
         container_name = get_container_name
         volume_name = get_volume_name
         env = {}
-        raise 'sync_user is no longer supported, since it ise no needed, use sync_userid only please' if @options.key?('sync_user')
+        if @options.key?('sync_user')
+          raise 'sync_user is no longer supported, since it ise no needed, use sync_userid only please'
+        end
 
         env['UNISON_SRC'] = '-socket 5000'
         env['UNISON_DEST'] = '/app_sync'
-
 
         env['MONIT_ENABLE'] = 'false'
         env['MONIT_INTERVAL'] = ''
@@ -171,17 +170,19 @@ module DockerSync
         end
 
         # start unison-image in unison socket mode mode
-        env['HOSTSYNC_ENABLE']=0
-        env['UNISONSOCKET_ENABLE']=1
+        env['HOSTSYNC_ENABLE'] = 0
+        env['UNISONSOCKET_ENABLE'] = 1
 
-        additional_docker_env = env.map{ |key,value| "-e #{key}=\"#{value}\"" }.join(' ')
+        additional_docker_env = env.map { |key, value| "-e #{key}=\"#{value}\"" }.join(' ')
         running = `docker ps --filter 'status=running' --filter 'name=#{container_name}' --format "{{.Names}}" | grep '^#{container_name}$'`
         if running == ''
           say_status 'ok', "#{container_name} container not running", :white if @options['verbose']
           exists = `docker ps --filter "status=exited" --filter "name=#{container_name}" --format "{{.Names}}" | grep '^#{container_name}$'`
           if exists == ''
             run_privileged = ''
-            run_privileged = '--privileged' if @options.key?('max_inotify_watches') #TODO: replace by the minimum capabilities required
+            if @options.key?('max_inotify_watches')
+              run_privileged = '--privileged'
+            end # TODO: replace by the minimum capabilities required
             tz_expression = '-e TZ=$(basename $(dirname `readlink /etc/localtime`))/$(basename `readlink /etc/localtime`)'
             say_status 'ok', 'Starting precopy', :white if @options['verbose']
             # we just run the precopy script and remove the container
@@ -212,8 +213,12 @@ module DockerSync
           # noinspection RubyUnusedLocalVariable
           stdout, stderr, exit_status = Open3.capture3(cmd)
           break if exit_status == 0
+
           attempt += 1
-          raise "Failed to start unison container in time, try to increase max_attempt (currently #{max_attempt}) in your configuration. See https://github.com/EugenMayer/docker-sync/wiki/2.-Configuration for more informations" if attempt > max_attempt
+          if attempt > max_attempt
+            raise "Failed to start unison container in time, try to increase max_attempt (currently #{max_attempt}) in your configuration. See https://github.com/EugenMayer/docker-sync/wiki/2.-Configuration for more informations"
+          end
+
           sleep 1
         end
         sync
@@ -221,7 +226,7 @@ module DockerSync
       end
 
       # noinspection RubyUnusedLocalVariable
-      def get_host_port(container_name, container_port)
+      def get_host_port(container_name, _container_port)
         cmd = 'docker inspect --format=\'{{(index (index .NetworkSettings.Ports "5000/tcp") 0).HostPort}}\' ' + container_name
         say_status 'command', cmd, :white if @options['verbose']
         stdout, stderr, exit_status = Open3.capture3(cmd)
@@ -230,15 +235,15 @@ module DockerSync
           say_status 'error', "Error getting mapped port, exit code #{$?.exitstatus}", :red
           say_status 'message', stderr
         end
-        return stdout.gsub("\n",'')
+        stdout.gsub("\n", '')
       end
 
       def get_container_name
-        return "#{@sync_name}"
+        @sync_name.to_s
       end
 
       def get_volume_name
-        return @sync_name
+        @sync_name
       end
 
       def stop_container

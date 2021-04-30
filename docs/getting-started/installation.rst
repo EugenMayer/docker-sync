@@ -241,9 +241,9 @@ As for now the procedure is as follows:
 .. code-block:: shell
 
     sudo apt-get install make
-    wget http://caml.inria.fr/pub/distrib/ocaml-4.08/ocaml-4.08.1.tar.gz
-    tar xvf ocaml-4.08.1.tar.gz
-    cd ocaml-4.08.1
+    wget https://caml.inria.fr/pub/distrib/ocaml-4.12/ocaml-4.12.0.tar.gz
+    tar xvf ocaml-4.12.0.tar.gz
+    cd ocaml-4.12.0
     ./configure
     make world
     make opt
@@ -262,8 +262,9 @@ As for now the procedure is as follows:
     wget https://github.com/bcpierce00/unison/archive/v2.51.3.tar.gz
     tar xvf v2.51.3.tar.gz
     cd unison-2.51.3
-    # The implementation src/system.ml does not match the interface system.cmi:curl and needs to be patched
-    curl https://github.com/bcpierce00/unison/commit/23fa1292.diff?full_index=1 -o patch.diff
+    # needed for < Unison 2.51.4_rc2 with OCAML 4.12 - see https://github.com/bcpierce00/unison/pull/480
+    # and https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/unison.rb#L13
+    curl https://github.com/bcpierce00/unison/commit/14b885316e0a4b41cb80fe3daef7950f88be5c8f.patch?full_index=1 -o patch.diff
     git apply patch.diff
     make UISTYLE=text
     sudo cp src/unison /usr/local/bin/unison
