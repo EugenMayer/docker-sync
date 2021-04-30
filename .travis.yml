@@ -10,6 +10,7 @@ rvm:
 services: docker
 
 before_install:
+  - gem install bundler:2.2.15
   - docker pull eugenmayer/unison:2.51.3-4.12.0
   - docker pull eugenmayer/rsync
 
