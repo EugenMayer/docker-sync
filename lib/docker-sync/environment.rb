@@ -4,11 +4,13 @@ module DockerSync
   module Environment
     def self.linux?
       return @linux if defined? @linux
+
       @linux = OS.linux?
     end
 
     def self.mac?
       return @mac if defined? @mac
+
       @mac = OS.mac?
     end
 
@@ -17,7 +19,7 @@ module DockerSync
     end
 
     def self.system(cmd)
-      defined?(Bundler) ? Bundler.clean_system(cmd) : Kernel.system(cmd)
+      defined?(Bundler) ? Bundler.unbundled_system(cmd) : Kernel.system(cmd)
     end
   end
 end
