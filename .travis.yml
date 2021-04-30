@@ -1,17 +1,23 @@
 language: ruby
 
+arch:
+  - amd64
+  - arm64
+
+os: linux
+
 rvm:
-# Removed those to since bundler is to old on those 2
-  - 2.2
-  - 2.3
   - 2.4
+  - 2.7
 
 #os: osx
 
 services: docker
 
 before_install:
-  - docker pull eugenmayer/unison:2.51.2.0
+  - gem install bundler:2.2.15
+  - docker pull eugenmayer/unison:2.51.3-4.12.0-AMD64
+  - docker pull eugenmayer/unison:2.51.3-4.12.0-ARM64
   - docker pull eugenmayer/rsync
 
 script: bundle exec rspec --format=documentation

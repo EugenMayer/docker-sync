@@ -23,7 +23,7 @@ module DockerSync
         if @options.key?('image')
           @docker_image = @options['image']
         else
-          @docker_image = 'eugenmayer/unison:2.51.2.2'
+          @docker_image = 'eugenmayer/unison:2.51.3-4.12.0-AMD64'
         end
 
         begin
