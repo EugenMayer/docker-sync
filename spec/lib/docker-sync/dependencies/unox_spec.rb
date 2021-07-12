@@ -3,11 +3,14 @@ require 'spec_helper'
 # unox is only available/allowed for mac
 RSpec.describe DockerSync::Dependencies::Unox do
   let(:available) { true }
+  let(:fsmonitor_available) { false }
   let(:mac?)   { true }
 
   before do
     allow(DockerSync::Environment).to receive(:system)
     allow(DockerSync::Environment).to receive(:system).with(/^brew list unox/).and_return(available)
+    allow(DockerSync::Environment).to receive(:system).with(/^brew list unison-fsmonitor/)
+                                                      .and_return(fsmonitor_available)
     allow(DockerSync::Environment).to receive(:mac?).and_return(mac?)
 
     described_class.remove_instance_variable(:@available) if described_class.instance_variable_defined? :@available
@@ -28,6 +31,13 @@ RSpec.describe DockerSync::Dependencies::Unox do
       let(:available) { false }
 
       it { is_expected.to be false }
+    end
+
+    context 'when Unox was not installed but another unison-fsmonitor is available' do
+      let(:available) { false }
+      let(:fsmonitor_available) { true }
+
+      it { is_expected.to be true }
     end
 
     context 'when its not a mac' do
