@@ -67,6 +67,10 @@ Optionally, if you do not want to use unison or want a better rsync or use uniso
 
 Homebrew aka brew is a tool you need under OSX to install / easy compile other tools. You can use other tools/ways to install or compile fswatch, but those are out of scope for this docs. All we need is the binary in PATH.
 
+.. caution::
+
+    Starting with docker-sync 0.7.0 if you're using unison strategy, you can also install [an alternative](https://github.com/autozimu/unison-fsmonitor) to unox. It seems to be faster and more performant but it has not been fully battle-tested yet.
+
 ----
 
 .. _installation-linux:
