@@ -5,6 +5,7 @@ module DockerSync
     module Unox
       LEGACY_UNOX_WARNING          = 'You installed unison-fsmonitor (unox) the old legacy way (i.e. not using brew). We need to fix that.'.freeze
       FAILED_TO_REMOVE_LEGACY_UNOX = 'Failed to remove legacy unison-fsmonitor (unox). Please delete /usr/local/bin/unison-fsmonitor manually and try again.'.freeze
+      UNSUPPORTED_FSMONITOR        = 'You are using unsupported version of unison-fsmonitor, consider installing eugenmayer/dockersync/unox instead'.freeze
 
       class << self
         extend Forwardable
@@ -15,8 +16,12 @@ module DockerSync
         # should never have been called anyway - fix the call that it should check for the OS
         raise 'Unox cannot be available for other platforms then MacOS' unless Environment.mac?
 
-        cmd = 'brew list unox > /dev/null 2>&1'
-        Environment.system(cmd)
+        return true if brew_package_installed?('unox')
+        return false unless brew_package_installed?('unison-fsmonitor')
+
+        say_status 'warning', UNSUPPORTED_FSMONITOR, :yellow unless @unsupported_fsmonitor_warning_displayed
+        @unsupported_fsmonitor_warning_displayed = true
+        true
       end
 
       def self.ensure!
@@ -38,6 +43,11 @@ module DockerSync
 
       def self.non_brew_version_installed?
         !available? && File.exist?('/usr/local/bin/unison-fsmonitor')
+      end
+
+      def self.brew_package_installed?(name)
+        cmd = "brew list #{name} > /dev/null 2>&1"
+        Environment.system(cmd)
       end
     end
   end
