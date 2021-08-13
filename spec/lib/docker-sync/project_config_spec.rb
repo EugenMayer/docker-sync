@@ -2,8 +2,24 @@ require 'spec_helper'
 require 'docker-sync/config/project_config'
 
 RSpec.describe DockerSync::ProjectConfig do
-  let(:default_sync_strategy) { OS.linux? ? 'native' : 'unison' }
-  let(:default_watch_strategy) { OS.linux? ? 'dummy' : 'unison' }
+  let(:default_sync_strategy)  do 
+    if OS.linux?
+      'native' 
+    elsif OS.mac?
+      'native_osx'
+    else
+      'unison'
+    end
+  end
+  let(:default_watch_strategy) do 
+    if OS.linux?
+      'dummy'
+    elsif OS.mac?
+      'remotelogs'
+    else
+      'unison'
+    end
+  end
 
   subject { described_class.new }
   before do
@@ -305,9 +321,10 @@ syncs:
 
   describe '#unison_required?' do
     it do
-      allow(DockerSync::Dependencies::Docker::Driver).to receive(:system).with('pgrep -q com.docker.hyperkit').and_return(true)
+      allow(DockerSync::Environment).to receive(:system).with('pgrep -q com.docker.hyperkit').and_return(true)
+
       use_fixture 'simplest' do
-        if OS.linux?
+        if OS.linux? || OS.mac?
           is_expected.not_to be_unison_required
         else
           is_expected.to be_unison_required
