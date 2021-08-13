@@ -7,7 +7,7 @@ RSpec.describe DockerSync::ProjectConfig do
 
   subject { described_class.new }
   before do
-    allow(DockerSync::Dependencies::Docker::Driver).to receive(:system).with('pgrep -q com.docker.hyperkit').and_return(true)
+    allow(DockerSync::Environment).to receive(:system).with('pgrep -q com.docker.hyperkit').and_return(true)
   end
 
   describe '#initialize' do
