@@ -7,11 +7,12 @@ RSpec.describe 'native_osx strategy', command_execution: :allowed, if: OS.mac? d
   include Rspec::Bash
 
   let(:env)                  { create_stubbed_env }
+  let(:dir)                  { Dir.tmpdir }
   let(:bin)                  { File.expand_path(File.join(__dir__, '..', '..', 'bin', 'docker-sync')) }
   let(:config_file_template) { File.expand_path(File.join(__dir__, '..', '..', 'spec', 'fixtures', 'native_osx', 'docker-sync.yml')) }
-  let(:config_file_path)     { File.join(env.dir, 'docker-sync.yml') }
+  let(:config_file_path)     { File.join(dir, 'docker-sync.yml') }
   let(:host_app_template)    { 'spec/fixtures/app_skeleton' }
-  let(:host_app_path)        { File.join(env.dir, File.basename(host_app_template)) }
+  let(:host_app_path)        { File.join(dir, File.basename(host_app_template)) }
   let(:test_env_vars)        { { 'DOCKER_SYNC_SKIP_UPGRADE' => 'true', 'DOCKER_SYNC_SKIP_UPDATE' => 'true', 'DOCKER_SYNC_SKIP_DEPENDENCIES_CHECK' => 'true' } }
 
   before :all do
@@ -21,8 +22,8 @@ RSpec.describe 'native_osx strategy', command_execution: :allowed, if: OS.mac? d
 
   describe 'start' do
     around(:each) do |example|
-      FileUtils.cp_r([host_app_template, config_file_template], env.dir)
-      FileUtils.chdir(env.dir) do
+      FileUtils.cp_r([host_app_template, config_file_template], dir)
+      FileUtils.chdir(dir) do
         replace_in_file(config_file_path, '{{HOST_APP_PATH}}', "'#{host_app_path}'")
         _stdout, stderr, status = env.execute_inline("#{bin} start", test_env_vars)
         raise stderr unless status.success?
