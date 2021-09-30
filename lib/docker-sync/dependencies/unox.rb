@@ -14,7 +14,7 @@ module DockerSync
 
       def self.available?
         # should never have been called anyway - fix the call that it should check for the OS
-        raise 'Unox cannot be available for other platforms then MacOS' unless Environment.mac?
+        raise 'Unox cannot be available for platforms other than MacOS' unless Environment.mac?
 
         return true if brew_package_installed?('unox')
         return false unless brew_package_installed?('unison-fsmonitor')
@@ -26,7 +26,7 @@ module DockerSync
 
       def self.ensure!
         return if available?
-        raise 'Unox cannot be installed on other platforms then MacOS' unless Environment.mac?
+        raise 'Unox cannot be installed on platforms other than MacOS' unless Environment.mac?
 
         cleanup_non_brew_version!
         PackageManager.install_package('eugenmayer/dockersync/unox')
