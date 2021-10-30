@@ -386,14 +386,12 @@ notify_terminal
 Type:
   optional
 
-Enable terminal_notifier.
 On every sync sends a Terminal Notification regarding files being synced.
 (Mac Only).
 
-Good thing in case you are developing and want to know exactly when your
-changes took effect.
-Be aware in case of unison this only gives you a notification on the initial sync,
-not the syncs after changes.
+Useful for when you want to know exactly when your changes took effect (or failed to do so).
+Be aware that in case of unison this only gives you a notification on the initial sync,
+not on syncs after subsequent changes.
 
 default:
   ``false``
@@ -403,6 +401,7 @@ Options                       Description
 ==========================    ===============
 ``false``
 ``true``                      Show notifications
+``errors_only``               Show only error notifications
 ==========================    ===============
 
 
