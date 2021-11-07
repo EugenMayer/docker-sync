@@ -78,13 +78,20 @@ module DockerSync
 
         stdout, stderr, exit_status = Open3.capture3(cmd)
         if !exit_status.success?
-          say_status 'error', "Error starting sync, exit code #{$?.exitstatus}", :red
+          error_msg = "Error starting sync, exit code #{$?.exitstatus}"
+          say_status 'error', error_msg, :red
           say_status 'message', stdout
           say_status 'message', stderr
-        else
+
           if @options['notify_terminal']
             TerminalNotifier.notify(
-              "Synced #{@options['src']}", title: @sync_name
+              "#{error_msg}", :title => @sync_name, :subtitle => @options['src'], group: 'docker-sync'
+            )
+          end
+        else
+          if @options['notify_terminal'] && @options['notify_terminal'] != 'errors_only'
+            TerminalNotifier.notify(
+              "Synced #{@options['src']}", title: @sync_name, group: 'docker-sync'
             )
           end
           say_status 'ok', "Synced #{@options['src']}", :white

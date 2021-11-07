@@ -78,7 +78,7 @@ syncs:
     sync_prefer: 'default'
 
   rsync-sync: # IMPORTANT: this name must be unique and should NOT match your real application container name!
-    # enable terminal_notifier. On every sync sends a Terminal Notification regarding files being synced. ( Mac Only ).
+    # On every sync sends a Terminal Notification regarding files being synced. ( Mac Only ).
     # good thing incase you are developing and want to know exactly when your changes took effect.
     notify_terminal: true
     # which folder to watch / sync from - you can use tilde, it will get expanded.
