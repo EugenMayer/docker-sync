@@ -1,4 +1,3 @@
-require 'docker/compose'
 require 'pp'
 class ComposeManager
   include Thor::Shell
