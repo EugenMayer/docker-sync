@@ -2,7 +2,6 @@ module DockerSync
   # based on `Docker::Compose::Compose` from `docker-compose` gem
   class DockerComposeSession
     def initialize(dir:, file:)
-      @shell = CommandRunner.new(dir: dir)
       @dir = dir
       @file = file # Array[String]
       @last_command = nil
@@ -29,7 +28,7 @@ module DockerSync
       # file_args and args should be Array of String
       file_args = @file.map { |filepath| "--file=#{filepath}" }
 
-      @last_command = @shell.run('docker-compose', *file_args, *args).join
+      @last_command = Command.run('docker-compose', *file_args, *args, dir: @dir).join
       status = @last_command.status
       out = @last_command.captured_output
       err = @last_command.captured_error

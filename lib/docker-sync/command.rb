@@ -1,3 +1,9 @@
+begin
+  require 'pty'
+rescue LoadError
+  # for Windows support, tolerate a missing PTY module
+end
+
 module DockerSync
   # based on `Backticks::Command` from `Backticks` gem
   class Command
@@ -18,6 +24,27 @@ module DockerSync
 
     # @return [String] all output to stderr that has been captured so far
     attr_reader :captured_error
+
+    # Run a command. The parameters are same as `Kernel#spawn`.
+    #
+    # Usage:
+    #    run('docker-compose', '--file=joe.yml', 'up', '-d', 'mysvc')
+    def self.run(*argv, dir: nil)
+      nopty = !defined?(PTY)
+
+      stdin_r, stdin = nopty ? IO.pipe : PTY.open
+      stdout, stdout_w = nopty ? IO.pipe : PTY.open
+      stderr, stderr_w = IO.pipe
+
+      chdir = dir || Dir.pwd
+      pid = spawn(*argv, in: stdin_r, out: stdout_w, err: stderr_w, chdir: chdir)
+
+      stdin_r.close
+      stdout_w.close
+      stderr_w.close
+
+      self.new(pid, stdin, stdout, stderr)
+    end
 
     def initialize(pid, stdin, stdout, stderr)
       @pid = pid
@@ -50,6 +77,8 @@ module DockerSync
 
       nil
     end
+
+    private
 
     def capture(limit)
       streams = [@stdout, @stderr]
