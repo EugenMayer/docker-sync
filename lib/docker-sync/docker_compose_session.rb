@@ -1,9 +1,9 @@
 module DockerSync
   # based on `Docker::Compose::Compose` from `docker-compose` gem
   class DockerComposeSession
-    def initialize(dir:, files:)
+    def initialize(dir: nil, files: nil)
       @dir = dir
-      @files = files # Array[String]
+      @files = files || [] # Array[String]
       @last_command = nil
     end
 
