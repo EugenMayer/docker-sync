@@ -1,9 +1,9 @@
 module DockerSync
   # based on `Docker::Compose::Compose` from `docker-compose` gem
   class DockerComposeSession
-    def initialize(dir:, file:)
+    def initialize(dir:, files:)
       @dir = dir
-      @file = file # Array[String]
+      @files = files # Array[String]
       @last_command = nil
     end
 
@@ -26,7 +26,7 @@ module DockerSync
 
     def run!(*args)
       # file_args and args should be Array of String
-      file_args = @file.map { |filepath| "--file=#{filepath}" }
+      file_args = @files.map { |file| "--file=#{file}" }
 
       @last_command = Command.run('docker-compose', *file_args, *args, dir: @dir).join
       status = @last_command.status

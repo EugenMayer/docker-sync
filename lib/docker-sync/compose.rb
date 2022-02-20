@@ -29,7 +29,7 @@ class ComposeManager
         compose_files.push compose_dev_path
       end
     end
-    @compose_session = DockerSync::DockerComposeSession.new(dir: './', file: compose_files)
+    @compose_session = DockerSync::DockerComposeSession.new(dir: './', files: compose_files)
   end
 
   def run
