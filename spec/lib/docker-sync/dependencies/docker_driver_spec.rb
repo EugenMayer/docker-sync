@@ -25,6 +25,15 @@ RSpec.describe DockerSync::Dependencies::Docker::Driver do
       expect(DockerSync::Environment).to have_received(:system).with('pgrep -q com.docker.hyperkit')
     end
 
+    it 'checks if Docker is running in Virtualization' do
+      allow(DockerSync::Environment).to receive(:system).with('pgrep -q com.docker.hyperkit').and_return(false)
+      allow(DockerSync::Environment).to receive(:system).with('pgrep -q com.docker.virtualization').and_return(true)
+
+      is_expected.to be true
+      expect(DockerSync::Environment).to have_received(:system).with('pgrep -q com.docker.hyperkit')
+      expect(DockerSync::Environment).to have_received(:system).with('pgrep -q com.docker.virtualization')
+    end
+
     it 'is memoized' do
       expect { 1.times { described_class.docker_for_mac? } }.to change { described_class.instance_variable_defined?(:@docker_for_mac) }
 
