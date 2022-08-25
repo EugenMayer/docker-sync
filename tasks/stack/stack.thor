@@ -2,7 +2,6 @@ require 'docker-sync'
 require 'docker-sync/sync_manager'
 require 'docker-sync/update_check'
 require 'docker-sync/upgrade_check'
-require 'docker/compose'
 require 'docker-sync/compose'
 require 'docker-sync/config/project_config'
 
