@@ -23,7 +23,11 @@ module DockerSync
         if @options.key?('image')
           @docker_image = @options['image']
         else
-          @docker_image = 'eugenmayer/unison:2.51.3-4.12.0-AMD64'
+          if RUBY_PLATFORM.include? "arm"
+            @docker_image = 'eugenmayer/unison:2.51.3-4.12.0-ARM64'
+          else
+            @docker_image = 'eugenmayer/unison:2.51.3-4.12.0-AMD64'
+          end
         end
 
         begin
