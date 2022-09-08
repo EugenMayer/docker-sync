@@ -5,7 +5,6 @@ require 'docker-sync/update_check'
 
 class UpgradeChecker
   include Thor::Shell
-  @config
   def initialize
     @config = DockerSync::GlobalConfig.load
   end
