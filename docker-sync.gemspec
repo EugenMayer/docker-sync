@@ -11,12 +11,14 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/EugenMayer/docker_sync'
   s.required_ruby_version = '>= 2.4'
 
-  s.add_runtime_dependency 'thor', '~> 1.0', '>= 1.0.0'
+  s.add_runtime_dependency 'thor', '~> 1.2', '>= 1.2.0'
   s.add_runtime_dependency 'gem_update_checker', '~> 0.2.0', '>= 0.2.0'
   s.add_runtime_dependency 'terminal-notifier', '2.0.0'
-  s.add_runtime_dependency 'dotenv', '~> 2.1', '>= 2.1.1'
-  s.add_runtime_dependency 'daemons', '~> 1.2', '>= 1.2.3'
-  s.add_runtime_dependency 'os'
+  s.add_runtime_dependency 'dotenv', '~> 2.8', '>= 2.8.1'
+  s.add_runtime_dependency 'daemons', '~> 1.4', '>= 1.4.1'
+  s.add_runtime_dependency 'os', '>= 1.0.0'
 
   s.add_development_dependency 'pry'
+  # support for ruby 2.4
+  s.add_development_dependency 'rdoc', '<= 6.3.2'
 end

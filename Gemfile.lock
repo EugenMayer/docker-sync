@@ -1,18 +1,18 @@
 PATH
   remote: .
   specs:
-    docker-sync (0.7.2)
-      daemons (~> 1.2, >= 1.2.3)
-      dotenv (~> 2.1, >= 2.1.1)
+    docker-sync (1.0.0)
+      daemons (~> 1.4, >= 1.4.1)
+      dotenv (~> 2.8, >= 2.8.1)
       gem_update_checker (~> 0.2.0, >= 0.2.0)
-      os
+      os (>= 1.0.0)
       terminal-notifier (= 2.0.0)
-      thor (~> 1.0, >= 1.0.0)
+      thor (~> 1.2, >= 1.2.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (5.2.7.1)
+    activesupport (5.2.8.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
@@ -21,9 +21,9 @@ GEM
     concurrent-ruby (1.1.10)
     daemons (1.4.1)
     diff-lcs (1.5.0)
-    dotenv (2.7.6)
+    dotenv (2.8.1)
     gem_update_checker (0.2.0)
-    i18n (1.10.0)
+    i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     method_source (1.0.0)
     minitest (5.15.0)
@@ -31,6 +31,7 @@ GEM
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
+    rdoc (6.3.2)
     rspec (3.11.0)
       rspec-core (~> 3.11.0)
       rspec-expectations (~> 3.11.0)
@@ -59,10 +60,12 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  activesupport (~> 5.2)
+  activesupport (~> 5.2.8)
   docker-sync!
+  minitest (<= 5.15.0)
   os (>= 1.0.0)
   pry
+  rdoc (<= 6.3.2)
   rspec
   rspec-bash
 
