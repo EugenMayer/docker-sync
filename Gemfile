@@ -10,4 +10,5 @@ group :test do
   gem 'os', '>= 1.0.0'
   # for ruby 2.4 support
   gem 'rdoc', '<=6.3.2'
+  gem 'minitest', '<=5.15.0'
 end
