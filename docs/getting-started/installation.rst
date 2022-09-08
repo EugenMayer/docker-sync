@@ -232,7 +232,7 @@ Then type the following command in your WSL shell.
 
 9. Compile and install OCaml
 
-Before doing this please check out first the eugenmayer/unison dockerfile and ensure that the OCaml version that you are going to install is the same. To find the required OCaml version, do a search for "ocaml" within the eugenmayer/unison's dockerfile (https://github.com/EugenMayer/docker-image-unison/blob/master/Dockerfile)
+Before doing this please check out first the ghcr.io/eugenmayer/unison dockerfile and ensure that the OCaml version that you are going to install is the same. To find the required OCaml version, do a search for "ocaml" within the eugenmayer/unison's dockerfile (https://github.com/EugenMayer/docker-image-unison/blob/master/Dockerfile)
 
 Install build script
 
