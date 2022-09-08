@@ -20,7 +20,7 @@ module DockerSync
         @options = options
         @sync_name = sync_name
         # if a custom image is set, apply it
-        @docker_image = @options.key?('image') ? @options['image'] : 'eugenmayer/unison:2.52.1-4.12.0'
+        @docker_image = @options.key?('image') ? @options['image'] : 'ghcr.io/eugenmayer/unison:2.52.1-4.12.0'
 
         begin
           Dependencies::Docker.ensure!
