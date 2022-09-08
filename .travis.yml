@@ -11,7 +11,8 @@ rvm:
 
 os:
   - linux
-  - osx
+  # since there is no docker support due to license issues under OSX, running there does not make any sense
+  # - osx
 
 services: docker
 
@@ -21,9 +22,13 @@ jobs:
     - rvm: 3.1.2
       arch: arm64
 
+    # ruby 3 somehow cannot be installed on osx either
+    - rvm: 3.1.2
+      os: osx
+
 before_install:
   - gem install bundler:2.2.15
-#  - docker pull ghcr.io/eugenmayer/unison:2.52.1-4.12.0
-#  - docker pull eugenmayer/rsync
+  - docker pull ghcr.io/eugenmayer/unison:2.52.1-4.12.0
+  - docker pull eugenmayer/rsync
 
 script: bundle exec rspec --format=documentation
