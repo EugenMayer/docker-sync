@@ -55,6 +55,7 @@ GEM
 
 PLATFORMS
   aarch64-linux
+  x86_64-darwin-17
   x86_64-linux
 
 DEPENDENCIES
@@ -66,4 +67,4 @@ DEPENDENCIES
   rspec-bash
 
 BUNDLED WITH
-   2.3.13
+   2.3.21

@@ -4,8 +4,6 @@ require 'docker-sync/config/global_config'
 
 class UpdateChecker
   include Thor::Shell
-  @config
-  @newer_image_found
 
   def initialize
     @config = DockerSync::GlobalConfig.load
