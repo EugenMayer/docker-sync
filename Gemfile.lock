@@ -12,11 +12,12 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (7.0.3.1)
+    activesupport (6.1.6.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
+      zeitwerk (~> 2.3)
     coderay (1.1.3)
     concurrent-ruby (1.1.10)
     daemons (1.4.1)
@@ -51,6 +52,7 @@ GEM
     thor (1.2.1)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
+    zeitwerk (2.6.0)
 
 PLATFORMS
   aarch64-linux
@@ -58,7 +60,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  activesupport (~> 7.0)
+  activesupport (~> 6.0)
   docker-sync!
   os (>= 1.0.0)
   pry
