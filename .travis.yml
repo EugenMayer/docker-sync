@@ -18,7 +18,7 @@ services: docker
 
 jobs:
   exclude:
-    # does not work - rvm cannot install ruby
+    # does not work - rvm cannot install ruby 3.x under arm64 (not investigated further)
     - rvm: 3.1.2
       arch: arm64
 
