@@ -21,5 +21,9 @@ module DockerSync
     def self.system(cmd)
       defined?(Bundler) ? Bundler.unbundled_system(cmd) : Kernel.system(cmd)
     end
+
+    def self.default_ignores()
+      ['.docker-sync/daemon.log', '.docker-sync/daemon.pid']
+    end
   end
 end

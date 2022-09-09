@@ -102,7 +102,7 @@ module DockerSync
         exclude_type = @options['sync_excludes_type'] unless @options['sync_excludes_type'].nil?
 
         unless @options['sync_excludes'].nil?
-          expanded_ignore_strings = @options['sync_excludes'].map do |pattern|
+          expanded_ignore_strings = @options['sync_excludes'].append(Environment.default_ignores).flatten!.map do |pattern|
             ignore_string = if exclude_type == 'none'
                               # the ignore type like Name / Path are part of the pattern
                               pattern.to_s
