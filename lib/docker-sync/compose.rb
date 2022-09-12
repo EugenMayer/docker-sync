@@ -1,4 +1,6 @@
 require 'pp'
+require 'docker-sync/docker_compose_session'
+
 class ComposeManager
   include Thor::Shell
   @compose_session

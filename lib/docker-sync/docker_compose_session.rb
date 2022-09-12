@@ -1,3 +1,5 @@
+require 'docker-sync/command'
+
 module DockerSync
   # based on `Docker::Compose::Compose` from `docker-compose` gem
   class DockerComposeSession
