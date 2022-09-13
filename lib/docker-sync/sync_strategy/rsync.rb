@@ -61,10 +61,9 @@ module DockerSync
 
       def sync_options
         args = []
-        excludes_list = @options['sync_excludes'].append(Environment.default_ignores).flatten!
 
-        unless excludes_list.nil?
-          args = excludes_list.map { |pattern| "--exclude='#{pattern}'" } + args
+        unless @options['sync_excludes'].nil?
+          args = excludes_list.append(Environment.default_ignores).flatten!.map { |pattern| "--exclude='#{pattern}'" } + args
         end
         args.push('-ap')
         args.push(@options['sync_args']) if @options.key?('sync_args')
