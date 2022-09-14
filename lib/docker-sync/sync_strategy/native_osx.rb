@@ -182,8 +182,16 @@ module DockerSync
           exclude_type = @options['sync_excludes_type']
         end
 
+        # use the 'Name' exclude type for all default ignores
+        # to prevent conflicts with the sync_excludes_type settings
+        unless Environment.default_ignores.nil?
+          expanded_ignore_strings = Environment.default_ignores.map do |pattern|
+            "-ignore='Name #{pattern}'"
+          end
+        end
+        
         unless @options['sync_excludes'].nil?
-          expanded_ignore_strings = @options['sync_excludes'].append(Environment.default_ignores).flatten!.map do |pattern|
+          expanded_ignore_strings = @options['sync_excludes'].map do |pattern|
             if exclude_type == 'none'
               # the ignore type like Name / Path are part of the pattern
               ignore_string = "#{pattern}"
