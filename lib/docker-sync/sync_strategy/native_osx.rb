@@ -176,6 +176,7 @@ module DockerSync
 
       def expand_ignore_strings
         expanded_ignore_strings = []
+        default_expanded_ignore_strings = []
 
         exclude_type = 'Name'
         unless @options['sync_excludes_type'].nil?
@@ -185,7 +186,7 @@ module DockerSync
         # use the 'Name' exclude type for all default ignores
         # to prevent conflicts with the sync_excludes_type settings
         unless Environment.default_ignores.nil?
-          expanded_ignore_strings = Environment.default_ignores.map do |pattern|
+          default_expanded_ignore_strings = Environment.default_ignores.map do |pattern|
             "-ignore='Name #{pattern}'"
           end
         end
@@ -201,7 +202,7 @@ module DockerSync
             "-ignore='#{ignore_string}'"
           end
         end
-        expanded_ignore_strings
+        expanded_ignore_strings.append(default_expanded_ignore_strings).flatten!
       end
     end
   end
