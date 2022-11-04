@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.files       = Dir['lib/**/*.rb', 'tasks/**/*.thor', 'Thorfile', 'bin/*', 'VERSION']
   s.license     = 'GPL-3.0'
   s.homepage    = 'https://github.com/EugenMayer/docker_sync'
-  s.required_ruby_version = '>= 2.4'
+  s.required_ruby_version = '>= 2.5'
 
-  s.add_runtime_dependency 'thor', '~> 1.2', '>= 1.2.0'
+  s.add_runtime_dependency 'thor', '~> 1.2', '>= 1.2.1'
   s.add_runtime_dependency 'gem_update_checker', '~> 0.2.0', '>= 0.2.0'
   s.add_runtime_dependency 'terminal-notifier', '2.0.0'
   s.add_runtime_dependency 'dotenv', '~> 2.8', '>= 2.8.1'
@@ -19,6 +19,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'os', '>= 1.0.0'
 
   s.add_development_dependency 'pry'
-  # support for ruby 2.4
-  s.add_development_dependency 'rdoc', '<= 6.3.2'
+  s.add_development_dependency 'rdoc', '<= 6.4.0'
 end
