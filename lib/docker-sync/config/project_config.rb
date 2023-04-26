@@ -144,7 +144,7 @@ module DockerSync
 
       def default_sync_strategy
         return 'native'     if Environment.linux?
-        return 'native_osx' if Environment.mac? && Dependencies::Docker::Driver.docker_for_mac?
+        return 'native_osx' if Environment.mac? && Dependencies::Docker::Driver.docker_on_mac?
         return 'unison'     if Environment.mac?
       end
 

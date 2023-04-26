@@ -1,17 +1,18 @@
 require 'spec_helper'
 
 RSpec.describe DockerSync::Dependencies::Docker::Driver do
-  describe '.docker_for_mac?' do
+  describe '.docker_on_mac?' do
     let(:mac?) { true }
 
     before do
+      allow(DockerSync::Environment).to receive(:system).with('docker info | grep -q "Operating System: Docker Desktop"').and_return(false)
       allow(DockerSync::Environment).to receive(:system).with('pgrep -q com.docker.hyperkit').and_return(true)
       allow(DockerSync::Environment).to receive(:mac?).and_return(mac?)
 
-      described_class.remove_instance_variable(:@docker_for_mac) if described_class.instance_variable_defined? :@docker_for_mac
+      described_class.remove_instance_variable(:@docker_on_mac) if described_class.instance_variable_defined? :@docker_on_mac
     end
 
-    subject { described_class.docker_for_mac? }
+    subject { described_class.docker_on_mac? }
 
     context 'when not running on a Macintosh' do
       let(:mac?) { false }
@@ -34,10 +35,17 @@ RSpec.describe DockerSync::Dependencies::Docker::Driver do
       expect(DockerSync::Environment).to have_received(:system).with('pgrep -q com.docker.virtualization')
     end
 
-    it 'is memoized' do
-      expect { 1.times { described_class.docker_for_mac? } }.to change { described_class.instance_variable_defined?(:@docker_for_mac) }
+    it 'checks if Docker is running in Docker Desktop' do
+      allow(DockerSync::Environment).to receive(:system).with('docker info | grep -q "Operating System: Docker Desktop"').and_return(true)
 
-      expect(DockerSync::Environment).to have_received(:system).exactly(:once)
+      is_expected.to be true
+      expect(DockerSync::Environment).to have_received(:system).with('docker info | grep -q "Operating System: Docker Desktop"')
+    end
+
+    it 'is memoized' do
+      expect { 1.times { described_class.docker_on_mac? } }.to change { described_class.instance_variable_defined?(:@docker_on_mac) }
+
+      expect(DockerSync::Environment).to have_received(:system).at_most(:twice)
     end
   end
 

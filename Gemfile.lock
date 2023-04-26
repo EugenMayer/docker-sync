@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    docker-sync (1.0.4)
+    docker-sync (1.0.5)
       daemons (~> 1.4, >= 1.4.1)
       dotenv (~> 2.8, >= 2.8.1)
       gem_update_checker (~> 0.2.0, >= 0.2.0)
@@ -57,6 +57,7 @@ GEM
 
 PLATFORMS
   aarch64-linux
+  arm64-darwin-21
   x86_64-darwin-17
   x86_64-linux
 
