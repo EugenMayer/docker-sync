@@ -28,6 +28,11 @@ module DockerSync
           'verbose' => false,
       }
 
+      # resolve ip address if sync_host set
+      if options.key?('sync_host') && options['sync_host'].to_s != ''
+        options['sync_host_ip']= IPSocket.getaddress(options['sync_host'])
+      end
+
       # even if sync_host_ip is set, if it is set to auto, enforce the default
       if !options.key?('sync_host_ip') || options['sync_host_ip'] == 'auto' || options['sync_host_ip'] == ''
         options['sync_host_ip'] = get_host_ip_default
