@@ -43,7 +43,7 @@ module DockerSync
         command_args = ['compose'] + file_args + args
       end
 
-      @last_command = Command.run(command, *docker_args, dir: @dir).join
+      @last_command = Command.run(command, *command_args, dir: @dir).join
       status = @last_command.status
       out = @last_command.captured_output
       err = @last_command.captured_error
