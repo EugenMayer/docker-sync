@@ -30,7 +30,10 @@ module DockerSync
       # file_args and args should be Array of String
       file_args = @files.map { |file| "--file=#{file}" }
 
-      @last_command = Command.run('docker-compose', *file_args, *args, dir: @dir).join
+      # Prepend "compose" to the args array
+      docker_args = ["compose", *file_args, *args]
+
+      @last_command = Command.run('docker', *docker_args, dir: @dir).join
       status = @last_command.status
       out = @last_command.captured_output
       err = @last_command.captured_error
