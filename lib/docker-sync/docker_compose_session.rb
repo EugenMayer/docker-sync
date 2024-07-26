@@ -26,7 +26,7 @@ module DockerSync
 
     private
 
-    def docker_compose_binary_exists?
+    def docker_compose_legacy_binary_exists?
       system('which docker-compose > /dev/null 2>&1')
     end
 
@@ -35,7 +35,7 @@ module DockerSync
       # file_args and args should be Array of String
       file_args = @files.map { |file| "--file=#{file}" }
 
-      if docker_compose_binary_exists?
+      if docker_compose_legacy_binary_exists?
         command = 'docker-compose'
         command_args = file_args + args
       else
