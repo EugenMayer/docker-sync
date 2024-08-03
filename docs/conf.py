@@ -190,3 +190,11 @@ epub_exclude_files = ['search.html']
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
+html_context = {
+  "display_github": True, # Integrate GitHub
+  "github_user": "EugenMayer", # Username
+  "github_repo": "docker-sync", # Repo name
+  "github_version": "main", # Version
+  "conf_py_path": "/docs/", # Path in the checkout to the docs root
+}
