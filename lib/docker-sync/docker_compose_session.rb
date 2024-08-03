@@ -26,11 +26,24 @@ module DockerSync
 
     private
 
+    def docker_compose_legacy_binary_exists?
+      system('which docker-compose > /dev/null 2>&1')
+    end
+
+
     def run!(*args)
       # file_args and args should be Array of String
       file_args = @files.map { |file| "--file=#{file}" }
 
-      @last_command = Command.run('docker-compose', *file_args, *args, dir: @dir).join
+      if docker_compose_legacy_binary_exists?
+        command = 'docker-compose'
+        command_args = file_args + args
+      else
+        command = 'docker'
+        command_args = ['compose'] + file_args + args
+      end
+
+      @last_command = Command.run(command, *command_args, dir: @dir).join
       status = @last_command.status
       out = @last_command.captured_output
       err = @last_command.captured_error
