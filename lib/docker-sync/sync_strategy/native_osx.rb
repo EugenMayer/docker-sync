@@ -95,7 +95,9 @@ module DockerSync
             cmd = "docker run -d -v \"#{volume_app_sync_name}:/app_sync\" -v \"#{host_sync_src}:/host_sync#{host_disk_mount_mode}\" -e HOST_VOLUME=/host_sync -e APP_VOLUME=/app_sync #{tz_expression} #{additional_docker_env} #{run_privileged} --name #{container_name} #{@docker_image}"
           else
             say_status 'ok', "starting #{container_name} container", :white if @options['verbose']
-            cmd = "docker start #{container_name} && docker exec #{container_name} supervisorctl restart unison"
+            cmd1 = "docker start #{container_name}"
+            cmd2 = "docker exec #{container_name} supervisorctl restart unison"
+            cmd = "#{cmd1} && (#{cmd2} || (sleep 3 && #{cmd2})) || exit 1"
           end
         else
           say_status 'ok', "#{container_name} container still running, restarting unison in container", :blue
