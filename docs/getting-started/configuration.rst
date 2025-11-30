@@ -244,7 +244,7 @@ Options                       Description
 IP address                    If you set this to a concrete IP, this OP will be enforced
 ==========================    ===============
 
-sync_prefe
+sync_prefer
 ^^^^^^^^^^^
 Type:
   optional
